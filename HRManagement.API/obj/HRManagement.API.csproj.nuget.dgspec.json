@@ -26,11 +26,11 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "/Users/joseph/Development/dotnet/HRManagement.API/HRManagement.Application/HRManagement.Application.csproj": {
-                "projectPath": "/Users/joseph/Development/dotnet/HRManagement.API/HRManagement.Application/HRManagement.Application.csproj"
+              "/Users/joseph/Development/dotnet/HRManagement.Application/HRManagement.Application.csproj": {
+                "projectPath": "/Users/joseph/Development/dotnet/HRManagement.Application/HRManagement.Application.csproj"
               },
-              "/Users/joseph/Development/dotnet/HRManagement.API/HRManagement.Infrastructure/HRManagement.Infrastructure.csproj": {
-                "projectPath": "/Users/joseph/Development/dotnet/HRManagement.API/HRManagement.Infrastructure/HRManagement.Infrastructure.csproj"
+              "/Users/joseph/Development/dotnet/HRManagement.Infrastructure/HRManagement.Infrastructure.csproj": {
+                "projectPath": "/Users/joseph/Development/dotnet/HRManagement.Infrastructure/HRManagement.Infrastructure.csproj"
               }
             }
           }
@@ -68,15 +68,15 @@
               "target": "Package",
               "version": "[9.0.6, )"
             },
-            "Microsoft.EntityFrameworkCore.SqlServer": {
-              "target": "Package",
-              "version": "[9.0.6, )"
-            },
             "Microsoft.EntityFrameworkCore.Tools": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
               "version": "[9.0.6, )"
+            },
+            "Npgsql.EntityFrameworkCore.PostgreSQL": {
+              "target": "Package",
+              "version": "[9.0.4, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
@@ -106,14 +106,14 @@
         }
       }
     },
-    "/Users/joseph/Development/dotnet/HRManagement.API/HRManagement.Application/HRManagement.Application.csproj": {
+    "/Users/joseph/Development/dotnet/HRManagement.Application/HRManagement.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/joseph/Development/dotnet/HRManagement.API/HRManagement.Application/HRManagement.Application.csproj",
+        "projectUniqueName": "/Users/joseph/Development/dotnet/HRManagement.Application/HRManagement.Application.csproj",
         "projectName": "HRManagement.Application",
-        "projectPath": "/Users/joseph/Development/dotnet/HRManagement.API/HRManagement.Application/HRManagement.Application.csproj",
+        "projectPath": "/Users/joseph/Development/dotnet/HRManagement.Application/HRManagement.Application.csproj",
         "packagesPath": "/Users/joseph/.nuget/packages/",
-        "outputPath": "/Users/joseph/Development/dotnet/HRManagement.API/HRManagement.Application/obj/",
+        "outputPath": "/Users/joseph/Development/dotnet/HRManagement.Application/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/joseph/.nuget/NuGet/NuGet.Config"
@@ -128,8 +128,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "/Users/joseph/Development/dotnet/HRManagement.API/HRManagement.Core/HRManagement.Core.csproj": {
-                "projectPath": "/Users/joseph/Development/dotnet/HRManagement.API/HRManagement.Core/HRManagement.Core.csproj"
+              "/Users/joseph/Development/dotnet/HRManagement.Core/HRManagement.Core.csproj": {
+                "projectPath": "/Users/joseph/Development/dotnet/HRManagement.Core/HRManagement.Core.csproj"
               }
             }
           }
@@ -168,14 +168,14 @@
         }
       }
     },
-    "/Users/joseph/Development/dotnet/HRManagement.API/HRManagement.Core/HRManagement.Core.csproj": {
+    "/Users/joseph/Development/dotnet/HRManagement.Core/HRManagement.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/joseph/Development/dotnet/HRManagement.API/HRManagement.Core/HRManagement.Core.csproj",
+        "projectUniqueName": "/Users/joseph/Development/dotnet/HRManagement.Core/HRManagement.Core.csproj",
         "projectName": "HRManagement.Core",
-        "projectPath": "/Users/joseph/Development/dotnet/HRManagement.API/HRManagement.Core/HRManagement.Core.csproj",
+        "projectPath": "/Users/joseph/Development/dotnet/HRManagement.Core/HRManagement.Core.csproj",
         "packagesPath": "/Users/joseph/.nuget/packages/",
-        "outputPath": "/Users/joseph/Development/dotnet/HRManagement.API/HRManagement.Core/obj/",
+        "outputPath": "/Users/joseph/Development/dotnet/HRManagement.Core/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/joseph/.nuget/NuGet/NuGet.Config"
@@ -226,14 +226,14 @@
         }
       }
     },
-    "/Users/joseph/Development/dotnet/HRManagement.API/HRManagement.Infrastructure/HRManagement.Infrastructure.csproj": {
+    "/Users/joseph/Development/dotnet/HRManagement.Infrastructure/HRManagement.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/joseph/Development/dotnet/HRManagement.API/HRManagement.Infrastructure/HRManagement.Infrastructure.csproj",
+        "projectUniqueName": "/Users/joseph/Development/dotnet/HRManagement.Infrastructure/HRManagement.Infrastructure.csproj",
         "projectName": "HRManagement.Infrastructure",
-        "projectPath": "/Users/joseph/Development/dotnet/HRManagement.API/HRManagement.Infrastructure/HRManagement.Infrastructure.csproj",
+        "projectPath": "/Users/joseph/Development/dotnet/HRManagement.Infrastructure/HRManagement.Infrastructure.csproj",
         "packagesPath": "/Users/joseph/.nuget/packages/",
-        "outputPath": "/Users/joseph/Development/dotnet/HRManagement.API/HRManagement.Infrastructure/obj/",
+        "outputPath": "/Users/joseph/Development/dotnet/HRManagement.Infrastructure/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/joseph/.nuget/NuGet/NuGet.Config"
@@ -248,8 +248,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "/Users/joseph/Development/dotnet/HRManagement.API/HRManagement.Core/HRManagement.Core.csproj": {
-                "projectPath": "/Users/joseph/Development/dotnet/HRManagement.API/HRManagement.Core/HRManagement.Core.csproj"
+              "/Users/joseph/Development/dotnet/HRManagement.Core/HRManagement.Core.csproj": {
+                "projectPath": "/Users/joseph/Development/dotnet/HRManagement.Core/HRManagement.Core.csproj"
               }
             }
           }
@@ -269,15 +269,13 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
-            "Microsoft.EntityFrameworkCore.SqlServer": {
+            "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[9.0.6, )"
+              "version": "[9.0.1, )"
             },
-            "Microsoft.EntityFrameworkCore.Tools": {
-              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
-              "suppressParent": "All",
+            "Npgsql.EntityFrameworkCore.PostgreSQL": {
               "target": "Package",
-              "version": "[9.0.6, )"
+              "version": "[9.0.4, )"
             }
           },
           "imports": [
