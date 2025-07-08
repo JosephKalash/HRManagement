@@ -1,0 +1,7 @@
+/Users/joseph/Development/dotnet/HRManagement.API/obj/Debug/net8.0/HRManagement.API.csproj.AssemblyReference.cache
+/Users/joseph/Development/dotnet/HRManagement.API/obj/Debug/net8.0/HRManagement.API.GeneratedMSBuildEditorConfig.editorconfig
+/Users/joseph/Development/dotnet/HRManagement.API/obj/Debug/net8.0/HRManagement.API.AssemblyInfoInputs.cache
+/Users/joseph/Development/dotnet/HRManagement.API/obj/Debug/net8.0/HRManagement.API.AssemblyInfo.cs
+/Users/joseph/Development/dotnet/HRManagement.API/obj/Debug/net8.0/HRManagement.API.csproj.CoreCompileInputs.cache
+/Users/joseph/Development/dotnet/HRManagement.API/obj/Debug/net8.0/HRManagement.API.MvcApplicationPartsAssemblyInfo.cs
+/Users/joseph/Development/dotnet/HRManagement.API/obj/Debug/net8.0/HRManagement.API.MvcApplicationPartsAssemblyInfo.cache

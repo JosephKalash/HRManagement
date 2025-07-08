@@ -1,0 +1,11 @@
+/Users/joseph/Development/dotnet/HRManagement.API/HRManagement.Core/bin/Debug/net8.0/HRManagement.Core.deps.json
+/Users/joseph/Development/dotnet/HRManagement.API/HRManagement.Core/bin/Debug/net8.0/HRManagement.Core.dll
+/Users/joseph/Development/dotnet/HRManagement.API/HRManagement.Core/bin/Debug/net8.0/HRManagement.Core.pdb
+/Users/joseph/Development/dotnet/HRManagement.API/HRManagement.Core/obj/Debug/net8.0/HRManagement.Core.GeneratedMSBuildEditorConfig.editorconfig
+/Users/joseph/Development/dotnet/HRManagement.API/HRManagement.Core/obj/Debug/net8.0/HRManagement.Core.AssemblyInfoInputs.cache
+/Users/joseph/Development/dotnet/HRManagement.API/HRManagement.Core/obj/Debug/net8.0/HRManagement.Core.AssemblyInfo.cs
+/Users/joseph/Development/dotnet/HRManagement.API/HRManagement.Core/obj/Debug/net8.0/HRManagement.Core.csproj.CoreCompileInputs.cache
+/Users/joseph/Development/dotnet/HRManagement.API/HRManagement.Core/obj/Debug/net8.0/HRManagement.Core.dll
+/Users/joseph/Development/dotnet/HRManagement.API/HRManagement.Core/obj/Debug/net8.0/refint/HRManagement.Core.dll
+/Users/joseph/Development/dotnet/HRManagement.API/HRManagement.Core/obj/Debug/net8.0/HRManagement.Core.pdb
+/Users/joseph/Development/dotnet/HRManagement.API/HRManagement.Core/obj/Debug/net8.0/ref/HRManagement.Core.dll
