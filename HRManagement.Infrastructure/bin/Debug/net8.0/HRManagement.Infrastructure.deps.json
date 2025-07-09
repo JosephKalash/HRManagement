@@ -187,6 +187,9 @@
         }
       },
       "HRManagement.Core/1.0.0": {
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore": "9.0.1"
+        },
         "runtime": {
           "HRManagement.Core.dll": {}
         }

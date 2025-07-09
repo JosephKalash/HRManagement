@@ -1,4 +1,5 @@
 using HRManagement.Application.DTOs;
+using HRManagement.Core.Models;
 
 namespace HRManagement.Application.Interfaces
 {
@@ -13,5 +14,6 @@ namespace HRManagement.Application.Interfaces
         Task<EmployeeDto> UpdateAsync(int id, UpdateEmployeeDto updateDto);
         Task DeleteAsync(int id);
         Task<bool> ExistsAsync(int id);
+        Task<PagedResult<EmployeeDto>> GetPagedAsync(int pageNumber, int pageSize);
     }
 } 

@@ -36,5 +36,10 @@ namespace HRManagement.Infrastructure.Repositories
                 e.Department!.Contains(searchTerm)
             ).ToListAsync();
         }
+
+        IQueryable<Employee> IRepository<Employee>.AsQueryable()
+        {
+            return _dbSet.AsNoTracking();
+        }
     }
 } 

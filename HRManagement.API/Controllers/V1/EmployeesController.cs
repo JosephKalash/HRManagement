@@ -25,18 +25,18 @@ namespace HRManagement.API.Controllers.V1
         /// <response code="200">Returns the list of employees</response>
         /// <response code="500">If there was an internal server error</response>
         [HttpGet]
-        [ProducesResponseType(typeof(ApiResponse<IEnumerable<EmployeeDto>>), 200)]
+        [ProducesResponseType(typeof(ApiResponse<PagedResult<EmployeeDto>>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 500)]
-        public async Task<ActionResult<ApiResponse<IEnumerable<EmployeeDto>>>> GetEmployees()
+        public async Task<ActionResult<ApiResponse<PagedResult<EmployeeDto>>>> GetEmployees([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             try
             {
-                var employees = await _employeeService.GetAllAsync();
-                return Ok(ApiResponse<IEnumerable<EmployeeDto>>.SuccessResult(employees, "Employees retrieved successfully"));
+                var pagedResult = await _employeeService.GetPagedAsync(pageNumber, pageSize);
+                return Ok(ApiResponse<PagedResult<EmployeeDto>>.SuccessResult(pagedResult, "Employees retrieved successfully"));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ApiResponse<IEnumerable<EmployeeDto>>.ErrorResult("An error occurred while retrieving employees", new List<string> { ex.Message }));
+                return StatusCode(500, ApiResponse<PagedResult<EmployeeDto>>.ErrorResult("An error occurred while retrieving employees", new List<string> { ex.Message }));
             }
         }
 

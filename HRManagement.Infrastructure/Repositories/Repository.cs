@@ -49,5 +49,10 @@ namespace HRManagement.Infrastructure.Repositories
         {
             return await _dbSet.FindAsync(id) != null;
         }
+
+        public virtual IQueryable<T> AsQueryable()
+        {
+            return _dbSet.AsNoTracking();
+        }
     }
 } 

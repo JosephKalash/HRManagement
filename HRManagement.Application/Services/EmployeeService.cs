@@ -1,7 +1,9 @@
 using HRManagement.Application.DTOs;
 using HRManagement.Application.Interfaces;
 using HRManagement.Core.Entities;
+using HRManagement.Core.Extensions;
 using HRManagement.Core.Interfaces;
+using HRManagement.Core.Models;
 
 namespace HRManagement.Application.Services
 {
@@ -42,6 +44,21 @@ namespace HRManagement.Application.Services
         {
             var employees = await _employeeRepository.SearchEmployeesAsync(searchTerm);
             return employees.Select(MapToDto);
+        }
+
+        public async Task<PagedResult<EmployeeDto>> GetPagedAsync(int pageNumber, int pageSize)
+        {
+            var query = _employeeRepository.AsQueryable();
+            var paged = await query.ToPagedResultAsync(pageNumber, pageSize);
+            // Map entities to DTOs
+            var dtoList = paged.Items.Select(MapToDto).ToList();
+            return new PagedResult<EmployeeDto>
+            {
+                Items = dtoList,
+                PageNumber = paged.PageNumber,
+                PageSize = paged.PageSize,
+                TotalCount = paged.TotalCount
+            };
         }
 
         public async Task<EmployeeDto> CreateAsync(CreateEmployeeDto createDto)
@@ -129,4 +146,4 @@ namespace HRManagement.Application.Services
             };
         }
     }
-} 
+}
