@@ -22,9 +22,9 @@ namespace HRManagement.Core.Entities
 
     public class LeaveRequest
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
         
-        public int EmployeeId { get; set; }
+        public Guid EmployeeId { get; set; }
         
         [Required]
         public DateTime StartDate { get; set; }

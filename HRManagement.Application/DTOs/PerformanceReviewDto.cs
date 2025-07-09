@@ -4,8 +4,8 @@ namespace HRManagement.Application.DTOs
 {
     public class PerformanceReviewDto
     {
-        public int Id { get; set; }
-        public int EmployeeId { get; set; }
+        public Guid Id { get; set; }
+        public Guid EmployeeId { get; set; }
         public DateTime ReviewDate { get; set; }
         public string ReviewerName { get; set; } = string.Empty;
         public int OverallRating { get; set; }
@@ -21,7 +21,7 @@ namespace HRManagement.Application.DTOs
     public class CreatePerformanceReviewDto
     {
         [Required]
-        public int EmployeeId { get; set; }
+        public Guid EmployeeId { get; set; }
 
         [Required]
         public DateTime ReviewDate { get; set; }
