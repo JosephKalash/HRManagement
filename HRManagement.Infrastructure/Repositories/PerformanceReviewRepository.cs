@@ -11,7 +11,7 @@ namespace HRManagement.Infrastructure.Repositories
         {
         }
 
-        public async Task<IEnumerable<PerformanceReview>> GetByEmployeeIdAsync(int employeeId)
+        public async Task<IEnumerable<PerformanceReview>> GetByEmployeeIdAsync(Guid employeeId)
         {
             return await _dbSet.Where(pr => pr.EmployeeId == employeeId).ToListAsync();
         }

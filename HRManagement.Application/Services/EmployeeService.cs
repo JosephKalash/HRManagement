@@ -16,7 +16,7 @@ namespace HRManagement.Application.Services
             _employeeRepository = employeeRepository;
         }
 
-        public async Task<EmployeeDto?> GetByIdAsync(int id)
+        public async Task<EmployeeDto?> GetByIdAsync(Guid id)
         {
             var employee = await _employeeRepository.GetByIdAsync(id);
             return employee != null ? MapToDto(employee) : null;
@@ -81,7 +81,7 @@ namespace HRManagement.Application.Services
             return MapToDto(createdEmployee);
         }
 
-        public async Task<EmployeeDto> UpdateAsync(int id, UpdateEmployeeDto updateDto)
+        public async Task<EmployeeDto> UpdateAsync(Guid id, UpdateEmployeeDto updateDto)
         {
             var employee = await _employeeRepository.GetByIdAsync(id);
             if (employee == null)
@@ -112,7 +112,7 @@ namespace HRManagement.Application.Services
             return MapToDto(updatedEmployee);
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(Guid id)
         {
             var employee = await _employeeRepository.GetByIdAsync(id);
             if (employee == null)
@@ -121,7 +121,7 @@ namespace HRManagement.Application.Services
             await _employeeRepository.DeleteAsync(employee);
         }
 
-        public async Task<bool> ExistsAsync(int id)
+        public async Task<bool> ExistsAsync(Guid id)
         {
             return await _employeeRepository.ExistsAsync(id);
         }

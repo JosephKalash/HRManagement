@@ -52,7 +52,7 @@ namespace HRManagement.API.Controllers.V1
         [ProducesResponseType(typeof(ApiResponse<EmployeeDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
         [ProducesResponseType(typeof(ApiResponse), 500)]
-        public async Task<ActionResult<ApiResponse<EmployeeDto>>> GetEmployee(int id)
+        public async Task<ActionResult<ApiResponse<EmployeeDto>>> GetEmployee(Guid id)
         {
             try
             {
@@ -192,7 +192,7 @@ namespace HRManagement.API.Controllers.V1
         [ProducesResponseType(typeof(ApiResponse), 400)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
         [ProducesResponseType(typeof(ApiResponse), 500)]
-        public async Task<ActionResult<ApiResponse<EmployeeDto>>> UpdateEmployee(int id, UpdateEmployeeDto updateDto)
+        public async Task<ActionResult<ApiResponse<EmployeeDto>>> UpdateEmployee(Guid id, UpdateEmployeeDto updateDto)
         {
             try
             {
@@ -230,7 +230,7 @@ namespace HRManagement.API.Controllers.V1
         [ProducesResponseType(typeof(ApiResponse), 204)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
         [ProducesResponseType(typeof(ApiResponse), 500)]
-        public async Task<ActionResult<ApiResponse>> DeleteEmployee(int id)
+        public async Task<ActionResult<ApiResponse>> DeleteEmployee(Guid id)
         {
             try
             {

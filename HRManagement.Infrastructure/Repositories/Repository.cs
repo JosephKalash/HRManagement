@@ -15,7 +15,7 @@ namespace HRManagement.Infrastructure.Repositories
             _dbSet = context.Set<T>();
         }
 
-        public virtual async Task<T?> GetByIdAsync(int id)
+        public virtual async Task<T?> GetByIdAsync(Guid id)
         {
             return await _dbSet.FindAsync(id);
         }
@@ -45,7 +45,7 @@ namespace HRManagement.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public virtual async Task<bool> ExistsAsync(int id)
+        public virtual async Task<bool> ExistsAsync(Guid id)
         {
             return await _dbSet.FindAsync(id) != null;
         }
