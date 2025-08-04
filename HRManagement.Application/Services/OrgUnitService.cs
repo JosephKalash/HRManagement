@@ -36,7 +36,7 @@ namespace HRManagement.Application.Services
 
         public async Task<IEnumerable<OrgUnitDto>> GetByTypeAsync(int type)
         {
-            var orgUnits = await _orgUnitRepository.GetByTypeAsync((OrgUnitType)type);
+            var orgUnits = await _orgUnitRepository.GetByTypeAsync(type);
             return orgUnits.Select(MapToDto);
         }
 
@@ -66,7 +66,10 @@ namespace HRManagement.Application.Services
             {
                 Name = dto.Name,
                 Type = dto.Type,
-                ParentId = dto.ParentId
+                Level = dto.Level,
+                Description = dto.Description,
+                ParentId = dto.ParentId,
+                ManagerId = dto.ManagerId
             };
             var created = await _orgUnitRepository.AddAsync(orgUnit);
             return MapToDto(created);
@@ -79,7 +82,10 @@ namespace HRManagement.Application.Services
                 throw new ArgumentException("OrgUnit not found");
             orgUnit.Name = dto.Name;
             orgUnit.Type = dto.Type;
+            orgUnit.Level = dto.Level;
+            orgUnit.Description = dto.Description;
             orgUnit.ParentId = dto.ParentId;
+            orgUnit.ManagerId = dto.ManagerId;
             var updated = await _orgUnitRepository.UpdateAsync(orgUnit);
             return MapToDto(updated);
         }
@@ -104,7 +110,10 @@ namespace HRManagement.Application.Services
                 Id = orgUnit.Id,
                 Name = orgUnit.Name,
                 Type = orgUnit.Type,
+                Level = orgUnit.Level,
+                Description = orgUnit.Description,
                 ParentId = orgUnit.ParentId,
+                ManagerId = orgUnit.ManagerId,
                 Children = orgUnit.Children?.Select(MapToDto).ToList() ?? new List<OrgUnitDto>()
             };
         }

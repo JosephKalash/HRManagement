@@ -10,9 +10,13 @@ namespace HRManagement.Infrastructure.Data
         }
 
         public DbSet<Employee> Employees { get; set; }
+        public DbSet<EmployeeProfile> EmployeeProfiles { get; set; }
+        public DbSet<EmployeeServiceInfo> EmployeeServiceInfos { get; set; }
+        public DbSet<EmployeeAssignment> EmployeeAssignments { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<OrgUnit> OrgUnits { get; set; }
         public DbSet<LeaveRequest> LeaveRequests { get; set; }
         public DbSet<PerformanceReview> PerformanceReviews { get; set; }
-        public DbSet<OrgUnit> OrgUnits { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -22,14 +26,95 @@ namespace HRManagement.Infrastructure.Data
             modelBuilder.Entity<Employee>(entity =>
             {
                 entity.HasKey(e => e.Id);
-                entity.Property(e => e.Email).IsRequired().HasMaxLength(255);
-                entity.HasIndex(e => e.Email).IsUnique();
-                entity.Property(e => e.FirstName).IsRequired().HasMaxLength(100);
-                entity.Property(e => e.LastName).IsRequired().HasMaxLength(100);
-                entity.Property(e => e.PhoneNumber).HasMaxLength(20);
-                entity.Property(e => e.Position).HasMaxLength(100);
-                entity.Property(e => e.Department).HasMaxLength(100);
-                entity.Property(e => e.Salary).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.MilitaryNumber).IsRequired();
+                entity.HasIndex(e => e.MilitaryNumber).IsUnique();
+                entity.Property(e => e.ArabicFirstName).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.ArabicMiddleName).HasMaxLength(100);
+                entity.Property(e => e.ArabicLastName).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.EnglishFirstName).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.EnglishMiddleName).HasMaxLength(100);
+                entity.Property(e => e.EnglishLastName).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.IdNumber).IsRequired().HasMaxLength(50);
+                entity.HasIndex(e => e.IdNumber).IsUnique();
+            });
+
+            // EmployeeProfile configuration
+            modelBuilder.Entity<EmployeeProfile>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.SkinColor).HasMaxLength(50);
+                entity.Property(e => e.HairColor).HasMaxLength(50);
+                entity.Property(e => e.EyeColor).HasMaxLength(50);
+                entity.Property(e => e.DisabilityType).HasMaxLength(100);
+                entity.Property(e => e.Image).IsRequired().HasMaxLength(500);
+                entity.Property(e => e.CurrentNationality).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.Religion).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.PlaceOfBirth).IsRequired().HasMaxLength(200);
+                entity.Property(e => e.InsuranceNumber).HasMaxLength(50);
+                entity.HasOne(e => e.Employee)
+                    .WithOne(e => e.Profile)
+                    .HasForeignKey<EmployeeProfile>(e => e.EmployeeId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // EmployeeServiceInfo configuration
+            modelBuilder.Entity<EmployeeServiceInfo>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.BaseSalary).HasColumnType("decimal(18,2)");
+                entity.HasOne(e => e.Employee)
+                    .WithMany(e => e.ServiceInfos)
+                    .HasForeignKey(e => e.EmployeeId)
+                    .OnDelete(DeleteBehavior.Cascade);
+                entity.HasOne(e => e.BelongingUnit)
+                    .WithMany()
+                    .HasForeignKey(e => e.BelongingUnitId)
+                    .OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(e => e.JobRole)
+                    .WithMany(e => e.EmployeeServiceInfos)
+                    .HasForeignKey(e => e.JobRoleId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            // EmployeeAssignment configuration
+            modelBuilder.Entity<EmployeeAssignment>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.HasOne(e => e.Employee)
+                    .WithMany(e => e.Assignments)
+                    .HasForeignKey(e => e.EmployeeId)
+                    .OnDelete(DeleteBehavior.Cascade);
+                entity.HasOne(e => e.AssignedUnit)
+                    .WithMany(e => e.EmployeeAssignments)
+                    .HasForeignKey(e => e.AssignedUnitId)
+                    .OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(e => e.JobRole)
+                    .WithMany(e => e.EmployeeAssignments)
+                    .HasForeignKey(e => e.JobRoleId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            // Role configuration
+            modelBuilder.Entity<Role>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Name).IsRequired().HasMaxLength(200);
+            });
+
+            // OrgUnit configuration
+            modelBuilder.Entity<OrgUnit>(entity =>
+            {
+                entity.HasKey(o => o.Id);
+                entity.Property(o => o.Name).IsRequired().HasMaxLength(200);
+                entity.Property(o => o.Description);
+                entity.HasOne(o => o.Parent)
+                      .WithMany(o => o.Children)
+                      .HasForeignKey(o => o.ParentId)
+                      .OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(o => o.Manager)
+                      .WithMany()
+                      .HasForeignKey(o => o.ManagerId)
+                      .OnDelete(DeleteBehavior.Restrict);
             });
 
             // LeaveRequest configuration
@@ -58,24 +143,13 @@ namespace HRManagement.Infrastructure.Data
                     .HasForeignKey(e => e.EmployeeId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
-
-            // OrgUnit configuration
-            modelBuilder.Entity<OrgUnit>(entity =>
-            {
-                entity.HasKey(o => o.Id);
-                entity.Property(o => o.Name).IsRequired().HasMaxLength(200);
-                entity.Property(o => o.Type).IsRequired();
-                entity.HasOne(o => o.Parent)
-                      .WithMany(o => o.Children)
-                      .HasForeignKey(o => o.ParentId)
-                      .OnDelete(DeleteBehavior.Restrict);
-            });
         }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             var entries = ChangeTracker.Entries()
-                .Where(e => e.Entity is Employee || e.Entity is LeaveRequest || e.Entity is PerformanceReview)
+                .Where(e => e.Entity is Employee || e.Entity is LeaveRequest || e.Entity is PerformanceReview || 
+                           e.Entity is EmployeeProfile || e.Entity is EmployeeServiceInfo || e.Entity is EmployeeAssignment)
                 .Where(e => e.State == EntityState.Modified);
 
             foreach (var entry in entries)

@@ -7,34 +7,38 @@ namespace HRManagement.Core.Entities
         public Guid Id { get; set; } = Guid.NewGuid();
         
         [Required]
-        [StringLength(100)]
-        public string FirstName { get; set; } = string.Empty;
+        public int MilitaryNumber { get; set; }
         
         [Required]
         [StringLength(100)]
-        public string LastName { get; set; } = string.Empty;
+        public string ArabicFirstName { get; set; } = string.Empty;
+        
+        [StringLength(100)]
+        public string? ArabicMiddleName { get; set; }
         
         [Required]
-        [EmailAddress]
-        [StringLength(255)]
-        public string Email { get; set; } = string.Empty;
+        [StringLength(100)]
+        public string ArabicLastName { get; set; } = string.Empty;
         
-        [StringLength(20)]
-        public string? PhoneNumber { get; set; }
+        [Required]
+        [StringLength(100)]
+        public string EnglishFirstName { get; set; } = string.Empty;
+        
+        [StringLength(100)]
+        public string? EnglishMiddleName { get; set; }
+        
+        [Required]
+        [StringLength(100)]
+        public string EnglishLastName { get; set; } = string.Empty;
+        
+        public int Gender { get; set; }
         
         [Required]
         public DateTime DateOfBirth { get; set; }
         
         [Required]
-        public DateTime HireDate { get; set; }
-        
-        [StringLength(100)]
-        public string? Position { get; set; }
-        
-        [StringLength(100)]
-        public string? Department { get; set; }
-        
-        public decimal Salary { get; set; }
+        [StringLength(50)]
+        public string IdNumber { get; set; } = string.Empty;
         
         public bool IsActive { get; set; } = true;
         
@@ -43,6 +47,9 @@ namespace HRManagement.Core.Entities
         public DateTime? UpdatedAt { get; set; }
         
         // Navigation properties
+        public virtual EmployeeProfile? Profile { get; set; }
+        public virtual ICollection<EmployeeServiceInfo> ServiceInfos { get; set; } = new List<EmployeeServiceInfo>();
+        public virtual ICollection<EmployeeAssignment> Assignments { get; set; } = new List<EmployeeAssignment>();
         public virtual ICollection<LeaveRequest> LeaveRequests { get; set; } = new List<LeaveRequest>();
         public virtual ICollection<PerformanceReview> PerformanceReviews { get; set; } = new List<PerformanceReview>();
     }

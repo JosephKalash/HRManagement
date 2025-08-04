@@ -92,28 +92,7 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        /// <summary>
-        /// Get employees by department
-        /// </summary>
-        /// <param name="department">Department name</param>
-        /// <returns>List of employees in the department</returns>
-        /// <response code="200">Returns the list of employees in the department</response>
-        /// <response code="500">If there was an internal server error</response>
-        [HttpGet("department/{department}")]
-        [ProducesResponseType(typeof(ApiResponse<IEnumerable<EmployeeDto>>), 200)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
-        public async Task<ActionResult<ApiResponse<IEnumerable<EmployeeDto>>>> GetEmployeesByDepartment(string department)
-        {
-            try
-            {
-                var employees = await _employeeService.GetByDepartmentAsync(department);
-                return Ok(ApiResponse<IEnumerable<EmployeeDto>>.SuccessResult(employees, $"Employees in department '{department}' retrieved successfully"));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ApiResponse<IEnumerable<EmployeeDto>>.ErrorResult("An error occurred while retrieving employees by department", new List<string> { ex.Message }));
-            }
-        }
+
 
         /// <summary>
         /// Search employees

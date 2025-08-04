@@ -11,14 +11,14 @@ namespace HRManagement.Infrastructure.Repositories
         {
         }
 
-        public async Task<Employee?> GetByEmailAsync(string email)
+        public async Task<Employee?> GetByMilitaryNumberAsync(int militaryNumber)
         {
-            return await _dbSet.FirstOrDefaultAsync(e => e.Email == email);
+            return await _dbSet.FirstOrDefaultAsync(e => e.MilitaryNumber == militaryNumber);
         }
 
-        public async Task<IEnumerable<Employee>> GetByDepartmentAsync(string department)
+        public async Task<Employee?> GetByIdNumberAsync(string idNumber)
         {
-            return await _dbSet.Where(e => e.Department == department).ToListAsync();
+            return await _dbSet.FirstOrDefaultAsync(e => e.IdNumber == idNumber);
         }
 
         public async Task<IEnumerable<Employee>> GetActiveEmployeesAsync()
@@ -29,11 +29,11 @@ namespace HRManagement.Infrastructure.Repositories
         public async Task<IEnumerable<Employee>> SearchEmployeesAsync(string searchTerm)
         {
             return await _dbSet.Where(e => 
-                e.FirstName.Contains(searchTerm) || 
-                e.LastName.Contains(searchTerm) || 
-                e.Email.Contains(searchTerm) ||
-                e.Position!.Contains(searchTerm) ||
-                e.Department!.Contains(searchTerm)
+                e.ArabicFirstName.Contains(searchTerm) || 
+                e.ArabicLastName.Contains(searchTerm) || 
+                e.EnglishFirstName.Contains(searchTerm) ||
+                e.EnglishLastName.Contains(searchTerm) ||
+                e.IdNumber.Contains(searchTerm)
             ).ToListAsync();
         }
 

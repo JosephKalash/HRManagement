@@ -8,7 +8,6 @@ namespace HRManagement.Application.Interfaces
         Task<EmployeeDto?> GetByIdAsync(Guid id);
         Task<IEnumerable<EmployeeDto>> GetAllAsync();
         Task<IEnumerable<EmployeeDto>> GetActiveEmployeesAsync();
-        Task<IEnumerable<EmployeeDto>> GetByDepartmentAsync(string department);
         Task<IEnumerable<EmployeeDto>> SearchEmployeesAsync(string searchTerm);
         Task<EmployeeDto> CreateAsync(CreateEmployeeDto createDto);
         Task<EmployeeDto> UpdateAsync(Guid id, UpdateEmployeeDto updateDto);

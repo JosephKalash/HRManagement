@@ -5,15 +5,16 @@ namespace HRManagement.Application.DTOs
     public class EmployeeDto
     {
         public Guid Id { get; set; }
-        public string FirstName { get; set; } = string.Empty;
-        public string LastName { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-        public string? PhoneNumber { get; set; }
+        public int MilitaryNumber { get; set; }
+        public string ArabicFirstName { get; set; } = string.Empty;
+        public string? ArabicMiddleName { get; set; }
+        public string ArabicLastName { get; set; } = string.Empty;
+        public string EnglishFirstName { get; set; } = string.Empty;
+        public string? EnglishMiddleName { get; set; }
+        public string EnglishLastName { get; set; } = string.Empty;
+        public int Gender { get; set; }
         public DateTime DateOfBirth { get; set; }
-        public DateTime HireDate { get; set; }
-        public string? Position { get; set; }
-        public string? Department { get; set; }
-        public decimal Salary { get; set; }
+        public string IdNumber { get; set; } = string.Empty;
         public bool IsActive { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
@@ -22,62 +23,68 @@ namespace HRManagement.Application.DTOs
     public class CreateEmployeeDto
     {
         [Required]
-        [StringLength(100)]
-        public string FirstName { get; set; } = string.Empty;
+        public int MilitaryNumber { get; set; }
 
         [Required]
         [StringLength(100)]
-        public string LastName { get; set; } = string.Empty;
+        public string ArabicFirstName { get; set; } = string.Empty;
+
+        [StringLength(100)]
+        public string? ArabicMiddleName { get; set; }
 
         [Required]
-        [EmailAddress]
-        [StringLength(255)]
-        public string Email { get; set; } = string.Empty;
+        [StringLength(100)]
+        public string ArabicLastName { get; set; } = string.Empty;
 
-        [StringLength(20)]
-        public string? PhoneNumber { get; set; }
+        [Required]
+        [StringLength(100)]
+        public string EnglishFirstName { get; set; } = string.Empty;
+
+        [StringLength(100)]
+        public string? EnglishMiddleName { get; set; }
+
+        [Required]
+        [StringLength(100)]
+        public string EnglishLastName { get; set; } = string.Empty;
+
+        public int Gender { get; set; }
 
         [Required]
         public DateTime DateOfBirth { get; set; }
 
         [Required]
-        public DateTime HireDate { get; set; }
-
-        [StringLength(100)]
-        public string? Position { get; set; }
-
-        [StringLength(100)]
-        public string? Department { get; set; }
-
-        public decimal Salary { get; set; }
+        [StringLength(50)]
+        public string IdNumber { get; set; } = string.Empty;
     }
 
     public class UpdateEmployeeDto
     {
-        [StringLength(100)]
-        public string? FirstName { get; set; }
+        public int? MilitaryNumber { get; set; }
 
         [StringLength(100)]
-        public string? LastName { get; set; }
+        public string? ArabicFirstName { get; set; }
 
-        [EmailAddress]
-        [StringLength(255)]
-        public string? Email { get; set; }
+        [StringLength(100)]
+        public string? ArabicMiddleName { get; set; }
 
-        [StringLength(20)]
-        public string? PhoneNumber { get; set; }
+        [StringLength(100)]
+        public string? ArabicLastName { get; set; }
+
+        [StringLength(100)]
+        public string? EnglishFirstName { get; set; }
+
+        [StringLength(100)]
+        public string? EnglishMiddleName { get; set; }
+
+        [StringLength(100)]
+        public string? EnglishLastName { get; set; }
+
+        public int? Gender { get; set; }
 
         public DateTime? DateOfBirth { get; set; }
 
-        public DateTime? HireDate { get; set; }
-
-        [StringLength(100)]
-        public string? Position { get; set; }
-
-        [StringLength(100)]
-        public string? Department { get; set; }
-
-        public decimal? Salary { get; set; }
+        [StringLength(50)]
+        public string? IdNumber { get; set; }
 
         public bool? IsActive { get; set; }
     }

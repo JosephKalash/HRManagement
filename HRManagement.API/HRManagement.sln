@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRManagement.Application", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRManagement.Infrastructure", "..\HRManagement.Infrastructure\HRManagement.Infrastructure.csproj", "{948D3167-79F5-4C65-948D-0EB444594422}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRManagement.API", "HRManagement.API.csproj", "{61051C93-F089-4051-993C-ABFC23920FBD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{948D3167-79F5-4C65-948D-0EB444594422}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{948D3167-79F5-4C65-948D-0EB444594422}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{948D3167-79F5-4C65-948D-0EB444594422}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61051C93-F089-4051-993C-ABFC23920FBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61051C93-F089-4051-993C-ABFC23920FBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61051C93-F089-4051-993C-ABFC23920FBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61051C93-F089-4051-993C-ABFC23920FBD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

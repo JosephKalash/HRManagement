@@ -14,7 +14,7 @@ namespace HRManagement.Infrastructure.Repositories
             return await _dbSet.Where(o => o.ParentId == parentId).ToListAsync();
         }
 
-        public async Task<IEnumerable<OrgUnit>> GetByTypeAsync(OrgUnitType type)
+        public async Task<IEnumerable<OrgUnit>> GetByTypeAsync(int type)
         {
             return await _dbSet.Where(o => o.Type == type).ToListAsync();
         }

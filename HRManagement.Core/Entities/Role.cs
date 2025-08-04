@@ -2,29 +2,20 @@ using System.ComponentModel.DataAnnotations;
 
 namespace HRManagement.Core.Entities
 {
-    public class OrgUnit
+    public class Role
     {
         public Guid Id { get; set; } = Guid.NewGuid();
-
-        public int Level { get; set; }
         
-        public int Type { get; set; }
-
+        public int? Level { get; set; }
+        
         [Required]
         [StringLength(200)]
         public string Name { get; set; } = string.Empty;
-
+        
         public string? Description { get; set; }
         
-        public Guid? ParentId { get; set; }
-        public OrgUnit? Parent { get; set; }
-        public ICollection<OrgUnit> Children { get; set; } = new List<OrgUnit>();
-        
-        public Guid? ManagerId { get; set; }
-        public Employee? Manager { get; set; }
-        
-        // Navigation properties for relationships
+        // Navigation properties
         public virtual ICollection<EmployeeServiceInfo> EmployeeServiceInfos { get; set; } = new List<EmployeeServiceInfo>();
         public virtual ICollection<EmployeeAssignment> EmployeeAssignments { get; set; } = new List<EmployeeAssignment>();
     }
-}
+} 

@@ -34,12 +34,6 @@ namespace HRManagement.Application.Services
             return employees.Select(MapToDto);
         }
 
-        public async Task<IEnumerable<EmployeeDto>> GetByDepartmentAsync(string department)
-        {
-            var employees = await _employeeRepository.GetByDepartmentAsync(department);
-            return employees.Select(MapToDto);
-        }
-
         public async Task<IEnumerable<EmployeeDto>> SearchEmployeesAsync(string searchTerm)
         {
             var employees = await _employeeRepository.SearchEmployeesAsync(searchTerm);
@@ -65,15 +59,16 @@ namespace HRManagement.Application.Services
         {
             var employee = new Employee
             {
-                FirstName = createDto.FirstName,
-                LastName = createDto.LastName,
-                Email = createDto.Email,
-                PhoneNumber = createDto.PhoneNumber,
+                MilitaryNumber = createDto.MilitaryNumber,
+                ArabicFirstName = createDto.ArabicFirstName,
+                ArabicMiddleName = createDto.ArabicMiddleName,
+                ArabicLastName = createDto.ArabicLastName,
+                EnglishFirstName = createDto.EnglishFirstName,
+                EnglishMiddleName = createDto.EnglishMiddleName,
+                EnglishLastName = createDto.EnglishLastName,
+                Gender = createDto.Gender,
                 DateOfBirth = createDto.DateOfBirth,
-                HireDate = createDto.HireDate,
-                Position = createDto.Position,
-                Department = createDto.Department,
-                Salary = createDto.Salary,
+                IdNumber = createDto.IdNumber,
                 IsActive = true
             };
 
@@ -87,24 +82,26 @@ namespace HRManagement.Application.Services
             if (employee == null)
                 throw new ArgumentException("Employee not found");
 
-            if (updateDto.FirstName != null)
-                employee.FirstName = updateDto.FirstName;
-            if (updateDto.LastName != null)
-                employee.LastName = updateDto.LastName;
-            if (updateDto.Email != null)
-                employee.Email = updateDto.Email;
-            if (updateDto.PhoneNumber != null)
-                employee.PhoneNumber = updateDto.PhoneNumber;
+            if (updateDto.MilitaryNumber.HasValue)
+                employee.MilitaryNumber = updateDto.MilitaryNumber.Value;
+            if (updateDto.ArabicFirstName != null)
+                employee.ArabicFirstName = updateDto.ArabicFirstName;
+            if (updateDto.ArabicMiddleName != null)
+                employee.ArabicMiddleName = updateDto.ArabicMiddleName;
+            if (updateDto.ArabicLastName != null)
+                employee.ArabicLastName = updateDto.ArabicLastName;
+            if (updateDto.EnglishFirstName != null)
+                employee.EnglishFirstName = updateDto.EnglishFirstName;
+            if (updateDto.EnglishMiddleName != null)
+                employee.EnglishMiddleName = updateDto.EnglishMiddleName;
+            if (updateDto.EnglishLastName != null)
+                employee.EnglishLastName = updateDto.EnglishLastName;
+            if (updateDto.Gender.HasValue)
+                employee.Gender = updateDto.Gender.Value;
             if (updateDto.DateOfBirth.HasValue)
                 employee.DateOfBirth = updateDto.DateOfBirth.Value;
-            if (updateDto.HireDate.HasValue)
-                employee.HireDate = updateDto.HireDate.Value;
-            if (updateDto.Position != null)
-                employee.Position = updateDto.Position;
-            if (updateDto.Department != null)
-                employee.Department = updateDto.Department;
-            if (updateDto.Salary.HasValue)
-                employee.Salary = updateDto.Salary.Value;
+            if (updateDto.IdNumber != null)
+                employee.IdNumber = updateDto.IdNumber;
             if (updateDto.IsActive.HasValue)
                 employee.IsActive = updateDto.IsActive.Value;
 
@@ -131,15 +128,16 @@ namespace HRManagement.Application.Services
             return new EmployeeDto
             {
                 Id = employee.Id,
-                FirstName = employee.FirstName,
-                LastName = employee.LastName,
-                Email = employee.Email,
-                PhoneNumber = employee.PhoneNumber,
+                MilitaryNumber = employee.MilitaryNumber,
+                ArabicFirstName = employee.ArabicFirstName,
+                ArabicMiddleName = employee.ArabicMiddleName,
+                ArabicLastName = employee.ArabicLastName,
+                EnglishFirstName = employee.EnglishFirstName,
+                EnglishMiddleName = employee.EnglishMiddleName,
+                EnglishLastName = employee.EnglishLastName,
+                Gender = employee.Gender,
                 DateOfBirth = employee.DateOfBirth,
-                HireDate = employee.HireDate,
-                Position = employee.Position,
-                Department = employee.Department,
-                Salary = employee.Salary,
+                IdNumber = employee.IdNumber,
                 IsActive = employee.IsActive,
                 CreatedAt = employee.CreatedAt,
                 UpdatedAt = employee.UpdatedAt
