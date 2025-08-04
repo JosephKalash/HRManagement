@@ -61,9 +61,11 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<ILeaveRequestRepository, LeaveRequestRepository>();
 builder.Services.AddScoped<IPerformanceReviewRepository, PerformanceReviewRepository>();
+builder.Services.AddScoped<IOrgUnitRepository, OrgUnitRepository>();
 
 // Register services
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<IOrgUnitService, OrgUnitService>();
 
 // Add CORS
 builder.Services.AddCors(options =>

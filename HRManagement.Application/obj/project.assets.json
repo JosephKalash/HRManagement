@@ -617,11 +617,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/joseph/Development/dotnet/HRManagement.Application/HRManagement.Application.csproj",
+      "projectUniqueName": "/Users/joseph/Development/HRManagement/HRManagement.Application/HRManagement.Application.csproj",
       "projectName": "HRManagement.Application",
-      "projectPath": "/Users/joseph/Development/dotnet/HRManagement.Application/HRManagement.Application.csproj",
+      "projectPath": "/Users/joseph/Development/HRManagement/HRManagement.Application/HRManagement.Application.csproj",
       "packagesPath": "/Users/joseph/.nuget/packages/",
-      "outputPath": "/Users/joseph/Development/dotnet/HRManagement.Application/obj/",
+      "outputPath": "/Users/joseph/Development/HRManagement/HRManagement.Application/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/joseph/.nuget/NuGet/NuGet.Config"
@@ -636,8 +636,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "/Users/joseph/Development/dotnet/HRManagement.Core/HRManagement.Core.csproj": {
-              "projectPath": "/Users/joseph/Development/dotnet/HRManagement.Core/HRManagement.Core.csproj"
+            "/Users/joseph/Development/HRManagement/HRManagement.Core/HRManagement.Core.csproj": {
+              "projectPath": "/Users/joseph/Development/HRManagement/HRManagement.Core/HRManagement.Core.csproj"
             }
           }
         }

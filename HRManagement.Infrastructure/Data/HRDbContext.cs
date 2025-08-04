@@ -12,6 +12,7 @@ namespace HRManagement.Infrastructure.Data
         public DbSet<Employee> Employees { get; set; }
         public DbSet<LeaveRequest> LeaveRequests { get; set; }
         public DbSet<PerformanceReview> PerformanceReviews { get; set; }
+        public DbSet<OrgUnit> OrgUnits { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -56,6 +57,18 @@ namespace HRManagement.Infrastructure.Data
                     .WithMany(e => e.PerformanceReviews)
                     .HasForeignKey(e => e.EmployeeId)
                     .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // OrgUnit configuration
+            modelBuilder.Entity<OrgUnit>(entity =>
+            {
+                entity.HasKey(o => o.Id);
+                entity.Property(o => o.Name).IsRequired().HasMaxLength(200);
+                entity.Property(o => o.Type).IsRequired();
+                entity.HasOne(o => o.Parent)
+                      .WithMany(o => o.Children)
+                      .HasForeignKey(o => o.ParentId)
+                      .OnDelete(DeleteBehavior.Restrict);
             });
         }
 

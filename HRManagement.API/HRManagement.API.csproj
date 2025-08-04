@@ -25,6 +25,7 @@
   <ItemGroup>
     <ProjectReference Include="..\HRManagement.Application\HRManagement.Application.csproj" />
     <ProjectReference Include="..\HRManagement.Infrastructure\HRManagement.Infrastructure.csproj" />
+    <ProjectReference Include="..\HRManagement.Core\HRManagement.Core.csproj" /> <!-- Add this if Core exists -->
   </ItemGroup>
 
 </Project>

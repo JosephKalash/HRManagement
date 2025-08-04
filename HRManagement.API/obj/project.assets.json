@@ -3497,6 +3497,7 @@
   "projectFileDependencyGroups": {
     "net8.0": [
       "HRManagement.Application >= 1.0.0",
+      "HRManagement.Core >= 1.0.0",
       "HRManagement.Infrastructure >= 1.0.0",
       "Microsoft.AspNetCore.Mvc.Versioning >= 5.1.0",
       "Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer >= 5.1.0",
@@ -3513,11 +3514,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/joseph/Development/dotnet/HRManagement.API/HRManagement.API.csproj",
+      "projectUniqueName": "/Users/joseph/Development/HRManagement/HRManagement.API/HRManagement.API.csproj",
       "projectName": "HRManagement.API",
-      "projectPath": "/Users/joseph/Development/dotnet/HRManagement.API/HRManagement.API.csproj",
+      "projectPath": "/Users/joseph/Development/HRManagement/HRManagement.API/HRManagement.API.csproj",
       "packagesPath": "/Users/joseph/.nuget/packages/",
-      "outputPath": "/Users/joseph/Development/dotnet/HRManagement.API/obj/",
+      "outputPath": "/Users/joseph/Development/HRManagement/HRManagement.API/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/joseph/.nuget/NuGet/NuGet.Config"
@@ -3532,11 +3533,14 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "/Users/joseph/Development/dotnet/HRManagement.Application/HRManagement.Application.csproj": {
-              "projectPath": "/Users/joseph/Development/dotnet/HRManagement.Application/HRManagement.Application.csproj"
+            "/Users/joseph/Development/HRManagement/HRManagement.Application/HRManagement.Application.csproj": {
+              "projectPath": "/Users/joseph/Development/HRManagement/HRManagement.Application/HRManagement.Application.csproj"
             },
-            "/Users/joseph/Development/dotnet/HRManagement.Infrastructure/HRManagement.Infrastructure.csproj": {
-              "projectPath": "/Users/joseph/Development/dotnet/HRManagement.Infrastructure/HRManagement.Infrastructure.csproj"
+            "/Users/joseph/Development/HRManagement/HRManagement.Core/HRManagement.Core.csproj": {
+              "projectPath": "/Users/joseph/Development/HRManagement/HRManagement.Core/HRManagement.Core.csproj"
+            },
+            "/Users/joseph/Development/HRManagement/HRManagement.Infrastructure/HRManagement.Infrastructure.csproj": {
+              "projectPath": "/Users/joseph/Development/HRManagement/HRManagement.Infrastructure/HRManagement.Infrastructure.csproj"
             }
           }
         }

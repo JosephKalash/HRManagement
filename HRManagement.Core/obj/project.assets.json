@@ -599,11 +599,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/joseph/Development/dotnet/HRManagement.Core/HRManagement.Core.csproj",
+      "projectUniqueName": "/Users/joseph/Development/HRManagement/HRManagement.Core/HRManagement.Core.csproj",
       "projectName": "HRManagement.Core",
-      "projectPath": "/Users/joseph/Development/dotnet/HRManagement.Core/HRManagement.Core.csproj",
+      "projectPath": "/Users/joseph/Development/HRManagement/HRManagement.Core/HRManagement.Core.csproj",
       "packagesPath": "/Users/joseph/.nuget/packages/",
-      "outputPath": "/Users/joseph/Development/dotnet/HRManagement.Core/obj/",
+      "outputPath": "/Users/joseph/Development/HRManagement/HRManagement.Core/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/joseph/.nuget/NuGet/NuGet.Config"
