@@ -108,7 +108,7 @@ namespace HRManagement.API.Controllers.V1
         [ProducesResponseType(typeof(ApiResponse<OrgUnitDto>), 201)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
         [ProducesResponseType(typeof(ApiResponse), 500)]
-        public async Task<ActionResult<ApiResponse<OrgUnitDto>>> CreateOrgUnit(OrgUnitDto dto)
+        public async Task<ActionResult<ApiResponse<OrgUnitDto>>> CreateOrgUnit(CreateOrgUnitDto dto)
         {
             try
             {
@@ -135,7 +135,7 @@ namespace HRManagement.API.Controllers.V1
         [ProducesResponseType(typeof(ApiResponse), 400)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
         [ProducesResponseType(typeof(ApiResponse), 500)]
-        public async Task<ActionResult<ApiResponse<OrgUnitDto>>> UpdateOrgUnit(Guid id, OrgUnitDto dto)
+        public async Task<ActionResult<ApiResponse<OrgUnitDto>>> UpdateOrgUnit(Guid id, UpdateOrgUnitDto dto)
         {
             try
             {
@@ -175,6 +175,22 @@ namespace HRManagement.API.Controllers.V1
             catch (Exception ex)
             {
                 return StatusCode(500, ApiResponse.ErrorResult("An error occurred while deleting the org unit", new List<string> { ex.Message }));
+            }
+        }
+
+        [HttpGet("hierarchy")]
+        [ProducesResponseType(typeof(ApiResponse<OrgUnitHierarchyDto>), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 500)]
+        public async Task<ActionResult<ApiResponse<OrgUnitHierarchyDto>>> GetHierarchy()
+        {
+            try
+            {
+                var hierarchy = await _orgUnitService.GetHierarchyAsync();
+                return Ok(ApiResponse<OrgUnitHierarchyDto>.SuccessResult(hierarchy, "Organization hierarchy retrieved successfully"));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<OrgUnitHierarchyDto>.ErrorResult("An error occurred while retrieving the hierarchy", new List<string> { ex.Message }));
             }
         }
     }

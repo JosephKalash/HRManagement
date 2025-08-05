@@ -28,13 +28,13 @@ namespace HRManagement.Core.Entities
 
         public Guid? ParentId { get; set; }
         public OrgUnit? Parent { get; set; }
-        public ICollection<OrgUnit> Children { get; set; } = new List<OrgUnit>();
+        public ICollection<OrgUnit> Children { get; set; } = [];
 
         public Guid? ManagerId { get; set; }
         public Employee? Manager { get; set; }
 
         // Navigation properties for relationships
-        public virtual ICollection<EmployeeServiceInfo> EmployeeServiceInfos { get; set; } = new List<EmployeeServiceInfo>();
-        public virtual ICollection<EmployeeAssignment> EmployeeAssignments { get; set; } = new List<EmployeeAssignment>();
+        public virtual ICollection<EmployeeServiceInfo> EmployeeServiceInfos { get; set; } = [];
+        public virtual ICollection<EmployeeAssignment> EmployeeAssignments { get; set; } = [];
     }
 }

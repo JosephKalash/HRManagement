@@ -7,14 +7,9 @@ using HRManagement.Core.Models;
 
 namespace HRManagement.Application.Services
 {
-    public class OrgUnitService : IOrgUnitService
+    public class OrgUnitService(IOrgUnitRepository orgUnitRepository) : IOrgUnitService
     {
-        private readonly IOrgUnitRepository _orgUnitRepository;
-
-        public OrgUnitService(IOrgUnitRepository orgUnitRepository)
-        {
-            _orgUnitRepository = orgUnitRepository;
-        }
+        private readonly IOrgUnitRepository _orgUnitRepository = orgUnitRepository;
 
         public async Task<OrgUnitDto?> GetByIdAsync(Guid id)
         {
@@ -60,7 +55,7 @@ namespace HRManagement.Application.Services
             };
         }
 
-        public async Task<OrgUnitDto> CreateAsync(OrgUnitDto dto)
+        public async Task<OrgUnitDto> CreateAsync(CreateOrgUnitDto dto)
         {
             var orgUnit = new OrgUnit
             {
@@ -74,13 +69,13 @@ namespace HRManagement.Application.Services
             return MapToDto(created);
         }
 
-        public async Task<OrgUnitDto> UpdateAsync(Guid id, OrgUnitDto dto)
+        public async Task<OrgUnitDto> UpdateAsync(Guid id, UpdateOrgUnitDto dto)
         {
             var orgUnit = await _orgUnitRepository.GetByIdAsync(id);
             if (orgUnit == null)
                 throw new ArgumentException("OrgUnit not found");
-            orgUnit.Name = dto.Name;
-            orgUnit.Type = dto.Type;
+            orgUnit.Name = dto.Name ?? orgUnit.Name;
+            orgUnit.Type = dto.Type ?? orgUnit.Type;
             orgUnit.Description = dto.Description;
             orgUnit.ParentId = dto.ParentId;
             orgUnit.ManagerId = dto.ManagerId;
@@ -101,6 +96,16 @@ namespace HRManagement.Application.Services
             return await _orgUnitRepository.ExistsAsync(id);
         }
 
+        public async Task<OrgUnitHierarchyDto> GetHierarchyAsync()
+        {
+            var allOrgUnits = await _orgUnitRepository.GetAllWithChildrenAsync();
+
+            var rootUnits = allOrgUnits.Where(o => o.ParentId == null).FirstOrDefault();
+            // var hierarchy = rootUnits.Select(MapToHierarchyDto);
+
+            return MapToHierarchyDto(rootUnits!);
+        }
+
         private static OrgUnitDto MapToDto(OrgUnit orgUnit)
         {
             return new OrgUnitDto
@@ -114,5 +119,16 @@ namespace HRManagement.Application.Services
                 Children = orgUnit.Children?.Select(MapToDto).ToList() ?? new List<OrgUnitDto>()
             };
         }
+
+        private OrgUnitHierarchyDto MapToHierarchyDto(OrgUnit orgUnit)
+        {
+            return new OrgUnitHierarchyDto
+            {
+                Id = orgUnit.Id,
+                Name = orgUnit.Name,
+                ManagerId = orgUnit.ManagerId,
+                Children = orgUnit.Children?.Select(MapToHierarchyDto).ToList() ?? new List<OrgUnitHierarchyDto>()
+            };
+        }
     }
-} 
+}

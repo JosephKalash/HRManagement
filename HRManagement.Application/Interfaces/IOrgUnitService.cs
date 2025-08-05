@@ -11,10 +11,11 @@ namespace HRManagement.Application.Interfaces
         Task<IEnumerable<OrgUnitDto>> GetByParentIdAsync(Guid? parentId);
         Task<IEnumerable<OrgUnitDto>> GetByTypeAsync(OrgUnitType type);
         Task<IEnumerable<OrgUnitDto>> SearchByNameAsync(string searchTerm);
-        Task<OrgUnitDto> CreateAsync(OrgUnitDto dto);
-        Task<OrgUnitDto> UpdateAsync(Guid id, OrgUnitDto dto);
+        Task<OrgUnitDto> CreateAsync(CreateOrgUnitDto dto);
+        Task<OrgUnitDto> UpdateAsync(Guid id, UpdateOrgUnitDto dto);
         Task DeleteAsync(Guid id);
         Task<bool> ExistsAsync(Guid id);
         Task<PagedResult<OrgUnitDto>> GetPagedAsync(int pageNumber, int pageSize);
+        Task<OrgUnitHierarchyDto> GetHierarchyAsync();
     }
-} 
+}

@@ -7,5 +7,6 @@ namespace HRManagement.Core.Interfaces
         Task<IEnumerable<OrgUnit>> GetByParentIdAsync(Guid? parentId);
         Task<IEnumerable<OrgUnit>> GetByTypeAsync(OrgUnitType type);
         Task<IEnumerable<OrgUnit>> SearchByNameAsync(string searchTerm);
+        Task<IEnumerable<OrgUnit>> GetAllWithChildrenAsync();
     }
-} 
+}

@@ -5,10 +5,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HRManagement.Infrastructure.Repositories
 {
-    public class OrgUnitRepository : Repository<OrgUnit>, IOrgUnitRepository
+    public class OrgUnitRepository(HRDbContext context) : Repository<OrgUnit>(context), IOrgUnitRepository
     {
-        public OrgUnitRepository(HRDbContext context) : base(context) { }
-
         public async Task<IEnumerable<OrgUnit>> GetByParentIdAsync(Guid? parentId)
         {
             return await _dbSet.Where(o => o.ParentId == parentId).ToListAsync();
@@ -23,5 +21,10 @@ namespace HRManagement.Infrastructure.Repositories
         {
             return await _dbSet.Where(o => o.Name.Contains(searchTerm)).ToListAsync();
         }
+
+        public async Task<IEnumerable<OrgUnit>> GetAllWithChildrenAsync()
+        {
+            return await _dbSet.Include(o => o.Children).ToListAsync();
+        }
     }
-} 
+}

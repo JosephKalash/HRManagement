@@ -4,16 +4,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HRManagement.Infrastructure.Repositories
 {
-    public class Repository<T> : IRepository<T> where T : class
+    public class Repository<T>(HRDbContext context) : IRepository<T> where T : class
     {
-        protected readonly HRDbContext _context;
-        protected readonly DbSet<T> _dbSet;
-
-        public Repository(HRDbContext context)
-        {
-            _context = context;
-            _dbSet = context.Set<T>();
-        }
+        protected readonly HRDbContext _context = context;
+        protected readonly DbSet<T> _dbSet = context.Set<T>();
 
         public virtual async Task<T?> GetByIdAsync(Guid id)
         {
