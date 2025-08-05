@@ -22,3 +22,4 @@
 /Users/joseph/Development/HRManagement/HRManagement.Core/obj/Debug/net8.0/refint/HRManagement.Core.dll
 /Users/joseph/Development/HRManagement/HRManagement.Core/obj/Debug/net8.0/HRManagement.Core.pdb
 /Users/joseph/Development/HRManagement/HRManagement.Core/obj/Debug/net8.0/ref/HRManagement.Core.dll
+/Users/joseph/Development/HRManagement/HRManagement.Core/obj/Debug/net8.0/HRManagement.Core.sourcelink.json

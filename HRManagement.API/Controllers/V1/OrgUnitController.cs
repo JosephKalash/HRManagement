@@ -1,5 +1,6 @@
 using HRManagement.Application.DTOs;
 using HRManagement.Application.Interfaces;
+using HRManagement.Core.Entities;
 using HRManagement.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -74,7 +75,7 @@ namespace HRManagement.API.Controllers.V1
         [HttpGet("type/{type}")]
         [ProducesResponseType(typeof(ApiResponse<IEnumerable<OrgUnitDto>>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 500)]
-        public async Task<ActionResult<ApiResponse<IEnumerable<OrgUnitDto>>>> GetByType(int type)
+        public async Task<ActionResult<ApiResponse<IEnumerable<OrgUnitDto>>>> GetByType(OrgUnitType type)
         {
             try
             {
@@ -177,4 +178,4 @@ namespace HRManagement.API.Controllers.V1
             }
         }
     }
-} 
+}

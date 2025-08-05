@@ -1,4 +1,5 @@
 using HRManagement.Core.Entities;
+using HRManagement.Core.Enums;
 using HRManagement.Core.Interfaces;
 using HRManagement.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -11,11 +12,11 @@ namespace HRManagement.Infrastructure.Repositories
         {
         }
 
-        public async Task<IEnumerable<Role>> GetByLevelAsync(int level)
+        public async Task<IEnumerable<Role>> GetByLevelAsync(RoleLevel level)
         {
             return await _context.Roles
                 .Where(r => r.Level == level)
                 .ToListAsync();
         }
     }
-} 
+}

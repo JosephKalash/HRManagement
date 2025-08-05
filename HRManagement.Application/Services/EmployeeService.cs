@@ -7,14 +7,11 @@ using HRManagement.Core.Models;
 
 namespace HRManagement.Application.Services
 {
-    public class EmployeeService : IEmployeeService
+    public class EmployeeService(IEmployeeRepository employeeRepository, IImageService imageService, IEmployeeProfileRepository employeeProfileRepository) : IEmployeeService
     {
-        private readonly IEmployeeRepository _employeeRepository;
-
-        public EmployeeService(IEmployeeRepository employeeRepository)
-        {
-            _employeeRepository = employeeRepository;
-        }
+        private readonly IEmployeeRepository _employeeRepository = employeeRepository;
+        private readonly IEmployeeProfileRepository _employeeProfileRepository = employeeProfileRepository;
+        private readonly IImageService _imageService = imageService;
 
         public async Task<EmployeeDto?> GetByIdAsync(Guid id)
         {
@@ -123,6 +120,29 @@ namespace HRManagement.Application.Services
             return await _employeeRepository.ExistsAsync(id);
         }
 
+        public async Task<string> UploadProfileImageAsync(Guid employeeId, Stream imageFile, string originalFileName)
+        {
+            if (imageFile == null || imageFile.Length == 0)
+            {
+                throw new ArgumentException("Invalid image file.");
+            }
+
+            var employeeProfile = await _employeeProfileRepository.GetByEmployeeIdAsync(employeeId) ?? throw new ArgumentException("Employee not found");
+
+            // Save new image first
+            var (filePath, _) = await _imageService.SaveImageAsync(imageFile, "employee-profiles", originalFileName);
+
+            // Delete old image if exists (after successfully saving the new one)
+            if (!string.IsNullOrEmpty(employeeProfile.ImagePath))
+            {
+                _imageService.DeleteImage(employeeProfile.ImagePath);
+            }
+
+            // Update the database with the new file path
+            await _employeeProfileRepository.UpdateEmployeeImageAsync(employeeId, filePath);
+            return filePath;
+        }
+
         private static EmployeeDto MapToDto(Employee employee)
         {
             return new EmployeeDto
@@ -143,5 +163,31 @@ namespace HRManagement.Application.Services
                 UpdatedAt = employee.UpdatedAt
             };
         }
+
+        public async Task DeleteProfileImageAsync(Guid employeeId)
+        {
+            var empProfile = await _employeeProfileRepository.GetByEmployeeIdAsync(employeeId);
+            if (empProfile == null)
+                throw new ArgumentException("Employee not found");
+
+            if (!string.IsNullOrEmpty(empProfile.ImagePath))
+            {
+                _imageService.DeleteImage(empProfile.ImagePath);
+                empProfile.ImagePath = null;
+                await _employeeProfileRepository.UpdateAsync(empProfile);
+            }
+        }
+
+        public async Task<EmployeeProfile?> GetProfileByEmployeeIdAsync(Guid id)
+        {
+            var empProfile = await _employeeProfileRepository.GetByEmployeeIdAsync(id);
+            if (empProfile == null)
+                throw new ArgumentException("Employee not found");
+
+            return empProfile;
+
+        }
+
+
     }
 }

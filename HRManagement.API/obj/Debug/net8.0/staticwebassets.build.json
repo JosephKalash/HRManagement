@@ -1,11 +1,39 @@
 {
   "Version": 1,
-  "Hash": "u/bMonF+LVHk+tOc5W0oiQ9bxuuFZZa10rDbKZb1Yf0=",
+  "Hash": "+ctmcYBz8zQVpsxZ21SPd+Y4rpj0GhWkmR0otv64z4A=",
   "Source": "HRManagement.API",
   "BasePath": "_content/HRManagement.API",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
-  "Assets": []
+  "DiscoveryPatterns": [
+    {
+      "Name": "HRManagement.API/wwwroot",
+      "Source": "HRManagement.API",
+      "ContentRoot": "/Users/joseph/Development/HRManagement/HRManagement.API/wwwroot/",
+      "BasePath": "_content/HRManagement.API",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "/Users/joseph/Development/HRManagement/HRManagement.API/wwwroot/.gitkeep",
+      "SourceId": "HRManagement.API",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/joseph/Development/HRManagement/HRManagement.API/wwwroot/",
+      "BasePath": "_content/HRManagement.API",
+      "RelativePath": ".gitkeep",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/.gitkeep"
+    }
+  ]
 }

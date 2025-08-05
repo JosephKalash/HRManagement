@@ -28,3 +28,6 @@
 /Users/joseph/Development/HRManagement/HRManagement.Infrastructure/obj/Debug/net8.0/refint/HRManagement.Infrastructure.dll
 /Users/joseph/Development/HRManagement/HRManagement.Infrastructure/obj/Debug/net8.0/HRManagement.Infrastructure.pdb
 /Users/joseph/Development/HRManagement/HRManagement.Infrastructure/obj/Debug/net8.0/ref/HRManagement.Infrastructure.dll
+/Users/joseph/Development/HRManagement/HRManagement.Infrastructure/obj/Debug/net8.0/HRManagement.Infrastructure.sourcelink.json
+/Users/joseph/Development/HRManagement/HRManagement.Infrastructure/bin/Debug/net8.0/HRManagement.Application.dll
+/Users/joseph/Development/HRManagement/HRManagement.Infrastructure/bin/Debug/net8.0/HRManagement.Application.pdb

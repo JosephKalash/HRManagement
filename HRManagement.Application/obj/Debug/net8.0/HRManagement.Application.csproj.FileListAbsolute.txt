@@ -28,3 +28,4 @@
 /Users/joseph/Development/HRManagement/HRManagement.Application/obj/Debug/net8.0/refint/HRManagement.Application.dll
 /Users/joseph/Development/HRManagement/HRManagement.Application/obj/Debug/net8.0/HRManagement.Application.pdb
 /Users/joseph/Development/HRManagement/HRManagement.Application/obj/Debug/net8.0/ref/HRManagement.Application.dll
+/Users/joseph/Development/HRManagement/HRManagement.Application/obj/Debug/net8.0/HRManagement.Application.sourcelink.json

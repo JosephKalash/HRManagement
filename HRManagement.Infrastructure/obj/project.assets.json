@@ -289,6 +289,19 @@
           "buildTransitive/net8.0/_._": {}
         }
       },
+      "HRManagement.Application/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "HRManagement.Core": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/HRManagement.Application.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/HRManagement.Application.dll": {}
+        }
+      },
       "HRManagement.Core/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
@@ -747,6 +760,11 @@
         "useSharedDesignerContext.txt"
       ]
     },
+    "HRManagement.Application/1.0.0": {
+      "type": "project",
+      "path": "../HRManagement.Application/HRManagement.Application.csproj",
+      "msbuildProject": "../HRManagement.Application/HRManagement.Application.csproj"
+    },
     "HRManagement.Core/1.0.0": {
       "type": "project",
       "path": "../HRManagement.Core/HRManagement.Core.csproj",
@@ -755,6 +773,7 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
+      "HRManagement.Application >= 1.0.0",
       "HRManagement.Core >= 1.0.0",
       "Microsoft.EntityFrameworkCore >= 9.0.1",
       "Npgsql.EntityFrameworkCore.PostgreSQL >= 9.0.4"
@@ -785,6 +804,9 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
+            "/Users/joseph/Development/HRManagement/HRManagement.Application/HRManagement.Application.csproj": {
+              "projectPath": "/Users/joseph/Development/HRManagement/HRManagement.Application/HRManagement.Application.csproj"
+            },
             "/Users/joseph/Development/HRManagement/HRManagement.Core/HRManagement.Core.csproj": {
               "projectPath": "/Users/joseph/Development/HRManagement/HRManagement.Core/HRManagement.Core.csproj"
             }
@@ -827,6 +849,9 @@
         "assetTargetFallback": true,
         "warn": true,
         "frameworkReferences": {
+          "Microsoft.AspNetCore.App": {
+            "privateAssets": "none"
+          },
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
           }

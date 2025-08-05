@@ -127,7 +127,6 @@ namespace HRManagement.API.Controllers.V1
                     EyeColor = createDto.EyeColor,
                     DisabilityType = createDto.DisabilityType,
                     DistinctiveSigns = createDto.DistinctiveSigns,
-                    Image = createDto.Image,
                     CurrentNationality = createDto.CurrentNationality,
                     Religion = createDto.Religion,
                     PreviousNationality = createDto.PreviousNationality,
@@ -196,8 +195,6 @@ namespace HRManagement.API.Controllers.V1
                     profile.DisabilityType = updateDto.DisabilityType;
                 if (updateDto.DistinctiveSigns != null)
                     profile.DistinctiveSigns = updateDto.DistinctiveSigns;
-                if (updateDto.Image != null)
-                    profile.Image = updateDto.Image;
                 if (updateDto.CurrentNationality != null)
                     profile.CurrentNationality = updateDto.CurrentNationality;
                 if (updateDto.Religion != null)
@@ -271,7 +268,6 @@ namespace HRManagement.API.Controllers.V1
                 EyeColor = profile.EyeColor,
                 DisabilityType = profile.DisabilityType,
                 DistinctiveSigns = profile.DistinctiveSigns,
-                Image = profile.Image,
                 CurrentNationality = profile.CurrentNationality,
                 Religion = profile.Religion,
                 PreviousNationality = profile.PreviousNationality,

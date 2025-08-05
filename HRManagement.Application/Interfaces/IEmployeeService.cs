@@ -1,4 +1,5 @@
 using HRManagement.Application.DTOs;
+using HRManagement.Core.Entities;
 using HRManagement.Core.Models;
 
 namespace HRManagement.Application.Interfaces
@@ -6,6 +7,7 @@ namespace HRManagement.Application.Interfaces
     public interface IEmployeeService
     {
         Task<EmployeeDto?> GetByIdAsync(Guid id);
+        Task<EmployeeProfile?> GetProfileByEmployeeIdAsync(Guid id);
         Task<IEnumerable<EmployeeDto>> GetAllAsync();
         Task<IEnumerable<EmployeeDto>> GetActiveEmployeesAsync();
         Task<IEnumerable<EmployeeDto>> SearchEmployeesAsync(string searchTerm);
@@ -14,5 +16,7 @@ namespace HRManagement.Application.Interfaces
         Task DeleteAsync(Guid id);
         Task<bool> ExistsAsync(Guid id);
         Task<PagedResult<EmployeeDto>> GetPagedAsync(int pageNumber, int pageSize);
+        Task<string> UploadProfileImageAsync(Guid employeeId, Stream imageStream, string OriginalFileName);
+        Task DeleteProfileImageAsync(Guid employeeId);
     }
-} 
+}

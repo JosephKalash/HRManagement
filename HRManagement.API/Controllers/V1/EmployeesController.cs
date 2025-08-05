@@ -143,7 +143,7 @@ namespace HRManagement.API.Controllers.V1
                 }
 
                 var employee = await _employeeService.CreateAsync(createDto);
-                return CreatedAtAction(nameof(GetEmployee), new { id = employee.Id }, 
+                return CreatedAtAction(nameof(GetEmployee), new { id = employee.Id },
                     ApiResponse<EmployeeDto>.SuccessResult(employee, "Employee created successfully"));
             }
             catch (ArgumentException ex)
@@ -225,5 +225,128 @@ namespace HRManagement.API.Controllers.V1
                 return StatusCode(500, ApiResponse.ErrorResult("An error occurred while deleting the employee", new List<string> { ex.Message }));
             }
         }
+
+        /// <summary>
+        /// Upload profile image for an employee
+        /// </summary>
+        /// <param name="employeeId">Employee ID</param>
+        /// <param name="file">Image file</param>
+        /// <returns>Upload result</returns>
+        /// <response code="200">Image uploaded successfully</response>
+        /// <response code="400">If the file is invalid or employee not found</response>
+        /// <response code="500">If there was an internal server error</response>
+        [HttpPost("{employeeId}/profile-image")]
+        [ProducesResponseType(typeof(ApiResponse<object>), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 400)]
+        [ProducesResponseType(typeof(ApiResponse), 500)]
+        public async Task<ActionResult<ApiResponse<object>>> UploadProfileImage(Guid employeeId, IFormFile file)
+        {
+            try
+            {
+                if (file == null || file.Length == 0)
+                    return BadRequest(ApiResponse.ErrorResult("No file uploaded"));
+
+                // Validate file extension
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+                var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
+                if (!allowedExtensions.Contains(extension))
+                    return BadRequest(ApiResponse.ErrorResult("Invalid file type. Only JPG, PNG, and GIF files are allowed"));
+
+                using var stream = file.OpenReadStream();
+                var filePath = await _employeeService.UploadProfileImageAsync(employeeId, stream, file.FileName);
+
+                return Ok(ApiResponse<object>.SuccessResult(new { filePath }, "Image uploaded successfully"));
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ApiResponse.ErrorResult(ex.Message));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse.ErrorResult("An error occurred while uploading the image", new List<string> { ex.Message }));
+            }
+        }
+
+        /// <summary>
+        /// Get profile image for an employee
+        /// </summary>
+        /// <param name="employeeId">Employee ID</param>
+        /// <returns>Image file</returns>
+        /// <response code="200">Returns the image file</response>
+        /// <response code="404">If image is not found</response>
+        /// <response code="500">If there was an internal server error</response>
+        [HttpGet("{employeeId}/profile-image")]
+        [ProducesResponseType(typeof(FileContentResult), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 404)]
+        [ProducesResponseType(typeof(ApiResponse), 500)]
+        public async Task<IActionResult> GetProfileImage(Guid employeeId)
+        {
+            try
+            {
+                var employee = await _employeeService.GetProfileByEmployeeIdAsync(employeeId);
+                if (employee == null || string.IsNullOrEmpty(employee.ImagePath))
+                    return NotFound(ApiResponse.ErrorResult("Profile image not found"));
+
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(),
+                    "wwwroot", employee.ImagePath.Replace('/', Path.DirectorySeparatorChar));
+
+                if (!System.IO.File.Exists(filePath))
+                    return NotFound(ApiResponse.ErrorResult("Image file not found on disk"));
+
+                var fileBytes = await System.IO.File.ReadAllBytesAsync(filePath);
+                var contentType = GetContentType(employee.ImagePath);
+
+                return File(fileBytes, contentType);
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ApiResponse.ErrorResult(ex.Message));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse.ErrorResult("An error occurred while retrieving the image", new List<string> { ex.Message }));
+            }
+        }
+
+        /// <summary>
+        /// Delete profile image for an employee
+        /// </summary>
+        /// <param name="employeeId">Employee ID</param>
+        /// <returns>Deletion result</returns>
+        /// <response code="200">Image deleted successfully</response>
+        /// <response code="400">If employee not found</response>
+        /// <response code="500">If there was an internal server error</response>
+        [HttpDelete("{employeeId}/profile-image")]
+        [ProducesResponseType(typeof(ApiResponse), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 400)]
+        [ProducesResponseType(typeof(ApiResponse), 500)]
+        public async Task<ActionResult<ApiResponse>> DeleteProfileImage(Guid employeeId)
+        {
+            try
+            {
+                await _employeeService.DeleteProfileImageAsync(employeeId);
+                return Ok(ApiResponse.SuccessResult("Image deleted successfully"));
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ApiResponse.ErrorResult(ex.Message));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse.ErrorResult("An error occurred while deleting the image", new List<string> { ex.Message }));
+            }
+        }
+
+        private string GetContentType(string filePath)
+        {
+            var extension = Path.GetExtension(filePath).ToLowerInvariant();
+            return extension switch
+            {
+                ".jpg" or ".jpeg" => "image/jpeg",
+                ".png" => "image/png",
+                ".gif" => "image/gif",
+                _ => "application/octet-stream"
+            };
+        }
     }
-} 
+}

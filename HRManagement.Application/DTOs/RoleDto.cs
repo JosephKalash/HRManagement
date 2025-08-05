@@ -1,33 +1,53 @@
 using System.ComponentModel.DataAnnotations;
+using HRManagement.Core.Enums;
 
 namespace HRManagement.Application.DTOs
 {
     public class RoleDto
     {
         public Guid Id { get; set; }
-        public int? Level { get; set; }
         public string Name { get; set; } = string.Empty;
+        public string Code { get; set; } = string.Empty; // System identification
         public string? Description { get; set; }
+        public RoleLevel Level { get; set; } // Organizational role level
+        public bool IsActive { get; set; } // Indicates if the role is active
+        public bool IsSystemRole { get; set; } // Indicates if the role is a system role
     }
 
     public class CreateRoleDto
     {
-        public int? Level { get; set; }
-
         [Required]
-        [StringLength(200)]
+        [StringLength(100)]
         public string Name { get; set; } = string.Empty;
 
+        [StringLength(50)]
+        public string Code { get; set; } = string.Empty; // System identification
+
+        [StringLength(500)]
         public string? Description { get; set; }
+
+        [Required]
+        public RoleLevel Level { get; set; } // Organizational role level
+
+        public bool IsSystemRole { get; set; } = false; // Indicates if the role is a system role
     }
 
     public class UpdateRoleDto
     {
-        public int? Level { get; set; }
+        [Required]
+        public Guid Id { get; set; } // Role ID for identification
 
-        [StringLength(200)]
-        public string? Name { get; set; }
+        [StringLength(100)]
+        public string Name { get; set; } = string.Empty;
 
+        [StringLength(50)]
+        public string Code { get; set; } = string.Empty; // System identification
+
+        [StringLength(500)]
         public string? Description { get; set; }
+
+        public RoleLevel? Level { get; set; } // Organizational role level
+
+        public bool? IsActive { get; set; } // Indicates if the role is active
     }
-} 
+}

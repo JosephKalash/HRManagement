@@ -1,12 +1,15 @@
+using System.Reflection;
+using System.Text.Json.Serialization;
+using HRManagement.API.Middleware;
 using HRManagement.Application.Interfaces;
 using HRManagement.Application.Services;
 using HRManagement.Core.Interfaces;
 using HRManagement.Infrastructure.Data;
 using HRManagement.Infrastructure.Repositories;
-using HRManagement.API.Middleware;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,7 +40,10 @@ builder.Services.AddSwaggerGen(c =>
         c.IncludeXmlComments(xmlPath);
     }
 });
-
+builder.Services.Configure<JsonOptions>(options =>
+{
+    options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
 // Add API Versioning
 builder.Services.AddApiVersioning(options =>
 {
@@ -70,6 +76,14 @@ builder.Services.AddScoped<IOrgUnitRepository, OrgUnitRepository>();
 // Register services
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<IOrgUnitService, OrgUnitService>();
+builder.Services.AddScoped<IImageService, ImageService>();
+builder.Services.AddScoped<IRoleService, RoleService>();
+
+// Configure file upload limits
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = 10 * 1024 * 1024; // 10MB
+});
 
 // Add CORS
 builder.Services.AddCors(options =>

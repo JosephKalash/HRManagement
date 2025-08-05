@@ -46,7 +46,6 @@ namespace HRManagement.Infrastructure.Data
                 entity.Property(e => e.HairColor).HasMaxLength(50);
                 entity.Property(e => e.EyeColor).HasMaxLength(50);
                 entity.Property(e => e.DisabilityType).HasMaxLength(100);
-                entity.Property(e => e.Image).IsRequired().HasMaxLength(500);
                 entity.Property(e => e.CurrentNationality).IsRequired().HasMaxLength(100);
                 entity.Property(e => e.Religion).IsRequired().HasMaxLength(100);
                 entity.Property(e => e.PlaceOfBirth).IsRequired().HasMaxLength(200);

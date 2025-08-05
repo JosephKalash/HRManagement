@@ -155,3 +155,11 @@ TestResults/
 
 Migrations/
 
+# Uploaded files
+HRManagement.API/wwwroot/uploads/
+uploads/
+*.jpg
+*.jpeg
+*.png
+*.gif
+

@@ -284,3 +284,6 @@
 /Users/joseph/Development/HRManagement/HRManagement.API/obj/Debug/net8.0/HRManagement.API.pdb
 /Users/joseph/Development/HRManagement/HRManagement.API/obj/Debug/net8.0/HRManagement.API.genruntimeconfig.cache
 /Users/joseph/Development/HRManagement/HRManagement.API/obj/Debug/net8.0/ref/HRManagement.API.dll
+/Users/joseph/Development/HRManagement/HRManagement.API/bin/Debug/net8.0/HRManagement.API.staticwebassets.runtime.json
+/Users/joseph/Development/HRManagement/HRManagement.API/bin/Debug/net8.0/Microsoft.Extensions.ObjectPool.dll
+/Users/joseph/Development/HRManagement/HRManagement.API/obj/Debug/net8.0/HRManagement.API.sourcelink.json
