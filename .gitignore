@@ -163,3 +163,75 @@ uploads/
 *.png
 *.gif
 
+# macOS
+.DS_Store
+
+# Visual Studio
+.vs/
+
+# IDEs
+.idea/
+*.sln.iml
+
+# Build results
+bin/
+obj/
+HRManagement.Infrastructure/obj
+HRManagement.API/obj
+HRManagement.Core/obj
+HRManagement.Application/obj
+Debug/
+Release/
+build/
+bld/
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+Thumbs.db
+Desktop.ini
+
+# Environment and secrets
+.env
+.env.*
+secrets.json
+
+# Test results
+TestResults/
+
+# Migration files (optional)
+Migrations/
+
+# Uploaded files
+HRManagement.API/wwwroot/uploads/
+uploads/
+*.jpg
+*.jpeg
+*.png
+*.gif
+
+# Node.js / npm
+node_modules/
+npm-debug.log
+yarn-error.log
+yarn-debug.log
+*.tsbuildinfo
+
+# Coverage
+coverage/
+coverage*.json
+*.lcov
+*.coverage
+*.coveragexml
+
+# Resharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# Azure Functions local settings
+local.settings.json
+
