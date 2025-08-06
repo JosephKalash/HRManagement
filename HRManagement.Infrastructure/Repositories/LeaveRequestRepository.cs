@@ -11,9 +11,10 @@ namespace HRManagement.Infrastructure.Repositories
         {
         }
 
-        public async Task<IEnumerable<LeaveRequest>> GetByEmployeeIdAsync(Guid employeeId)
+        public Task<IEnumerable<LeaveRequest>> GetByEmployeeIdAsync(Guid employeeId)
         {
-            return await _dbSet.Where(lr => lr.EmployeeId == employeeId).ToListAsync();
+            // return await _dbSet.Where(lr => lr.EmployeeId == employeeId).ToListAsync();
+            throw new NotImplementedException("This method is not implemented yet.");
         }
 
         public async Task<IEnumerable<LeaveRequest>> GetByStatusAsync(LeaveStatus status)

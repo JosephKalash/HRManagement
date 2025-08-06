@@ -1,13 +1,18 @@
 using System.Reflection;
+using HRManagement.Application.Interfaces;
+using HRManagement.Application.Mapping;
+using HRManagement.Application.Services;
+using HRManagement.Core.Entities;
+using HRManagement.Core.Enums;
+using HRManagement.Core.Interfaces;
+using HRManagement.Infrastructure.Data;
+using HRManagement.Infrastructure.Repositories;
+using HRManagement.Infrastructure.Services;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
-using HRManagement.Infrastructure.Data;
-using HRManagement.Application.Interfaces;
-using HRManagement.Application.Services;
-using HRManagement.Core.Interfaces;
-using HRManagement.Infrastructure.Repositories;
 
 namespace HRManagement.API;
 
@@ -18,17 +23,17 @@ public static class ProgramConfigExtensions
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(c =>
         {
+            c.SupportNonNullableReferenceTypes();
             c.SwaggerDoc("v1", new OpenApiInfo
             {
                 Title = "HR Management API",
                 Version = "v1",
                 Description = "A comprehensive HR management system API",
-                Contact = new OpenApiContact
-                {
-                    Name = "HR Management Team",
-                    Email = "hr@company.com"
-                }
             });
+            MapEnum<RoleLevel>(c);
+            MapEnum<OrgUnitType>(c);
+            MapEnum<MilitaryRank>(c);
+            MapEnum<Gender>(c);
             // Include XML comments for better documentation
             var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
             var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
@@ -95,7 +100,6 @@ public static class ProgramConfigExtensions
         builder.Services.AddScoped<IEmployeeAssignmentRepository, EmployeeAssignmentRepository>();
         builder.Services.AddScoped<IRoleRepository, RoleRepository>();
         builder.Services.AddScoped<ILeaveRequestRepository, LeaveRequestRepository>();
-        builder.Services.AddScoped<IPerformanceReviewRepository, PerformanceReviewRepository>();
         builder.Services.AddScoped<IOrgUnitRepository, OrgUnitRepository>();
         return builder;
     }
@@ -105,6 +109,25 @@ public static class ProgramConfigExtensions
         builder.Services.AddScoped<IEmployeeService, EmployeeService>();
         builder.Services.AddScoped<IOrgUnitService, OrgUnitService>();
         builder.Services.AddScoped<IImageService, ImageService>();
+        builder.Services.AddScoped<IRoleService, RoleService>();
+
+        // Add AutoMapper
+        builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+        // Register the web host environment adapter
+        _ = builder.Services.AddScoped<Application.Interfaces.IWebHostEnvironment, WebHostEnvironmentAdapter>();
+
         return builder;
+    }
+
+    static void MapEnum<T>(Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenOptions c)
+    {
+        c.MapType<T>(() => new OpenApiSchema
+        {
+            Type = "string",
+            Enum = [.. Enum.GetNames(typeof(T))
+                    .Select(name => new OpenApiString(name))
+                    .Cast<IOpenApiAny>()]
+        });
     }
 }

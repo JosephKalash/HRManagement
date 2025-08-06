@@ -7,5 +7,4 @@ namespace HRManagement.Application.Interfaces
         void DeleteImage(string filePath);
         bool IsValidImage(Stream imageStream, string fileName);
     }
-
 }

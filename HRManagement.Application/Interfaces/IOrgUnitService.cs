@@ -1,5 +1,6 @@
 using HRManagement.Application.DTOs;
 using HRManagement.Core.Entities;
+using HRManagement.Core.Enums;
 using HRManagement.Core.Models;
 
 namespace HRManagement.Application.Interfaces

@@ -1,4 +1,5 @@
 using HRManagement.Core.Entities;
+using HRManagement.Core.Enums;
 
 namespace HRManagement.Application.DTOs
 {

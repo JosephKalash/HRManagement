@@ -7,7 +7,6 @@ namespace HRManagement.Application.DTOs
         public Guid Id { get; set; }
         public Guid EmployeeId { get; set; }
         public Guid BelongingUnitId { get; set; }
-        public int Rank { get; set; }
         public int Ownership { get; set; }
         public Guid JobRoleId { get; set; }
         public DateTime? HiringDate { get; set; }

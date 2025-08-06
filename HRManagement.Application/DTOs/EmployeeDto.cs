@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using HRManagement.Core.Enums;
 
 namespace HRManagement.Application.DTOs
 {
@@ -9,10 +10,11 @@ namespace HRManagement.Application.DTOs
         public string ArabicFirstName { get; set; } = string.Empty;
         public string? ArabicMiddleName { get; set; }
         public string ArabicLastName { get; set; } = string.Empty;
+        public MilitaryRank Rank { get; set; }
         public string EnglishFirstName { get; set; } = string.Empty;
         public string? EnglishMiddleName { get; set; }
         public string EnglishLastName { get; set; } = string.Empty;
-        public int Gender { get; set; }
+        public Gender Gender { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string IdNumber { get; set; } = string.Empty;
         public bool IsActive { get; set; }
@@ -47,10 +49,13 @@ namespace HRManagement.Application.DTOs
         [StringLength(100)]
         public string EnglishLastName { get; set; } = string.Empty;
 
-        public int Gender { get; set; }
+        public Gender Gender { get; set; }
 
         [Required]
         public DateTime DateOfBirth { get; set; }
+
+        [Required]
+        public MilitaryRank Rank { get; set; }
 
         [Required]
         [StringLength(50)]

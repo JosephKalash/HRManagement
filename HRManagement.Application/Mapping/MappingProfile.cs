@@ -1,0 +1,128 @@
+using AutoMapper;
+using HRManagement.Application.DTOs;
+using HRManagement.Core.Entities;
+
+namespace HRManagement.Application.Mapping
+{
+    public class MappingProfile : Profile
+    {
+        public MappingProfile()
+        {
+            // Employee mappings
+            CreateMap<Employee, EmployeeDto>()
+                .ReverseMap();
+
+            CreateMap<CreateEmployeeDto, Employee>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+                .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore())
+                .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => true))
+                .ForMember(dest => dest.Profile, opt => opt.Ignore())
+                .ForMember(dest => dest.ServiceInfos, opt => opt.Ignore())
+                .ForMember(dest => dest.Assignments, opt => opt.Ignore())
+                .ReverseMap();
+            // .ForMember(dest => dest.LeaveRequests, opt => opt.Ignore());
+
+            CreateMap<UpdateEmployeeDto, Employee>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+                .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => DateTime.UtcNow))
+                .ForMember(dest => dest.Profile, opt => opt.Ignore())
+                .ForMember(dest => dest.ServiceInfos, opt => opt.Ignore())
+                .ForMember(dest => dest.Assignments, opt => opt.Ignore())
+                // .ForMember(dest => dest.LeaveRequests, opt => opt.Ignore())
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            // EmployeeProfile mappings
+            CreateMap<EmployeeProfile, EmployeeProfileDto>()
+                .ReverseMap();
+
+            CreateMap<CreateEmployeeProfileDto, EmployeeProfile>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.Employee, opt => opt.Ignore());
+
+            CreateMap<UpdateEmployeeProfileDto, EmployeeProfile>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.Employee, opt => opt.Ignore())
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            // EmployeeServiceInfo mappings
+            CreateMap<EmployeeServiceInfo, EmployeeServiceInfoDto>()
+                .ReverseMap();
+
+            CreateMap<CreateEmployeeServiceInfoDto, EmployeeServiceInfo>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.Employee, opt => opt.Ignore());
+
+            CreateMap<UpdateEmployeeServiceInfoDto, EmployeeServiceInfo>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.Employee, opt => opt.Ignore())
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            // EmployeeAssignment mappings
+            CreateMap<EmployeeAssignment, EmployeeAssignmentDto>()
+                .ReverseMap();
+
+            CreateMap<CreateEmployeeAssignmentDto, EmployeeAssignment>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.Employee, opt => opt.Ignore())
+                .ForMember(dest => dest.AssignedUnit, opt => opt.Ignore())
+                .ForMember(dest => dest.JobRole, opt => opt.Ignore());
+
+            CreateMap<UpdateEmployeeAssignmentDto, EmployeeAssignment>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.Employee, opt => opt.Ignore())
+                .ForMember(dest => dest.AssignedUnit, opt => opt.Ignore())
+                .ForMember(dest => dest.JobRole, opt => opt.Ignore())
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            // OrgUnit mappings
+            CreateMap<OrgUnit, OrgUnitDto>()
+                .ReverseMap();
+
+            CreateMap<CreateOrgUnitDto, OrgUnit>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.Parent, opt => opt.Ignore())
+                .ForMember(dest => dest.Children, opt => opt.Ignore())
+                .ForMember(dest => dest.EmployeeAssignments, opt => opt.Ignore());
+
+            CreateMap<UpdateOrgUnitDto, OrgUnit>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.Parent, opt => opt.Ignore())
+                .ForMember(dest => dest.Children, opt => opt.Ignore())
+                .ForMember(dest => dest.EmployeeAssignments, opt => opt.Ignore())
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            // OrgUnitHierarchyDto mapping
+            CreateMap<OrgUnit, OrgUnitHierarchyDto>()
+                .ForMember(dest => dest.Children, opt => opt.MapFrom(src => src.Children));
+
+            // Role mappings
+            CreateMap<Role, RoleDto>()
+                .ReverseMap();
+
+            CreateMap<CreateRoleDto, Role>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.EmployeeAssignments, opt => opt.Ignore());
+
+            CreateMap<UpdateRoleDto, Role>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.EmployeeAssignments, opt => opt.Ignore())
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            // LeaveRequest mappings
+            CreateMap<LeaveRequest, LeaveRequestDto>()
+                .ReverseMap();
+
+            CreateMap<CreateLeaveRequestDto, LeaveRequest>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.Employee, opt => opt.Ignore());
+
+            CreateMap<UpdateLeaveRequestDto, LeaveRequest>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.Employee, opt => opt.Ignore())
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+        }
+    }
+}

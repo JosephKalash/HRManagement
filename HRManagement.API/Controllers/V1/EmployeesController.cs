@@ -129,7 +129,7 @@ namespace HRManagement.API.Controllers.V1
         [ProducesResponseType(typeof(ApiResponse<EmployeeDto>), 201)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
         [ProducesResponseType(typeof(ApiResponse), 500)]
-        public async Task<ActionResult<ApiResponse<EmployeeDto>>> CreateEmployee(CreateEmployeeDto createDto)
+        public async Task<ActionResult<ApiResponse<EmployeeDto>>> CreateEmployee([FromBody] CreateEmployeeDto createDto)
         {
             try
             {

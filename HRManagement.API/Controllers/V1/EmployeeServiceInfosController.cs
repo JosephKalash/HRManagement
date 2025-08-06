@@ -295,7 +295,6 @@ namespace HRManagement.API.Controllers.V1
                 Id = serviceInfo.Id,
                 EmployeeId = serviceInfo.EmployeeId,
                 BelongingUnitId = serviceInfo.BelongingUnitId,
-                Rank = serviceInfo.Rank,
                 Ownership = serviceInfo.Ownership,
                 JobRoleId = serviceInfo.JobRoleId,
                 HiringDate = serviceInfo.HiringDate,

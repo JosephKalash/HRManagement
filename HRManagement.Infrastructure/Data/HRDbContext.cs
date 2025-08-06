@@ -16,7 +16,6 @@ namespace HRManagement.Infrastructure.Data
         public DbSet<Role> Roles { get; set; }
         public DbSet<OrgUnit> OrgUnits { get; set; }
         public DbSet<LeaveRequest> LeaveRequests { get; set; }
-        public DbSet<PerformanceReview> PerformanceReviews { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -122,32 +121,18 @@ namespace HRManagement.Infrastructure.Data
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Reason).HasMaxLength(500);
                 entity.Property(e => e.ManagerComments).HasMaxLength(500);
-                entity.HasOne(e => e.Employee)
-                    .WithMany(e => e.LeaveRequests)
-                    .HasForeignKey(e => e.EmployeeId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                // entity.HasOne(e => e.Employee)
+                //     .WithMany(e => e.LeaveRequests)
+                //     .HasForeignKey(e => e.EmployeeId)
+                //     .OnDelete(DeleteBehavior.Cascade);
             });
 
-            // PerformanceReview configuration
-            modelBuilder.Entity<PerformanceReview>(entity =>
-            {
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.ReviewerName).IsRequired().HasMaxLength(100);
-                entity.Property(e => e.Strengths).HasMaxLength(1000);
-                entity.Property(e => e.AreasForImprovement).HasMaxLength(1000);
-                entity.Property(e => e.Goals).HasMaxLength(1000);
-                entity.Property(e => e.Comments).HasMaxLength(1000);
-                entity.HasOne(e => e.Employee)
-                    .WithMany(e => e.PerformanceReviews)
-                    .HasForeignKey(e => e.EmployeeId)
-                    .OnDelete(DeleteBehavior.Cascade);
-            });
         }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             var entries = ChangeTracker.Entries()
-                .Where(e => e.Entity is Employee || e.Entity is LeaveRequest || e.Entity is PerformanceReview || 
+                .Where(e => e.Entity is Employee || e.Entity is LeaveRequest ||
                            e.Entity is EmployeeProfile || e.Entity is EmployeeServiceInfo || e.Entity is EmployeeAssignment)
                 .Where(e => e.State == EntityState.Modified);
 
@@ -164,4 +149,4 @@ namespace HRManagement.Infrastructure.Data
             return base.SaveChangesAsync(cancellationToken);
         }
     }
-} 
+}

@@ -1,13 +1,22 @@
+using System.Text.Json.Serialization;
 using HRManagement.API;
 using HRManagement.API.Middleware;
+using Microsoft.AspNetCore.Http.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });;
 
 // Use extension methods for configuration
 builder.AddSwaggerAndApiVersioning();
-builder.AddJsonOptions();
+// builder.Services.Configure<JsonOptions>(options =>
+//         {
+//             options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+//         });
+
 builder.AddCorsPolicy();
 builder.AddFormOptions();
 builder.AddDbContextAndRepositories();

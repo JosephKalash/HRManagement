@@ -1,6 +1,7 @@
 using HRManagement.Application.DTOs;
 using HRManagement.Application.Interfaces;
 using HRManagement.Core.Entities;
+using HRManagement.Core.Enums;
 using HRManagement.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 

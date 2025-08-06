@@ -24,7 +24,7 @@ namespace HRManagement.Core.Entities
     {
         public Guid Id { get; set; } = Guid.NewGuid();
         
-        public Guid EmployeeId { get; set; }
+        // public Guid EmployeeId { get; set; }
         
         [Required]
         public DateTime StartDate { get; set; }
