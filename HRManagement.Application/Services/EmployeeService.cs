@@ -134,5 +134,15 @@ namespace HRManagement.Application.Services
 
             return empProfile;
         }
+
+        public async Task<ComprehensiveEmployeeDto?> GetComprehensiveEmployeeByIdAsync(Guid id)
+        {
+            var employee = await _employeeRepository.GetEmployeeWithAllDetailsAsync(id);
+            if (employee == null)
+            {
+                return null;
+            }
+            return _mapper.Map<ComprehensiveEmployeeDto>(employee);
+        }
     }
 }

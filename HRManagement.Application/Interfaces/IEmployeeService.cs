@@ -18,5 +18,6 @@ namespace HRManagement.Application.Interfaces
         Task<PagedResult<EmployeeDto>> GetPagedAsync(int pageNumber, int pageSize);
         Task<string> UploadProfileImageAsync(Guid employeeId, Stream imageStream, string OriginalFileName);
         Task DeleteProfileImageAsync(Guid employeeId);
+        Task<ComprehensiveEmployeeDto?> GetComprehensiveEmployeeByIdAsync(Guid id);
     }
 }

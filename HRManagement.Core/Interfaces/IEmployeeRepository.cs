@@ -8,5 +8,6 @@ namespace HRManagement.Core.Interfaces
         Task<Employee?> GetByIdNumberAsync(string idNumber);
         Task<IEnumerable<Employee>> GetActiveEmployeesAsync();
         Task<IEnumerable<Employee>> SearchEmployeesAsync(string searchTerm);
+        Task<Employee?> GetEmployeeWithAllDetailsAsync(Guid id);
     }
 } 

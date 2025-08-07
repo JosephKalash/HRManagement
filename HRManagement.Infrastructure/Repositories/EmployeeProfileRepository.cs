@@ -5,12 +5,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HRManagement.Infrastructure.Repositories
 {
-    public class EmployeeProfileRepository : Repository<EmployeeProfile>, IEmployeeProfileRepository
+    public class EmployeeProfileRepository(HRDbContext context) : Repository<EmployeeProfile>(context), IEmployeeProfileRepository
     {
-        public EmployeeProfileRepository(HRDbContext context) : base(context)
-        {
-        }
-
         public async Task<EmployeeProfile?> GetByEmployeeIdAsync(Guid employeeId)
         {
             return await _context.EmployeeProfiles

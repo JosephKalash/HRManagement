@@ -16,6 +16,7 @@ namespace HRManagement.Infrastructure.Data
         public DbSet<Role> Roles { get; set; }
         public DbSet<OrgUnit> OrgUnits { get; set; }
         public DbSet<LeaveRequest> LeaveRequests { get; set; }
+        public DbSet<EmployeeContact> EmployeeContacts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -52,6 +53,18 @@ namespace HRManagement.Infrastructure.Data
                 entity.HasOne(e => e.Employee)
                     .WithOne(e => e.Profile)
                     .HasForeignKey<EmployeeProfile>(e => e.EmployeeId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+            modelBuilder.Entity<EmployeeContact>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Email);
+                entity.Property(e => e.MobileNumber).IsRequired();
+                entity.Property(e => e.SecondMobileNumber);
+                entity.Property(e => e.Address).HasMaxLength(500);
+                entity.HasOne(e => e.Employee)
+                    .WithOne(e => e.Contact)
+                    .HasForeignKey<EmployeeContact>(e => e.EmployeeId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
 

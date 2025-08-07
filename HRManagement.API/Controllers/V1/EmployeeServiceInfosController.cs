@@ -3,6 +3,7 @@ using HRManagement.Core.Entities;
 using HRManagement.Core.Interfaces;
 using HRManagement.Core.Models;
 using Microsoft.AspNetCore.Mvc;
+using AutoMapper;
 
 namespace HRManagement.API.Controllers.V1
 {
@@ -13,10 +14,12 @@ namespace HRManagement.API.Controllers.V1
     public class EmployeeServiceInfosController : ControllerBase
     {
         private readonly IEmployeeServiceInfoRepository _employeeServiceInfoRepository;
+        private readonly IMapper _mapper;
 
-        public EmployeeServiceInfosController(IEmployeeServiceInfoRepository employeeServiceInfoRepository)
+        public EmployeeServiceInfosController(IEmployeeServiceInfoRepository employeeServiceInfoRepository, IMapper mapper)
         {
             _employeeServiceInfoRepository = employeeServiceInfoRepository;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -31,7 +34,7 @@ namespace HRManagement.API.Controllers.V1
             try
             {
                 var serviceInfos = await _employeeServiceInfoRepository.GetAllAsync();
-                var dtos = serviceInfos.Select(MapToDto);
+                var dtos = _mapper.Map<IEnumerable<EmployeeServiceInfoDto>>(serviceInfos);
                 return Ok(ApiResponse<IEnumerable<EmployeeServiceInfoDto>>.SuccessResult(dtos, "Employee service infos retrieved successfully"));
             }
             catch (Exception ex)
@@ -59,7 +62,7 @@ namespace HRManagement.API.Controllers.V1
                     return NotFound(ApiResponse<EmployeeServiceInfoDto>.ErrorResult($"Employee service info with ID {id} not found"));
                 }
 
-                return Ok(ApiResponse<EmployeeServiceInfoDto>.SuccessResult(MapToDto(serviceInfo), "Employee service info retrieved successfully"));
+                return Ok(ApiResponse<EmployeeServiceInfoDto>.SuccessResult(_mapper.Map<EmployeeServiceInfoDto>(serviceInfo), "Employee service info retrieved successfully"));
             }
             catch (Exception ex)
             {
@@ -80,7 +83,7 @@ namespace HRManagement.API.Controllers.V1
             try
             {
                 var serviceInfos = await _employeeServiceInfoRepository.GetByEmployeeIdAsync(employeeId);
-                var dtos = serviceInfos.Select(MapToDto);
+                var dtos = _mapper.Map<IEnumerable<EmployeeServiceInfoDto>>(serviceInfos);
                 return Ok(ApiResponse<IEnumerable<EmployeeServiceInfoDto>>.SuccessResult(dtos, "Employee service infos retrieved successfully"));
             }
             catch (Exception ex)
@@ -108,7 +111,7 @@ namespace HRManagement.API.Controllers.V1
                     return NotFound(ApiResponse<EmployeeServiceInfoDto>.ErrorResult($"Active employee service info for employee ID {employeeId} not found"));
                 }
 
-                return Ok(ApiResponse<EmployeeServiceInfoDto>.SuccessResult(MapToDto(serviceInfo), "Active employee service info retrieved successfully"));
+                return Ok(ApiResponse<EmployeeServiceInfoDto>.SuccessResult(_mapper.Map<EmployeeServiceInfoDto>(serviceInfo), "Active employee service info retrieved successfully"));
             }
             catch (Exception ex)
             {
@@ -138,32 +141,11 @@ namespace HRManagement.API.Controllers.V1
                     return BadRequest(ApiResponse<EmployeeServiceInfoDto>.ErrorResult("Validation failed", errors));
                 }
 
-                var serviceInfo = new EmployeeServiceInfo
-                {
-                    EmployeeId = createDto.EmployeeId,
-                    BelongingUnitId = createDto.BelongingUnitId,
-                    Rank = createDto.Rank,
-                    Ownership = createDto.Ownership,
-                    JobRoleId = createDto.JobRoleId,
-                    HiringDate = createDto.HiringDate,
-                    GrantingAuthority = createDto.GrantingAuthority,
-                    LastPromotion = createDto.LastPromotion,
-                    ContractDuration = createDto.ContractDuration,
-                    ServiceDuration = createDto.ServiceDuration,
-                    BaseSalary = createDto.BaseSalary,
-                    IsMilitaryCoach = createDto.IsMilitaryCoach,
-                    IsDeductedMinistryVacancies = createDto.IsDeductedMinistryVacancies,
-                    IsRetiredFederalMinistry = createDto.IsRetiredFederalMinistry,
-                    IsNationalService = createDto.IsNationalService,
-                    ProfessionalSupport = createDto.ProfessionalSupport,
-                    EffectiveDate = createDto.EffectiveDate,
-                    EndDate = createDto.EndDate,
-                    IsActive = createDto.IsActive
-                };
+                var serviceInfo = _mapper.Map<EmployeeServiceInfo>(createDto);
 
                 var createdServiceInfo = await _employeeServiceInfoRepository.AddAsync(serviceInfo);
-                return CreatedAtAction(nameof(GetEmployeeServiceInfo), new { id = createdServiceInfo.Id }, 
-                    ApiResponse<EmployeeServiceInfoDto>.SuccessResult(MapToDto(createdServiceInfo), "Employee service info created successfully"));
+                return CreatedAtAction(nameof(GetEmployeeServiceInfo), new { id = createdServiceInfo.Id },
+                    ApiResponse<EmployeeServiceInfoDto>.SuccessResult(_mapper.Map<EmployeeServiceInfoDto>(createdServiceInfo), "Employee service info created successfully"));
             }
             catch (ArgumentException ex)
             {
@@ -208,8 +190,6 @@ namespace HRManagement.API.Controllers.V1
                 // Update properties
                 if (updateDto.BelongingUnitId.HasValue)
                     serviceInfo.BelongingUnitId = updateDto.BelongingUnitId.Value;
-                if (updateDto.Rank.HasValue)
-                    serviceInfo.Rank = updateDto.Rank.Value;
                 if (updateDto.Ownership.HasValue)
                     serviceInfo.Ownership = updateDto.Ownership.Value;
                 if (updateDto.JobRoleId.HasValue)
@@ -244,7 +224,7 @@ namespace HRManagement.API.Controllers.V1
                     serviceInfo.IsActive = updateDto.IsActive.Value;
 
                 var updatedServiceInfo = await _employeeServiceInfoRepository.UpdateAsync(serviceInfo);
-                return Ok(ApiResponse<EmployeeServiceInfoDto>.SuccessResult(MapToDto(updatedServiceInfo), "Employee service info updated successfully"));
+                return Ok(ApiResponse<EmployeeServiceInfoDto>.SuccessResult(_mapper.Map<EmployeeServiceInfoDto>(updatedServiceInfo), "Employee service info updated successfully"));
             }
             catch (ArgumentException ex)
             {
@@ -287,31 +267,5 @@ namespace HRManagement.API.Controllers.V1
                 return StatusCode(500, ApiResponse.ErrorResult("An error occurred while deleting the employee service info", new List<string> { ex.Message }));
             }
         }
-
-        private static EmployeeServiceInfoDto MapToDto(EmployeeServiceInfo serviceInfo)
-        {
-            return new EmployeeServiceInfoDto
-            {
-                Id = serviceInfo.Id,
-                EmployeeId = serviceInfo.EmployeeId,
-                BelongingUnitId = serviceInfo.BelongingUnitId,
-                Ownership = serviceInfo.Ownership,
-                JobRoleId = serviceInfo.JobRoleId,
-                HiringDate = serviceInfo.HiringDate,
-                GrantingAuthority = serviceInfo.GrantingAuthority,
-                LastPromotion = serviceInfo.LastPromotion,
-                ContractDuration = serviceInfo.ContractDuration,
-                ServiceDuration = serviceInfo.ServiceDuration,
-                BaseSalary = serviceInfo.BaseSalary,
-                IsMilitaryCoach = serviceInfo.IsMilitaryCoach,
-                IsDeductedMinistryVacancies = serviceInfo.IsDeductedMinistryVacancies,
-                IsRetiredFederalMinistry = serviceInfo.IsRetiredFederalMinistry,
-                IsNationalService = serviceInfo.IsNationalService,
-                ProfessionalSupport = serviceInfo.ProfessionalSupport,
-                EffectiveDate = serviceInfo.EffectiveDate,
-                EndDate = serviceInfo.EndDate,
-                IsActive = serviceInfo.IsActive
-            };
-        }
     }
-} 
+}

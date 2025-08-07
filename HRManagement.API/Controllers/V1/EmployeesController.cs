@@ -331,6 +331,36 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
+        /// <summary>
+        /// Get comprehensive employee details by ID
+        /// </summary>
+        /// <param name="id">Employee ID</param>
+        /// <returns>Comprehensive employee details</returns>
+        /// <response code="200">Returns the comprehensive employee details</response>
+        /// <response code="404">If employee is not found</response>
+        /// <response code="500">If there was an internal server error</response>
+        [HttpGet("{id}/details")]
+        [ProducesResponseType(typeof(ApiResponse<ComprehensiveEmployeeDto>), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 404)]
+        [ProducesResponseType(typeof(ApiResponse), 500)]
+        public async Task<ActionResult<ApiResponse<ComprehensiveEmployeeDto>>> GetComprehensiveEmployeeDetails(Guid id)
+        {
+            try
+            {
+                var employee = await _employeeService.GetComprehensiveEmployeeByIdAsync(id);
+                if (employee == null)
+                {
+                    return NotFound(ApiResponse<ComprehensiveEmployeeDto>.ErrorResult($"Employee with ID {id} not found"));
+                }
+
+                return Ok(ApiResponse<ComprehensiveEmployeeDto>.SuccessResult(employee, "Comprehensive employee details retrieved successfully"));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<ComprehensiveEmployeeDto>.ErrorResult("An error occurred while retrieving comprehensive employee details", new List<string> { ex.Message }));
+            }
+        }
+
         private string GetContentType(string filePath)
         {
             var extension = Path.GetExtension(filePath).ToLowerInvariant();

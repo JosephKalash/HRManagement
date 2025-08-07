@@ -19,6 +19,8 @@ namespace HRManagement.Application.DTOs
         public string? PreviousNationality { get; set; }
         public DateTime? IssueNationalityDate { get; set; }
         public SocialCondition? SocialCondition { get; set; }
+
+        public int? MobileNumber { get; set; }
         public string PlaceOfBirth { get; set; } = string.Empty;
         public string? InsuranceNumber { get; set; }
         //for return 
@@ -31,6 +33,7 @@ namespace HRManagement.Application.DTOs
         public Guid EmployeeId { get; set; }
 
         public int? Height { get; set; }
+        public int? MobileNumber { get; set; }
 
         public BloodGroup? BloodGroup { get; set; }
 
@@ -76,6 +79,7 @@ namespace HRManagement.Application.DTOs
 
         [StringLength(50)]
         public string? SkinColor { get; set; }
+        public int? MobileNumber { get; set; }
 
         [StringLength(50)]
         public string? HairColor { get; set; }

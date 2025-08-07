@@ -1,5 +1,6 @@
 using AutoMapper;
 using HRManagement.Application.DTOs;
+using HRManagement.Core.DTOs;
 using HRManagement.Core.Entities;
 
 namespace HRManagement.Application.Mapping
@@ -42,6 +43,18 @@ namespace HRManagement.Application.Mapping
                 .ForMember(dest => dest.Employee, opt => opt.Ignore());
 
             CreateMap<UpdateEmployeeProfileDto, EmployeeProfile>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.Employee, opt => opt.Ignore())
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+            // EmployeeContact mappings
+            CreateMap<EmployeeContact, EmployeeContactDto>()
+                .ReverseMap();
+
+            CreateMap<CreateEmployeeContactDto, EmployeeContact>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.Employee, opt => opt.Ignore());
+
+            CreateMap<UpdateEmployeeContactDto, EmployeeContact>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.Employee, opt => opt.Ignore())
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
@@ -123,6 +136,12 @@ namespace HRManagement.Application.Mapping
                 .ForMember(dest => dest.Employee, opt => opt.Ignore())
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
+            // ComprehensiveEmployeeDto mapping
+            CreateMap<Employee, ComprehensiveEmployeeDto>()
+                .ForMember(dest => dest.Profile, opt => opt.MapFrom(src => src.Profile))
+                .ForMember(dest => dest.Contact, opt => opt.MapFrom(src => src.Contact))
+                .ForMember(dest => dest.ActiveServiceInfo, opt => opt.MapFrom(src => src.ServiceInfos.FirstOrDefault(si => si.IsActive)))
+                .ForMember(dest => dest.Assignments, opt => opt.MapFrom(src => src.Assignments));
         }
     }
 }

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using HRManagement.Core.Enums;
 
 namespace HRManagement.Application.DTOs
 {
@@ -7,7 +8,7 @@ namespace HRManagement.Application.DTOs
         public Guid Id { get; set; }
         public Guid EmployeeId { get; set; }
         public Guid BelongingUnitId { get; set; }
-        public int Ownership { get; set; }
+        public Ownership Ownership { get; set; }
         public Guid JobRoleId { get; set; }
         public DateTime? HiringDate { get; set; }
         public int? GrantingAuthority { get; set; }
@@ -15,11 +16,13 @@ namespace HRManagement.Application.DTOs
         public int? ContractDuration { get; set; }
         public int? ServiceDuration { get; set; }
         public decimal? BaseSalary { get; set; }
-        public bool IsMilitaryCoach { get; set; }
-        public bool IsDeductedMinistryVacancies { get; set; }
-        public bool IsRetiredFederalMinistry { get; set; }
-        public bool IsNationalService { get; set; }
-        public int ProfessionalSupport { get; set; }
+        public bool IsMilitaryCoach { get; set; } = false;
+        public ContractType ContractType { get; set; }
+
+        public bool IsDeductedMinistryVacancies { get; set; } = false;
+        public bool IsRetiredFederalMinistry { get; set; } = false;
+        public bool IsNationalService { get; set; } = false;
+        public bool ProfessionalSupportCourse { get; set; }
         public DateTime EffectiveDate { get; set; }
         public DateTime? EndDate { get; set; }
         public bool IsActive { get; set; }
@@ -33,11 +36,9 @@ namespace HRManagement.Application.DTOs
         [Required]
         public Guid BelongingUnitId { get; set; }
 
-        [Required]
-        public int Rank { get; set; }
 
         [Required]
-        public int Ownership { get; set; }
+        public Ownership Ownership { get; set; }
 
         [Required]
         public Guid JobRoleId { get; set; }
@@ -48,11 +49,13 @@ namespace HRManagement.Application.DTOs
         public int? ContractDuration { get; set; }
         public int? ServiceDuration { get; set; }
         public decimal? BaseSalary { get; set; }
-        public bool IsMilitaryCoach { get; set; }
-        public bool IsDeductedMinistryVacancies { get; set; }
-        public bool IsRetiredFederalMinistry { get; set; }
-        public bool IsNationalService { get; set; }
-        public int ProfessionalSupport { get; set; } = 0;
+        public bool IsMilitaryCoach { get; set; } = false;
+        public bool IsDeductedMinistryVacancies { get; set; } = false;
+        public bool IsRetiredFederalMinistry { get; set; } = false;
+        public bool IsNationalService { get; set; } = false;
+        public ContractType ContractType { get; set; } = ContractType.Local;
+
+        public bool ProfessionalSupportCourse { get; set; } = false;
 
         [Required]
         public DateTime EffectiveDate { get; set; }
@@ -64,8 +67,7 @@ namespace HRManagement.Application.DTOs
     public class UpdateEmployeeServiceInfoDto
     {
         public Guid? BelongingUnitId { get; set; }
-        public int? Rank { get; set; }
-        public int? Ownership { get; set; }
+        public Ownership? Ownership { get; set; }
         public Guid? JobRoleId { get; set; }
         public DateTime? HiringDate { get; set; }
         public int? GrantingAuthority { get; set; }
@@ -73,13 +75,16 @@ namespace HRManagement.Application.DTOs
         public int? ContractDuration { get; set; }
         public int? ServiceDuration { get; set; }
         public decimal? BaseSalary { get; set; }
+        public ContractType? ContractType { get; set; }
+
         public bool? IsMilitaryCoach { get; set; }
         public bool? IsDeductedMinistryVacancies { get; set; }
         public bool? IsRetiredFederalMinistry { get; set; }
         public bool? IsNationalService { get; set; }
-        public int? ProfessionalSupport { get; set; }
+        public bool? ProfessionalSupportCourse { get; set; }
+        public bool? ProfessionalSupport { get; set; }
         public DateTime? EffectiveDate { get; set; }
         public DateTime? EndDate { get; set; }
         public bool? IsActive { get; set; }
     }
-} 
+}

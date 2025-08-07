@@ -37,6 +37,20 @@ namespace HRManagement.Infrastructure.Repositories
             ).ToListAsync();
         }
 
+        public async Task<Employee?> GetEmployeeWithAllDetailsAsync(Guid id)
+        {
+            return await _dbSet
+                .Include(e => e.Profile)
+                .Include(e => e.Contact)
+                .Include(e => e.ServiceInfos)
+                    .ThenInclude(si => si.JobRole)
+                .Include(e => e.Assignments)
+                    .ThenInclude(a => a.AssignedUnit)
+                .Include(e => e.Assignments)
+                    .ThenInclude(a => a.JobRole)
+                .FirstOrDefaultAsync(e => e.Id == id);
+        }
+
         IQueryable<Employee> IRepository<Employee>.AsQueryable()
         {
             return _dbSet.AsNoTracking();

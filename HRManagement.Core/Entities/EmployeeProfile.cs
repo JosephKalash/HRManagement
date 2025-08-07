@@ -12,6 +12,7 @@ namespace HRManagement.Core.Entities
         public Employee Employee { get; set; } = null!;
 
         public int? Height { get; set; }
+        public int? MobileNumber { get; set; }
 
         public BloodGroup? BloodGroup { get; set; }
 

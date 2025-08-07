@@ -178,24 +178,6 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        private static void UpdateProfileProperties(UpdateEmployeeProfileDto updateDto, EmployeeProfile profile)
-        {
-            updateDto.Height.SetIfHasValue(val => profile.Height = val);
-            updateDto.BloodGroup.SetIfHasValue(val => profile.BloodGroup = val);
-            updateDto.SkinColor.SetIfNotNull(val => profile.SkinColor = val);
-            updateDto.HairColor.SetIfNotNull(val => profile.HairColor = val);
-            updateDto.EyeColor.SetIfNotNull(val => profile.EyeColor = val);
-            updateDto.DisabilityType.SetIfNotNull(val => profile.DisabilityType = val);
-            updateDto.DistinctiveSigns.SetIfNotNull(val => profile.DistinctiveSigns = val);
-            updateDto.CurrentNationality.SetIfNotNull(val => profile.CurrentNationality = val);
-            updateDto.Religion.SetIfHasValue(val => profile.Religion = val);
-            updateDto.PreviousNationality.SetIfNotNull(val => profile.PreviousNationality = val);
-            updateDto.IssueNationalityDate.SetIfHasValue(val => profile.IssueNationalityDate = val);
-            updateDto.SocialCondition.SetIfHasValue(val => profile.SocialCondition = val);
-            updateDto.PlaceOfBirth.SetIfNotNull(val => profile.PlaceOfBirth = val);
-            updateDto.InsuranceNumber.SetIfNotNull(val => profile.InsuranceNumber = val);
-        }
-
         /// <summary>
         /// Delete an employee profile
         /// </summary>
@@ -228,5 +210,23 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
+        private static void UpdateProfileProperties(UpdateEmployeeProfileDto updateDto, EmployeeProfile profile)
+        {
+            updateDto.Height.SetIfHasValue(val => profile.Height = val);
+            updateDto.BloodGroup.SetIfHasValue(val => profile.BloodGroup = val);
+            updateDto.SkinColor.SetIfNotNull(val => profile.SkinColor = val);
+            updateDto.MobileNumber.SetIfHasValue(val => profile.MobileNumber = val);
+            updateDto.HairColor.SetIfNotNull(val => profile.HairColor = val);
+            updateDto.EyeColor.SetIfNotNull(val => profile.EyeColor = val);
+            updateDto.DisabilityType.SetIfNotNull(val => profile.DisabilityType = val);
+            updateDto.DistinctiveSigns.SetIfNotNull(val => profile.DistinctiveSigns = val);
+            updateDto.CurrentNationality.SetIfNotNull(val => profile.CurrentNationality = val);
+            updateDto.Religion.SetIfHasValue(val => profile.Religion = val);
+            updateDto.PreviousNationality.SetIfNotNull(val => profile.PreviousNationality = val);
+            updateDto.IssueNationalityDate.SetIfHasValue(val => profile.IssueNationalityDate = val);
+            updateDto.SocialCondition.SetIfHasValue(val => profile.SocialCondition = val);
+            updateDto.PlaceOfBirth.SetIfNotNull(val => profile.PlaceOfBirth = val);
+            updateDto.InsuranceNumber.SetIfNotNull(val => profile.InsuranceNumber = val);
+        }
     }
 }
