@@ -19,5 +19,6 @@ namespace HRManagement.Application.Interfaces
         Task<string> UploadProfileImageAsync(Guid employeeId, Stream imageStream, string OriginalFileName);
         Task DeleteProfileImageAsync(Guid employeeId);
         Task<ComprehensiveEmployeeDto?> GetComprehensiveEmployeeByIdAsync(Guid id);
+        Task<List<EmployeeJobSummaryDto>> GetEmployeeJobSummaryAsync(Guid employeeId);
     }
 }

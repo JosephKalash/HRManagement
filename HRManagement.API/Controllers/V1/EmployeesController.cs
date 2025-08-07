@@ -361,6 +361,35 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
+        /// <summary>
+        /// Get employee job summary by employee ID
+        /// </summary>
+        /// <param name="employeeId">Employee ID</param>
+        /// <returns>List of employee job summaries</returns>
+        /// <response code="200">Returns the list of employee job summaries</response>
+        /// <response code="500">If there was an internal server error</response>
+        [HttpGet("{employeeId}/job-summary")]
+        [ProducesResponseType(typeof(ApiResponse<List<EmployeeJobSummaryDto>>), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 500)]
+        public async Task<ActionResult<ApiResponse<List<EmployeeJobSummaryDto>>>> GetEmployeeJobSummary(Guid employeeId)
+        {
+            try
+            {
+                var employeeExists = await _employeeService.ExistsAsync(employeeId);
+                if (!employeeExists)
+                {
+                    return NotFound(ApiResponse<List<EmployeeJobSummaryDto>>.ErrorResult($"Employee with ID {employeeId} not found"));
+                }
+
+                var jobSummaries = await _employeeService.GetEmployeeJobSummaryAsync(employeeId);
+                return Ok(ApiResponse<List<EmployeeJobSummaryDto>>.SuccessResult(jobSummaries, "Employee job summary retrieved successfully"));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<List<EmployeeJobSummaryDto>>.ErrorResult("An error occurred while retrieving employee job summary", new List<string> { ex.Message }));
+            }
+        }
+
         private string GetContentType(string filePath)
         {
             var extension = Path.GetExtension(filePath).ToLowerInvariant();

@@ -12,12 +12,16 @@ namespace HRManagement.Application.Services
         IEmployeeRepository employeeRepository,
         IImageService imageService,
         IEmployeeProfileRepository employeeProfileRepository,
+        IEmployeeServiceInfoRepository employeeServiceInfoRepository,
+        IEmployeeAssignmentRepository employeeAssignmentRepository,
         IMapper mapper) : IEmployeeService
     {
         private readonly IEmployeeRepository _employeeRepository = employeeRepository;
         private readonly IEmployeeProfileRepository _employeeProfileRepository = employeeProfileRepository;
         private readonly IImageService _imageService = imageService;
         private readonly IMapper _mapper = mapper;
+        private readonly IEmployeeServiceInfoRepository _employeeServiceInfoRepository = employeeServiceInfoRepository;
+        private readonly IEmployeeAssignmentRepository _employeeAssignmentRepository = employeeAssignmentRepository;
 
         public async Task<EmployeeDto?> GetByIdAsync(Guid id)
         {
@@ -143,6 +147,25 @@ namespace HRManagement.Application.Services
                 return null;
             }
             return _mapper.Map<ComprehensiveEmployeeDto>(employee);
+        }
+
+        public async Task<List<EmployeeJobSummaryDto>> GetEmployeeJobSummaryAsync(Guid employeeId)
+        {
+            var jobSummaries = new List<EmployeeJobSummaryDto>();
+
+            var activeServiceInfo = await _employeeServiceInfoRepository.GetActiveByEmployeeIdAsync(employeeId);
+            if (activeServiceInfo != null)
+            {
+                jobSummaries.Add(_mapper.Map<EmployeeJobSummaryDto>(activeServiceInfo));
+            }
+
+            var assignments = await _employeeAssignmentRepository.GetByEmployeeIdAsync(employeeId);
+            foreach (var assignment in assignments)
+            {
+                jobSummaries.Add(_mapper.Map<EmployeeJobSummaryDto>(assignment));
+            }
+
+            return jobSummaries;
         }
     }
 }

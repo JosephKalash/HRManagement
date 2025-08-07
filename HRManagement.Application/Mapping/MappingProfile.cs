@@ -136,6 +136,19 @@ namespace HRManagement.Application.Mapping
                 .ForMember(dest => dest.Employee, opt => opt.Ignore())
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
+            // EmployeeJobSummaryDto mappings
+            CreateMap<EmployeeServiceInfo, EmployeeJobSummaryDto>()
+                .ForMember(dest => dest.UnitId, opt => opt.MapFrom(src => src.BelongingUnitId))
+                .ForMember(dest => dest.UnitName, opt => opt.MapFrom(src => src.BelongingUnit.Name))
+                .ForMember(dest => dest.JobRoleName, opt => opt.MapFrom(src => src.JobRole.Name));
+
+            CreateMap<EmployeeAssignment, EmployeeJobSummaryDto>()
+                .ForMember(dest => dest.UnitId, opt => opt.MapFrom(src => src.AssignedUnitId))
+                .ForMember(dest => dest.UnitName, opt => opt.MapFrom(src => src.AssignedUnit.Name))
+                .ForMember(dest => dest.JobRoleName, opt => opt.MapFrom(src => src.JobRole.Name))
+                .ForMember(dest => dest.EffectiveDate, opt => opt.MapFrom(src => src.AssignmentDate))
+                .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => true)); // Assuming assignments are always active for job details
+
             // ComprehensiveEmployeeDto mapping
             CreateMap<Employee, ComprehensiveEmployeeDto>()
                 .ForMember(dest => dest.Profile, opt => opt.MapFrom(src => src.Profile))
