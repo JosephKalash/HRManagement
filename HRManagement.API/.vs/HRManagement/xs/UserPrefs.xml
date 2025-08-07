@@ -6,7 +6,9 @@
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
-          <Node name="HRManagement" expanded="True" />
+          <Node name="HRManagement" expanded="True">
+            <Node name="HRManagement.API" expanded="True" />
+          </Node>
         </State>
       </Pad>
     </Pads>

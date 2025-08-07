@@ -247,7 +247,7 @@ namespace HRManagement.API.Controllers.V1
                     return BadRequest(ApiResponse.ErrorResult("No file uploaded"));
 
                 // Validate file extension
-                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" } ;
                 var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
                 if (!allowedExtensions.Contains(extension))
                     return BadRequest(ApiResponse.ErrorResult("Invalid file type. Only JPG, PNG, and GIF files are allowed"));

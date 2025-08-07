@@ -31,6 +31,9 @@ public static class ProgramConfigExtensions
                 Description = "A comprehensive HR management system API",
             });
             MapEnum<RoleLevel>(c);
+            MapEnum<SocialCondition>(c);
+            MapEnum<BloodGroup>(c);
+            MapEnum<Religions>(c);
             MapEnum<OrgUnitType>(c);
             MapEnum<MilitaryRank>(c);
             MapEnum<Gender>(c);

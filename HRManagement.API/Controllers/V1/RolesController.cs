@@ -102,10 +102,6 @@ namespace HRManagement.API.Controllers.V1
         [ProducesResponseType(typeof(ApiResponse), 500)]
         public async Task<ActionResult<ApiResponse<RoleDto>>> CreateRole([FromBody] CreateRoleDto createDto)
         {
-            Console.WriteLine("Creating role with data: " + createDto.Name);
-            Console.WriteLine("Role Level: " + createDto.Level);
-            Console.WriteLine("Is System Role: " + createDto.IsSystemRole);
-            Console.WriteLine("Description: " + (createDto.Description ?? "No description provided"));
             try
             {
                 if (!ModelState.IsValid)

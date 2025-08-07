@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using HRManagement.Core.Enums;
 
 namespace HRManagement.Core.Entities
 {
@@ -12,7 +13,7 @@ namespace HRManagement.Core.Entities
 
         public int? Height { get; set; }
 
-        public int BloodGroup { get; set; }
+        public BloodGroup? BloodGroup { get; set; }
 
         [StringLength(50)]
         public string? SkinColor { get; set; }
@@ -34,13 +35,13 @@ namespace HRManagement.Core.Entities
 
         [Required]
         [StringLength(100)]
-        public string Religion { get; set; } = string.Empty;
+        public Religions Religion { get; set; } = Religions.Islam;
 
-        public int? PreviousNationality { get; set; }
+        public string? PreviousNationality { get; set; }
 
         public DateTime? IssueNationalityDate { get; set; }
 
-        public int SocialCondition { get; set; }
+        public SocialCondition SocialCondition { get; set; }
 
         [Required]
         [StringLength(200)]

@@ -84,12 +84,13 @@ namespace HRManagement.Application.DTOs
         [StringLength(100)]
         public string? EnglishLastName { get; set; }
 
-        public int? Gender { get; set; }
+        public Gender? Gender { get; set; }
 
         public DateTime? DateOfBirth { get; set; }
 
         [StringLength(50)]
         public string? IdNumber { get; set; }
+        public MilitaryRank? Rank { get; set; }
 
         public bool? IsActive { get; set; }
     }

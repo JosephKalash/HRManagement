@@ -94,18 +94,13 @@ namespace HRManagement.Core.Enums
         Masheer = 44
     }
 
+    [AttributeUsage(AttributeTargets.Field)]
     public class EnglishDescriptionAttribute(string description) : Attribute
     {
         public string Description { get; set; } = description;
     }
-    /// <summary>
-    /// Extension methods for RankArabic enum
-    /// </summary>
     public static class RankArabicExtensions
     {
-        /// <summary>
-        /// Gets the Arabic description of the rank
-        /// </summary>
         public static string GetArabicName(this MilitaryRank rank)
         {
             var field = rank.GetType().GetField(rank.ToString());

@@ -1,5 +1,6 @@
+using AutoMapper;
 using HRManagement.Application.DTOs;
-using HRManagement.Application.Interfaces;
+using HRManagement.Application.Helpers;
 using HRManagement.Core.Entities;
 using HRManagement.Core.Interfaces;
 using HRManagement.Core.Models;
@@ -11,14 +12,10 @@ namespace HRManagement.API.Controllers.V1
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [Produces("application/json")]
-    public class EmployeeProfilesController : ControllerBase
+    public class EmployeeProfilesController(IEmployeeProfileRepository employeeProfileRepository, IMapper mapper) : ControllerBase
     {
-        private readonly IEmployeeProfileRepository _employeeProfileRepository;
-
-        public EmployeeProfilesController(IEmployeeProfileRepository employeeProfileRepository)
-        {
-            _employeeProfileRepository = employeeProfileRepository;
-        }
+        private readonly IEmployeeProfileRepository _employeeProfileRepository = employeeProfileRepository;
+        private readonly IMapper _mapper = mapper;
 
         /// <summary>
         /// Get all employee profiles
@@ -32,7 +29,7 @@ namespace HRManagement.API.Controllers.V1
             try
             {
                 var profiles = await _employeeProfileRepository.GetAllAsync();
-                var dtos = profiles.Select(MapToDto);
+                var dtos = profiles.Select(_mapper.Map<EmployeeProfileDto>);
                 return Ok(ApiResponse<IEnumerable<EmployeeProfileDto>>.SuccessResult(dtos, "Employee profiles retrieved successfully"));
             }
             catch (Exception ex)
@@ -60,7 +57,7 @@ namespace HRManagement.API.Controllers.V1
                     return NotFound(ApiResponse<EmployeeProfileDto>.ErrorResult($"Employee profile with ID {id} not found"));
                 }
 
-                return Ok(ApiResponse<EmployeeProfileDto>.SuccessResult(MapToDto(profile), "Employee profile retrieved successfully"));
+                return Ok(ApiResponse<EmployeeProfileDto>.SuccessResult(_mapper.Map<EmployeeProfileDto>(profile), "Employee profile retrieved successfully"));
             }
             catch (Exception ex)
             {
@@ -87,7 +84,7 @@ namespace HRManagement.API.Controllers.V1
                     return NotFound(ApiResponse<EmployeeProfileDto>.ErrorResult($"Employee profile for employee ID {employeeId} not found"));
                 }
 
-                return Ok(ApiResponse<EmployeeProfileDto>.SuccessResult(MapToDto(profile), "Employee profile retrieved successfully"));
+                return Ok(ApiResponse<EmployeeProfileDto>.SuccessResult(_mapper.Map<EmployeeProfileDto>(profile), "Employee profile retrieved successfully"));
             }
             catch (Exception ex)
             {
@@ -117,28 +114,11 @@ namespace HRManagement.API.Controllers.V1
                     return BadRequest(ApiResponse<EmployeeProfileDto>.ErrorResult("Validation failed", errors));
                 }
 
-                var profile = new EmployeeProfile
-                {
-                    EmployeeId = createDto.EmployeeId,
-                    Height = createDto.Height,
-                    BloodGroup = createDto.BloodGroup,
-                    SkinColor = createDto.SkinColor,
-                    HairColor = createDto.HairColor,
-                    EyeColor = createDto.EyeColor,
-                    DisabilityType = createDto.DisabilityType,
-                    DistinctiveSigns = createDto.DistinctiveSigns,
-                    CurrentNationality = createDto.CurrentNationality,
-                    Religion = createDto.Religion,
-                    PreviousNationality = createDto.PreviousNationality,
-                    IssueNationalityDate = createDto.IssueNationalityDate,
-                    SocialCondition = createDto.SocialCondition,
-                    PlaceOfBirth = createDto.PlaceOfBirth,
-                    InsuranceNumber = createDto.InsuranceNumber
-                };
+                var profile = _mapper.Map<EmployeeProfile>(createDto);
 
                 var createdProfile = await _employeeProfileRepository.AddAsync(profile);
-                return CreatedAtAction(nameof(GetEmployeeProfile), new { id = createdProfile.Id }, 
-                    ApiResponse<EmployeeProfileDto>.SuccessResult(MapToDto(createdProfile), "Employee profile created successfully"));
+                return CreatedAtAction(nameof(GetEmployeeProfile), new { id = createdProfile.Id },
+                    ApiResponse<EmployeeProfileDto>.SuccessResult(_mapper.Map<EmployeeProfileDto>(createdProfile), "Employee profile created successfully"));
             }
             catch (ArgumentException ex)
             {
@@ -156,7 +136,7 @@ namespace HRManagement.API.Controllers.V1
         /// <param name="id">Employee Profile ID</param>
         /// <param name="updateDto">Employee profile update data</param>
         /// <returns>Updated employee profile</returns>
-        [HttpPut("{id}")]
+        [HttpPatch("{id}")]
         [ProducesResponseType(typeof(ApiResponse<EmployeeProfileDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
@@ -167,10 +147,7 @@ namespace HRManagement.API.Controllers.V1
             {
                 if (!ModelState.IsValid)
                 {
-                    var errors = ModelState.Values
-                        .SelectMany(v => v.Errors)
-                        .Select(e => e.ErrorMessage)
-                        .ToList();
+                    var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
                     return BadRequest(ApiResponse<EmployeeProfileDto>.ErrorResult("Validation failed", errors));
                 }
 
@@ -180,38 +157,10 @@ namespace HRManagement.API.Controllers.V1
                     return NotFound(ApiResponse<EmployeeProfileDto>.ErrorResult($"Employee profile with ID {id} not found"));
                 }
 
-                // Update properties
-                if (updateDto.Height.HasValue)
-                    profile.Height = updateDto.Height.Value;
-                if (updateDto.BloodGroup.HasValue)
-                    profile.BloodGroup = updateDto.BloodGroup.Value;
-                if (updateDto.SkinColor != null)
-                    profile.SkinColor = updateDto.SkinColor;
-                if (updateDto.HairColor != null)
-                    profile.HairColor = updateDto.HairColor;
-                if (updateDto.EyeColor != null)
-                    profile.EyeColor = updateDto.EyeColor;
-                if (updateDto.DisabilityType != null)
-                    profile.DisabilityType = updateDto.DisabilityType;
-                if (updateDto.DistinctiveSigns != null)
-                    profile.DistinctiveSigns = updateDto.DistinctiveSigns;
-                if (updateDto.CurrentNationality != null)
-                    profile.CurrentNationality = updateDto.CurrentNationality;
-                if (updateDto.Religion != null)
-                    profile.Religion = updateDto.Religion;
-                if (updateDto.PreviousNationality.HasValue)
-                    profile.PreviousNationality = updateDto.PreviousNationality.Value;
-                if (updateDto.IssueNationalityDate.HasValue)
-                    profile.IssueNationalityDate = updateDto.IssueNationalityDate.Value;
-                if (updateDto.SocialCondition.HasValue)
-                    profile.SocialCondition = updateDto.SocialCondition.Value;
-                if (updateDto.PlaceOfBirth != null)
-                    profile.PlaceOfBirth = updateDto.PlaceOfBirth;
-                if (updateDto.InsuranceNumber != null)
-                    profile.InsuranceNumber = updateDto.InsuranceNumber;
+                UpdateProfileProperties(updateDto, profile);
 
                 var updatedProfile = await _employeeProfileRepository.UpdateAsync(profile);
-                return Ok(ApiResponse<EmployeeProfileDto>.SuccessResult(MapToDto(updatedProfile), "Employee profile updated successfully"));
+                return Ok(ApiResponse<EmployeeProfileDto>.SuccessResult(_mapper.Map<EmployeeProfileDto>(updatedProfile), "Employee profile updated successfully"));
             }
             catch (ArgumentException ex)
             {
@@ -221,6 +170,24 @@ namespace HRManagement.API.Controllers.V1
             {
                 return StatusCode(500, ApiResponse<EmployeeProfileDto>.ErrorResult("An error occurred while updating the employee profile", new List<string> { ex.Message }));
             }
+        }
+
+        private static void UpdateProfileProperties(UpdateEmployeeProfileDto updateDto, EmployeeProfile profile)
+        {
+            updateDto.Height.SetIfHasValue(val => profile.Height = val);
+            updateDto.BloodGroup.SetIfHasValue(val => profile.BloodGroup = val);
+            updateDto.SkinColor.SetIfNotNull(val => profile.SkinColor = val);
+            updateDto.HairColor.SetIfNotNull(val => profile.HairColor = val);
+            updateDto.EyeColor.SetIfNotNull(val => profile.EyeColor = val);
+            updateDto.DisabilityType.SetIfNotNull(val => profile.DisabilityType = val);
+            updateDto.DistinctiveSigns.SetIfNotNull(val => profile.DistinctiveSigns = val);
+            updateDto.CurrentNationality.SetIfNotNull(val => profile.CurrentNationality = val);
+            updateDto.Religion.SetIfHasValue(val => profile.Religion = val);
+            updateDto.PreviousNationality.SetIfNotNull(val => profile.PreviousNationality = val);
+            updateDto.IssueNationalityDate.SetIfHasValue(val => profile.IssueNationalityDate = val);
+            updateDto.SocialCondition.SetIfHasValue(val => profile.SocialCondition = val);
+            updateDto.PlaceOfBirth.SetIfNotNull(val => profile.PlaceOfBirth = val);
+            updateDto.InsuranceNumber.SetIfNotNull(val => profile.InsuranceNumber = val);
         }
 
         /// <summary>
@@ -255,27 +222,5 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        private static EmployeeProfileDto MapToDto(EmployeeProfile profile)
-        {
-            return new EmployeeProfileDto
-            {
-                Id = profile.Id,
-                EmployeeId = profile.EmployeeId,
-                Height = profile.Height,
-                BloodGroup = profile.BloodGroup,
-                SkinColor = profile.SkinColor,
-                HairColor = profile.HairColor,
-                EyeColor = profile.EyeColor,
-                DisabilityType = profile.DisabilityType,
-                DistinctiveSigns = profile.DistinctiveSigns,
-                CurrentNationality = profile.CurrentNationality,
-                Religion = profile.Religion,
-                PreviousNationality = profile.PreviousNationality,
-                IssueNationalityDate = profile.IssueNationalityDate,
-                SocialCondition = profile.SocialCondition,
-                PlaceOfBirth = profile.PlaceOfBirth,
-                InsuranceNumber = profile.InsuranceNumber
-            };
-        }
     }
-} 
+}
