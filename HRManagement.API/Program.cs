@@ -21,7 +21,6 @@ builder.AddCorsPolicy();
 builder.AddFormOptions();
 builder.AddDbContextAndRepositories();
 builder.AddAppServices();
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -36,6 +35,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 app.UseCors("AllowAll");
 app.UseGlobalExceptionHandler();
 app.UseAuthorization();

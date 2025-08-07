@@ -3,15 +3,15 @@ using HRManagement.Application.Interfaces;
 
 namespace HRManagement.Infrastructure.Services
 {
-    public class ImageService(HRManagement.Application.Interfaces.IWebHostEnvironment environment) : IImageService
+    public class ImageService(IWebHostEnvironment environment) : IImageService
     {
-        private readonly HRManagement.Application.Interfaces.IWebHostEnvironment _environment = environment;
+        private readonly IWebHostEnvironment _environment = environment;
         private readonly IEnumerable<string> _allowedExtensions = [".jpg", ".jpeg", ".png", ".gif"];
         private const long MaxFileSize = 10 * 1024 * 1024; // 10MB - consistent with global FormOptions limit
 
         public async Task<(string filePath, string fileName)> SaveImageAsync(Stream file, string folder, string originalFileName)
         {
-            if (file == null)
+            if (file == null || file.Length == 0)
                 throw new ArgumentException("File cannot be null");
 
             if (!IsValidImage(file, originalFileName))
@@ -62,8 +62,8 @@ namespace HRManagement.Infrastructure.Services
         private static string GenerateUniqueFileName(string originalFileName)
         {
             var extension = Path.GetExtension(originalFileName);
-            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(originalFileName);
-            return $"{fileNameWithoutExtension}_{Guid.NewGuid()}{extension}";
+            var newName = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+            return $"{newName}_{Guid.NewGuid()}{extension}";
         }
     }
 }

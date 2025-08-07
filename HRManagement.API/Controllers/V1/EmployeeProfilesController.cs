@@ -29,7 +29,13 @@ namespace HRManagement.API.Controllers.V1
             try
             {
                 var profiles = await _employeeProfileRepository.GetAllAsync();
-                var dtos = profiles.Select(_mapper.Map<EmployeeProfileDto>);
+                var baseUrl = $"{Request.Scheme}://{Request.Host}";
+                var dtos = profiles.Select(profile =>
+                {
+                    var dto = _mapper.Map<EmployeeProfileDto>(profile);
+                    dto.ImagePath = baseUrl + '/' + profile.ImagePath; // Call a method to modify the ImagePath
+                    return dto;
+                });
                 return Ok(ApiResponse<IEnumerable<EmployeeProfileDto>>.SuccessResult(dtos, "Employee profiles retrieved successfully"));
             }
             catch (Exception ex)

@@ -1,16 +1,16 @@
+using AutoMapper;
 using HRManagement.Application.DTOs;
 using HRManagement.Application.Interfaces;
 using HRManagement.Core.Entities;
 using HRManagement.Core.Extensions;
 using HRManagement.Core.Interfaces;
 using HRManagement.Core.Models;
-using AutoMapper;
 
 namespace HRManagement.Application.Services
 {
     public class EmployeeService(
-        IEmployeeRepository employeeRepository, 
-        IImageService imageService, 
+        IEmployeeRepository employeeRepository,
+        IImageService imageService,
         IEmployeeProfileRepository employeeProfileRepository,
         IMapper mapper) : IEmployeeService
     {
@@ -47,7 +47,7 @@ namespace HRManagement.Application.Services
         {
             var query = _employeeRepository.AsQueryable();
             var paged = await query.ToPagedResultAsync(pageNumber, pageSize);
-            
+
             // Map entities to DTOs using AutoMapper
             var dtoList = _mapper.Map<List<EmployeeDto>>(paged.Items);
             return new PagedResult<EmployeeDto>
@@ -93,18 +93,13 @@ namespace HRManagement.Application.Services
 
         public async Task<string> UploadProfileImageAsync(Guid employeeId, Stream imageStream, string fileName)
         {
-            if (imageStream == null || imageStream.Length == 0)
-            {
-                throw new ArgumentException("Invalid image file.");
-            }
 
             var employeeProfile = await _employeeProfileRepository.GetByEmployeeIdAsync(employeeId) ?? throw new ArgumentException("Employee not found");
 
-            if (!_imageService.IsValidImage(imageStream, fileName))
-                throw new ArgumentException("Invalid image file");
-
             // Save new image first
             var (filePath, _) = await _imageService.SaveImageAsync(imageStream, "employee-profiles", fileName);
+            if (filePath == null)
+                throw new ArgumentException("Image not valid");
 
             // Delete old image if exists (after successfully saving the new one)
             if (!string.IsNullOrEmpty(employeeProfile.ImagePath))
