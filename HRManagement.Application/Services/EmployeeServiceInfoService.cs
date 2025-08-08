@@ -85,13 +85,16 @@ namespace HRManagement.Application.Services
 
         public async Task<PagedResult<EmployeeServiceInfoDto>> GetPagedByEmployeeIdAsync(Guid employeeId, int pageNumber, int pageSize)
         {
-            var pagedResult = await _employeeServiceInfoRepository.GetPagedByEmployeeIdAsync(employeeId, pageNumber, pageSize);
+            var query = _employeeServiceInfoRepository.AsQueryable()
+                .Where(esi => esi.EmployeeId == employeeId);
+            var paged = await query.ToPagedResultAsync(pageNumber, pageSize);
+            var dtoList = _mapper.Map<List<EmployeeServiceInfoDto>>(paged.Items);
             return new PagedResult<EmployeeServiceInfoDto>
             {
-                Items = _mapper.Map<List<EmployeeServiceInfoDto>>(pagedResult.Items),
-                PageNumber = pagedResult.PageNumber,
-                PageSize = pagedResult.PageSize,
-                TotalCount = pagedResult.TotalCount
+                Items = dtoList,
+                PageNumber = paged.PageNumber,
+                PageSize = paged.PageSize,
+                TotalCount = paged.TotalCount
             };
         }
     }

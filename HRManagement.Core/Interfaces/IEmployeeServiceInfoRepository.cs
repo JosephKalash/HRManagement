@@ -1,5 +1,4 @@
 using HRManagement.Core.Entities;
-using HRManagement.Core.Models;
 
 namespace HRManagement.Core.Interfaces
 {
@@ -7,7 +6,5 @@ namespace HRManagement.Core.Interfaces
     {
         Task<IEnumerable<EmployeeServiceInfo>> GetByEmployeeIdAsync(Guid employeeId);
         Task<EmployeeServiceInfo?> GetActiveByEmployeeIdAsync(Guid employeeId);
-        Task<PagedResult<EmployeeServiceInfo>> GetPagedAsync(int pageNumber, int pageSize);
-        Task<PagedResult<EmployeeServiceInfo>> GetPagedByEmployeeIdAsync(Guid employeeId, int pageNumber, int pageSize);
     }
 } 

@@ -7,6 +7,5 @@ namespace HRManagement.Core.Repositories
     public interface IEmployeeContactRepository : IRepository<EmployeeContact>
     {
         Task<EmployeeContact?> GetEmployeeContactByEmployeeId(Guid employeeId);
-        Task<PagedResult<EmployeeContact>> GetPagedAsync(int pageNumber, int pageSize);
     }
 }

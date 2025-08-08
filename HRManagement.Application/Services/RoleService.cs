@@ -1,10 +1,9 @@
 using HRManagement.Application.DTOs;
+using HRManagement.Core.Extensions;
 using HRManagement.Application.Interfaces;
 using HRManagement.Core.Entities;
-// using HRManagement.Core.Enums;
 using HRManagement.Core.Interfaces;
 using AutoMapper;
-using HRManagement.Core.Enums;
 using HRManagement.Core.Models;
 
 namespace HRManagement.Application.Services
@@ -22,25 +21,30 @@ namespace HRManagement.Application.Services
 
         public async Task<PagedResult<RoleDto>> GetPagedRolesAsync(int pageNumber, int pageSize)
         {
-            var pagedRoles = await _roleRepository.GetPagedAsync(pageNumber, pageSize);
+            var query = _roleRepository.AsQueryable();
+            var paged = await query.ToPagedResultAsync(pageNumber, pageSize);
+            var dtoList = _mapper.Map<List<RoleDto>>(paged.Items);
             return new PagedResult<RoleDto>
             {
-                Items = _mapper.Map<List<RoleDto>>(pagedRoles.Items),
-                PageNumber = pagedRoles.PageNumber,
-                PageSize = pagedRoles.PageSize,
-                TotalCount = pagedRoles.TotalCount
+                Items = dtoList,
+                PageNumber = paged.PageNumber,
+                PageSize = paged.PageSize,
+                TotalCount = paged.TotalCount
             };
         }
 
         public async Task<PagedResult<RoleDto>> GetPagedRolesByLevelAsync(RoleLevel level, int pageNumber, int pageSize)
         {
-            var pagedRoles = await _roleRepository.GetPagedByLevelAsync(level, pageNumber, pageSize);
+            var query = _roleRepository.AsQueryable()
+                .Where(r => r.Level == level);
+            var paged = await query.ToPagedResultAsync(pageNumber, pageSize);
+            var dtoList = _mapper.Map<List<RoleDto>>(paged.Items);
             return new PagedResult<RoleDto>
             {
-                Items = _mapper.Map<List<RoleDto>>(pagedRoles.Items),
-                PageNumber = pagedRoles.PageNumber,
-                PageSize = pagedRoles.PageSize,
-                TotalCount = pagedRoles.TotalCount
+                Items = dtoList,
+                PageNumber = paged.PageNumber,
+                PageSize = paged.PageSize,
+                TotalCount = paged.TotalCount
             };
         }
 
