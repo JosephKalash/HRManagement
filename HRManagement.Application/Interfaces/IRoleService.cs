@@ -1,6 +1,7 @@
 using HRManagement.Application.DTOs;
 using HRManagement.Core.Entities;
 using HRManagement.Core.Enums;
+using HRManagement.Core.Models;
 // using HRManagement.Core.Enums;
 
 namespace HRManagement.Application.Interfaces
@@ -13,5 +14,7 @@ namespace HRManagement.Application.Interfaces
         Task<RoleDto> CreateRoleAsync(CreateRoleDto createDto);
         Task<RoleDto?> UpdateRoleAsync(Guid id, UpdateRoleDto updateDto);
         Task<bool> DeleteRoleAsync(Guid id);
+        Task<PagedResult<RoleDto>> GetPagedRolesAsync(int pageNumber, int pageSize);
+        Task<PagedResult<RoleDto>> GetPagedRolesByLevelAsync(RoleLevel level, int pageNumber, int pageSize);
     }
 }

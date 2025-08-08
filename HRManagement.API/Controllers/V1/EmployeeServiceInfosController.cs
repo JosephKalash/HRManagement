@@ -1,6 +1,6 @@
 using HRManagement.Application.DTOs;
+using HRManagement.Application.Interfaces;
 using HRManagement.Core.Entities;
-using HRManagement.Core.Interfaces;
 using HRManagement.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
@@ -13,12 +13,12 @@ namespace HRManagement.API.Controllers.V1
     [Produces("application/json")]
     public class EmployeeServiceInfosController : ControllerBase
     {
-        private readonly IEmployeeServiceInfoRepository _employeeServiceInfoRepository;
+        private readonly IEmployeeServiceInfoService _employeeServiceInfoService;
         private readonly IMapper _mapper;
 
-        public EmployeeServiceInfosController(IEmployeeServiceInfoRepository employeeServiceInfoRepository, IMapper mapper)
+        public EmployeeServiceInfosController(IEmployeeServiceInfoService employeeServiceInfoService, IMapper mapper)
         {
-            _employeeServiceInfoRepository = employeeServiceInfoRepository;
+            _employeeServiceInfoService = employeeServiceInfoService;
             _mapper = mapper;
         }
 
@@ -27,19 +27,25 @@ namespace HRManagement.API.Controllers.V1
         /// </summary>
         /// <returns>List of all employee service infos</returns>
         [HttpGet]
-        [ProducesResponseType(typeof(ApiResponse<IEnumerable<EmployeeServiceInfoDto>>), 200)]
+        [ProducesResponseType(typeof(ApiResponse<PagedResult<EmployeeServiceInfoDto>>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 500)]
-        public async Task<ActionResult<ApiResponse<IEnumerable<EmployeeServiceInfoDto>>>> GetEmployeeServiceInfos()
+        public async Task<ActionResult<ApiResponse<PagedResult<EmployeeServiceInfoDto>>>> GetEmployeeServiceInfos([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             try
             {
-                var serviceInfos = await _employeeServiceInfoRepository.GetAllAsync();
-                var dtos = _mapper.Map<IEnumerable<EmployeeServiceInfoDto>>(serviceInfos);
-                return Ok(ApiResponse<IEnumerable<EmployeeServiceInfoDto>>.SuccessResult(dtos, "Employee service infos retrieved successfully"));
+                var pagedResult = await _employeeServiceInfoService.GetPagedAsync(pageNumber, pageSize);
+                var dtos = _mapper.Map<List<EmployeeServiceInfoDto>>(pagedResult.Items);
+                return Ok(ApiResponse<PagedResult<EmployeeServiceInfoDto>>.SuccessResult(new PagedResult<EmployeeServiceInfoDto>
+                {
+                    Items = dtos,
+                    PageNumber = pagedResult.PageNumber,
+                    PageSize = pagedResult.PageSize,
+                    TotalCount = pagedResult.TotalCount
+                }, "Employee service infos retrieved successfully"));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ApiResponse<IEnumerable<EmployeeServiceInfoDto>>.ErrorResult("An error occurred while retrieving employee service infos", new List<string> { ex.Message }));
+                return StatusCode(500, ApiResponse<PagedResult<EmployeeServiceInfoDto>>.ErrorResult("An error occurred while retrieving employee service infos", new List<string> { ex.Message }));
             }
         }
 
@@ -56,13 +62,13 @@ namespace HRManagement.API.Controllers.V1
         {
             try
             {
-                var serviceInfo = await _employeeServiceInfoRepository.GetByIdAsync(id);
+                var serviceInfo = await _employeeServiceInfoService.GetByIdAsync(id);
                 if (serviceInfo == null)
                 {
                     return NotFound(ApiResponse<EmployeeServiceInfoDto>.ErrorResult($"Employee service info with ID {id} not found"));
                 }
 
-                return Ok(ApiResponse<EmployeeServiceInfoDto>.SuccessResult(_mapper.Map<EmployeeServiceInfoDto>(serviceInfo), "Employee service info retrieved successfully"));
+                return Ok(ApiResponse<EmployeeServiceInfoDto>.SuccessResult(serviceInfo, "Employee service info retrieved successfully"));
             }
             catch (Exception ex)
             {
@@ -76,19 +82,25 @@ namespace HRManagement.API.Controllers.V1
         /// <param name="employeeId">Employee ID</param>
         /// <returns>Employee service info details</returns>
         [HttpGet("employee/{employeeId}")]
-        [ProducesResponseType(typeof(ApiResponse<IEnumerable<EmployeeServiceInfoDto>>), 200)]
+        [ProducesResponseType(typeof(ApiResponse<PagedResult<EmployeeServiceInfoDto>>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 500)]
-        public async Task<ActionResult<ApiResponse<IEnumerable<EmployeeServiceInfoDto>>>> GetEmployeeServiceInfosByEmployeeId(Guid employeeId)
+        public async Task<ActionResult<ApiResponse<PagedResult<EmployeeServiceInfoDto>>>> GetEmployeeServiceInfosByEmployeeId(Guid employeeId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             try
             {
-                var serviceInfos = await _employeeServiceInfoRepository.GetByEmployeeIdAsync(employeeId);
-                var dtos = _mapper.Map<IEnumerable<EmployeeServiceInfoDto>>(serviceInfos);
-                return Ok(ApiResponse<IEnumerable<EmployeeServiceInfoDto>>.SuccessResult(dtos, "Employee service infos retrieved successfully"));
+                var pagedResult = await _employeeServiceInfoService.GetPagedByEmployeeIdAsync(employeeId, pageNumber, pageSize);
+                var dtos = _mapper.Map<List<EmployeeServiceInfoDto>>(pagedResult.Items);
+                return Ok(ApiResponse<PagedResult<EmployeeServiceInfoDto>>.SuccessResult(new PagedResult<EmployeeServiceInfoDto>
+                {
+                    Items = dtos,
+                    PageNumber = pagedResult.PageNumber,
+                    PageSize = pagedResult.PageSize,
+                    TotalCount = pagedResult.TotalCount
+                }, "Employee service infos retrieved successfully"));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ApiResponse<IEnumerable<EmployeeServiceInfoDto>>.ErrorResult("An error occurred while retrieving employee service infos", new List<string> { ex.Message }));
+                return StatusCode(500, ApiResponse<PagedResult<EmployeeServiceInfoDto>>.ErrorResult("An error occurred while retrieving employee service infos", new List<string> { ex.Message }));
             }
         }
 
@@ -105,13 +117,13 @@ namespace HRManagement.API.Controllers.V1
         {
             try
             {
-                var serviceInfo = await _employeeServiceInfoRepository.GetActiveByEmployeeIdAsync(employeeId);
+                var serviceInfo = await _employeeServiceInfoService.GetActiveByEmployeeIdAsync(employeeId);
                 if (serviceInfo == null)
                 {
                     return NotFound(ApiResponse<EmployeeServiceInfoDto>.ErrorResult($"Active employee service info for employee ID {employeeId} not found"));
                 }
 
-                return Ok(ApiResponse<EmployeeServiceInfoDto>.SuccessResult(_mapper.Map<EmployeeServiceInfoDto>(serviceInfo), "Active employee service info retrieved successfully"));
+                return Ok(ApiResponse<EmployeeServiceInfoDto>.SuccessResult(serviceInfo, "Active employee service info retrieved successfully"));
             }
             catch (Exception ex)
             {
@@ -141,11 +153,9 @@ namespace HRManagement.API.Controllers.V1
                     return BadRequest(ApiResponse<EmployeeServiceInfoDto>.ErrorResult("Validation failed", errors));
                 }
 
-                var serviceInfo = _mapper.Map<EmployeeServiceInfo>(createDto);
-
-                var createdServiceInfo = await _employeeServiceInfoRepository.AddAsync(serviceInfo);
-                return CreatedAtAction(nameof(GetEmployeeServiceInfo), new { id = createdServiceInfo.Id },
-                    ApiResponse<EmployeeServiceInfoDto>.SuccessResult(_mapper.Map<EmployeeServiceInfoDto>(createdServiceInfo), "Employee service info created successfully"));
+                var serviceInfo = await _employeeServiceInfoService.CreateAsync(createDto);
+                return CreatedAtAction(nameof(GetEmployeeServiceInfo), new { id = serviceInfo.Id },
+                    ApiResponse<EmployeeServiceInfoDto>.SuccessResult(serviceInfo, "Employee service info created successfully"));
             }
             catch (ArgumentException ex)
             {
@@ -181,50 +191,8 @@ namespace HRManagement.API.Controllers.V1
                     return BadRequest(ApiResponse<EmployeeServiceInfoDto>.ErrorResult("Validation failed", errors));
                 }
 
-                var serviceInfo = await _employeeServiceInfoRepository.GetByIdAsync(id);
-                if (serviceInfo == null)
-                {
-                    return NotFound(ApiResponse<EmployeeServiceInfoDto>.ErrorResult($"Employee service info with ID {id} not found"));
-                }
-
-                // Update properties
-                if (updateDto.BelongingUnitId.HasValue)
-                    serviceInfo.BelongingUnitId = updateDto.BelongingUnitId.Value;
-                if (updateDto.Ownership.HasValue)
-                    serviceInfo.Ownership = updateDto.Ownership.Value;
-                if (updateDto.JobRoleId.HasValue)
-                    serviceInfo.JobRoleId = updateDto.JobRoleId.Value;
-                if (updateDto.HiringDate.HasValue)
-                    serviceInfo.HiringDate = updateDto.HiringDate.Value;
-                if (updateDto.GrantingAuthority.HasValue)
-                    serviceInfo.GrantingAuthority = updateDto.GrantingAuthority.Value;
-                if (updateDto.LastPromotion.HasValue)
-                    serviceInfo.LastPromotion = updateDto.LastPromotion.Value;
-                if (updateDto.ContractDuration.HasValue)
-                    serviceInfo.ContractDuration = updateDto.ContractDuration.Value;
-                if (updateDto.ServiceDuration.HasValue)
-                    serviceInfo.ServiceDuration = updateDto.ServiceDuration.Value;
-                if (updateDto.BaseSalary.HasValue)
-                    serviceInfo.BaseSalary = updateDto.BaseSalary.Value;
-                if (updateDto.IsMilitaryCoach.HasValue)
-                    serviceInfo.IsMilitaryCoach = updateDto.IsMilitaryCoach.Value;
-                if (updateDto.IsDeductedMinistryVacancies.HasValue)
-                    serviceInfo.IsDeductedMinistryVacancies = updateDto.IsDeductedMinistryVacancies.Value;
-                if (updateDto.IsRetiredFederalMinistry.HasValue)
-                    serviceInfo.IsRetiredFederalMinistry = updateDto.IsRetiredFederalMinistry.Value;
-                if (updateDto.IsNationalService.HasValue)
-                    serviceInfo.IsNationalService = updateDto.IsNationalService.Value;
-                if (updateDto.ProfessionalSupport.HasValue)
-                    serviceInfo.ProfessionalSupport = updateDto.ProfessionalSupport.Value;
-                if (updateDto.EffectiveDate.HasValue)
-                    serviceInfo.EffectiveDate = updateDto.EffectiveDate.Value;
-                if (updateDto.EndDate.HasValue)
-                    serviceInfo.EndDate = updateDto.EndDate.Value;
-                if (updateDto.IsActive.HasValue)
-                    serviceInfo.IsActive = updateDto.IsActive.Value;
-
-                var updatedServiceInfo = await _employeeServiceInfoRepository.UpdateAsync(serviceInfo);
-                return Ok(ApiResponse<EmployeeServiceInfoDto>.SuccessResult(_mapper.Map<EmployeeServiceInfoDto>(updatedServiceInfo), "Employee service info updated successfully"));
+                var serviceInfo = await _employeeServiceInfoService.UpdateAsync(id, updateDto);
+                return Ok(ApiResponse<EmployeeServiceInfoDto>.SuccessResult(serviceInfo, "Employee service info updated successfully"));
             }
             catch (ArgumentException ex)
             {
@@ -249,13 +217,7 @@ namespace HRManagement.API.Controllers.V1
         {
             try
             {
-                var serviceInfo = await _employeeServiceInfoRepository.GetByIdAsync(id);
-                if (serviceInfo == null)
-                {
-                    return NotFound(ApiResponse.ErrorResult($"Employee service info with ID {id} not found"));
-                }
-
-                await _employeeServiceInfoRepository.DeleteAsync(serviceInfo);
+                await _employeeServiceInfoService.DeleteAsync(id);
                 return NoContent();
             }
             catch (ArgumentException ex)

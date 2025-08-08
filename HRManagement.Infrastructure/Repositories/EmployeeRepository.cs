@@ -5,12 +5,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HRManagement.Infrastructure.Repositories
 {
-    public class EmployeeRepository : Repository<Employee>, IEmployeeRepository
+    public class EmployeeRepository(HRDbContext context) : Repository<Employee>(context), IEmployeeRepository
     {
-        public EmployeeRepository(HRDbContext context) : base(context)
-        {
-        }
-
         public async Task<Employee?> GetByMilitaryNumberAsync(int militaryNumber)
         {
             return await _dbSet.FirstOrDefaultAsync(e => e.MilitaryNumber == militaryNumber);

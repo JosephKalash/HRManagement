@@ -92,8 +92,8 @@ namespace HRManagement.Application.Services
         public async Task<OrgUnitHierarchyDto> GetHierarchyAsync()
         {
             var allOrgUnits = await _orgUnitRepository.GetAllWithChildrenAsync();
-            var rootUnits = allOrgUnits.Where(o => o.ParentId == null).FirstOrDefault();
-            return _mapper.Map<OrgUnitHierarchyDto>(rootUnits!);
+            var leaderUnit = allOrgUnits.Where(o => o.ParentId == null).FirstOrDefault();
+            return _mapper.Map<OrgUnitHierarchyDto>(leaderUnit!);
         }
     }
 }

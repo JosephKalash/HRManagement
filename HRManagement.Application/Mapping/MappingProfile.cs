@@ -73,8 +73,8 @@ namespace HRManagement.Application.Mapping
 
             // EmployeeAssignment mappings
             CreateMap<EmployeeAssignment, EmployeeAssignmentDto>()
-                // .ForMember(dest => dest.CreatedByName, opt => opt.MapFrom(src => src.CreatedByUser.ArabicFirstName + " " + src.CreatedByUser.ArabicLastName))
-                // .ForMember(dest => dest.UpdatedByName, opt => opt.MapFrom(src => src.UpdatedByUser.ArabicFirstName + " " + src.UpdatedByUser.ArabicLastName))
+                .ForMember(dest => dest.CreatedByName, opt => opt.MapFrom(src => src.CreatedByUser == null ? null : src.CreatedByUser.ArabicFirstName + " " + src.CreatedByUser.ArabicLastName))
+                .ForMember(dest => dest.UpdatedByName, opt => opt.MapFrom(src => src.UpdatedByUser == null ? null : src.UpdatedByUser.ArabicFirstName + " " + src.UpdatedByUser.ArabicLastName))
                 .ReverseMap();
 
             CreateMap<CreateEmployeeAssignmentDto, EmployeeAssignment>()

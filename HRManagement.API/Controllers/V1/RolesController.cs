@@ -28,18 +28,18 @@ namespace HRManagement.API.Controllers.V1
         /// </summary>
         /// <returns>List of all roles</returns>
         [HttpGet]
-        [ProducesResponseType(typeof(ApiResponse<IEnumerable<RoleDto>>), 200)]
+        [ProducesResponseType(typeof(ApiResponse<PagedResult<RoleDto>>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 500)]
-        public async Task<ActionResult<ApiResponse<IEnumerable<RoleDto>>>> GetRoles()
+        public async Task<ActionResult<ApiResponse<PagedResult<RoleDto>>>> GetRoles([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             try
             {
-                var roles = await _roleService.GetAllRolesAsync();
-                return Ok(ApiResponse<IEnumerable<RoleDto>>.SuccessResult(roles, "Roles retrieved successfully"));
+                var pagedResult = await _roleService.GetPagedRolesAsync(pageNumber, pageSize);
+                return Ok(ApiResponse<PagedResult<RoleDto>>.SuccessResult(pagedResult, "Roles retrieved successfully"));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ApiResponse<IEnumerable<RoleDto>>.ErrorResult("An error occurred while retrieving roles", new List<string> { ex.Message }));
+                return StatusCode(500, ApiResponse<PagedResult<RoleDto>>.ErrorResult("An error occurred while retrieving roles", new List<string> { ex.Message }));
             }
         }
 
@@ -76,18 +76,18 @@ namespace HRManagement.API.Controllers.V1
         /// <param name="level">Role level</param>
         /// <returns>List of roles at the specified level</returns>
         [HttpGet("level/{level}")]
-        [ProducesResponseType(typeof(ApiResponse<IEnumerable<RoleDto>>), 200)]
+        [ProducesResponseType(typeof(ApiResponse<PagedResult<RoleDto>>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 500)]
-        public async Task<ActionResult<ApiResponse<IEnumerable<RoleDto>>>> GetRolesByLevel(RoleLevel level)
+        public async Task<ActionResult<ApiResponse<PagedResult<RoleDto>>>> GetRolesByLevel(RoleLevel level, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             try
             {
-                var roles = await _roleService.GetRolesByLevelAsync(level);
-                return Ok(ApiResponse<IEnumerable<RoleDto>>.SuccessResult(roles, $"Roles at level {level} retrieved successfully"));
+                var pagedResult = await _roleService.GetPagedRolesByLevelAsync(level, pageNumber, pageSize);
+                return Ok(ApiResponse<PagedResult<RoleDto>>.SuccessResult(pagedResult, $"Roles at level {level} retrieved successfully"));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ApiResponse<IEnumerable<RoleDto>>.ErrorResult("An error occurred while retrieving roles by level", new List<string> { ex.Message }));
+                return StatusCode(500, ApiResponse<PagedResult<RoleDto>>.ErrorResult("An error occurred while retrieving roles by level", new List<string> { ex.Message }));
             }
         }
 

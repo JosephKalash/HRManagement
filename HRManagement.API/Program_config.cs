@@ -114,6 +114,10 @@ public static class ProgramConfigExtensions
     public static WebApplicationBuilder AddAppServices(this WebApplicationBuilder builder)
     {
         builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+        builder.Services.AddScoped<IEmployeeProfileService, EmployeeProfileService>();
+        builder.Services.AddScoped<IEmployeeContactService, EmployeeContactService>();
+        builder.Services.AddScoped<IEmployeeServiceInfoService, EmployeeServiceInfoService>();
+        builder.Services.AddScoped<IEmployeeAssignmentService, EmployeeAssignmentService>();
         builder.Services.AddScoped<IOrgUnitService, OrgUnitService>();
         builder.Services.AddScoped<IImageService, ImageService>();
         builder.Services.AddScoped<IRoleService, RoleService>();

@@ -22,6 +22,8 @@ namespace HRManagement.Application.DTOs
         public DateTime? EndDate { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
+        public string? CreatedByName { get; set; }
+        public string? UpdatedByName { get; set; }
     }
 
     public class CreateEmployeeAssignmentDto

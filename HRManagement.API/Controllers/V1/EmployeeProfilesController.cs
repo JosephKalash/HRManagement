@@ -1,8 +1,8 @@
 using AutoMapper;
 using HRManagement.Application.DTOs;
 using HRManagement.Application.Helpers;
+using HRManagement.Application.Interfaces;
 using HRManagement.Core.Entities;
-using HRManagement.Core.Interfaces;
 using HRManagement.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,9 +12,9 @@ namespace HRManagement.API.Controllers.V1
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [Produces("application/json")]
-    public class EmployeeProfilesController(IEmployeeProfileRepository employeeProfileRepository, IMapper mapper) : ControllerBase
+    public class EmployeeProfilesController(IEmployeeProfileService employeeProfileService, IMapper mapper) : ControllerBase
     {
-        private readonly IEmployeeProfileRepository _employeeProfileRepository = employeeProfileRepository;
+        private readonly IEmployeeProfileService _employeeProfileService = employeeProfileService;
         private readonly IMapper _mapper = mapper;
 
         /// <summary>
@@ -22,25 +22,34 @@ namespace HRManagement.API.Controllers.V1
         /// </summary>
         /// <returns>List of all employee profiles</returns>
         [HttpGet]
-        [ProducesResponseType(typeof(ApiResponse<IEnumerable<EmployeeProfileDto>>), 200)]
+        [ProducesResponseType(typeof(ApiResponse<PagedResult<EmployeeProfileDto>>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 500)]
-        public async Task<ActionResult<ApiResponse<IEnumerable<EmployeeProfileDto>>>> GetEmployeeProfiles()
+        public async Task<ActionResult<ApiResponse<PagedResult<EmployeeProfileDto>>>> GetEmployeeProfiles([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             try
             {
-                var profiles = await _employeeProfileRepository.GetAllAsync();
+                var pagedResult = await _employeeProfileService.GetPagedAsync(pageNumber, pageSize);
                 var baseUrl = $"{Request.Scheme}://{Request.Host}";
-                var dtos = profiles.Select(profile =>
+                var dtos = pagedResult.Items.Select(profile =>
                 {
                     var dto = _mapper.Map<EmployeeProfileDto>(profile);
-                    dto.ImagePath = baseUrl + '/' + profile.ImagePath; // Call a method to modify the ImagePath
+                    if (profile.ImagePath != null)
+                    {
+                        dto.ImagePath = baseUrl + '/' + profile.ImagePath;
+                    }
                     return dto;
-                });
-                return Ok(ApiResponse<IEnumerable<EmployeeProfileDto>>.SuccessResult(dtos, "Employee profiles retrieved successfully"));
+                }).ToList();
+                return Ok(ApiResponse<PagedResult<EmployeeProfileDto>>.SuccessResult(new PagedResult<EmployeeProfileDto>
+                {
+                    Items = dtos,
+                    PageNumber = pagedResult.PageNumber,
+                    PageSize = pagedResult.PageSize,
+                    TotalCount = pagedResult.TotalCount
+                }, "Employee profiles retrieved successfully"));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ApiResponse<IEnumerable<EmployeeProfileDto>>.ErrorResult("An error occurred while retrieving employee profiles", new List<string> { ex.Message }));
+                return StatusCode(500, ApiResponse<PagedResult<EmployeeProfileDto>>.ErrorResult("An error occurred while retrieving employee profiles", new List<string> { ex.Message }));
             }
         }
 
@@ -57,13 +66,13 @@ namespace HRManagement.API.Controllers.V1
         {
             try
             {
-                var profile = await _employeeProfileRepository.GetByIdAsync(id);
+                var profile = await _employeeProfileService.GetByIdAsync(id);
                 if (profile == null)
                 {
                     return NotFound(ApiResponse<EmployeeProfileDto>.ErrorResult($"Employee profile with ID {id} not found"));
                 }
 
-                return Ok(ApiResponse<EmployeeProfileDto>.SuccessResult(_mapper.Map<EmployeeProfileDto>(profile), "Employee profile retrieved successfully"));
+                return Ok(ApiResponse<EmployeeProfileDto>.SuccessResult(profile, "Employee profile retrieved successfully"));
             }
             catch (Exception ex)
             {
@@ -84,13 +93,13 @@ namespace HRManagement.API.Controllers.V1
         {
             try
             {
-                var profile = await _employeeProfileRepository.GetByEmployeeIdAsync(employeeId);
+                var profile = await _employeeProfileService.GetByEmployeeIdAsync(employeeId);
                 if (profile == null)
                 {
                     return NotFound(ApiResponse<EmployeeProfileDto>.ErrorResult($"Employee profile for employee ID {employeeId} not found"));
                 }
 
-                return Ok(ApiResponse<EmployeeProfileDto>.SuccessResult(_mapper.Map<EmployeeProfileDto>(profile), "Employee profile retrieved successfully"));
+                return Ok(ApiResponse<EmployeeProfileDto>.SuccessResult(profile, "Employee profile retrieved successfully"));
             }
             catch (Exception ex)
             {
@@ -120,11 +129,9 @@ namespace HRManagement.API.Controllers.V1
                     return BadRequest(ApiResponse<EmployeeProfileDto>.ErrorResult("Validation failed", errors));
                 }
 
-                var profile = _mapper.Map<EmployeeProfile>(createDto);
-
-                var createdProfile = await _employeeProfileRepository.AddAsync(profile);
-                return CreatedAtAction(nameof(GetEmployeeProfile), new { id = createdProfile.Id },
-                    ApiResponse<EmployeeProfileDto>.SuccessResult(_mapper.Map<EmployeeProfileDto>(createdProfile), "Employee profile created successfully"));
+                var profile = await _employeeProfileService.CreateAsync(createDto);
+                return CreatedAtAction(nameof(GetEmployeeProfile), new { id = profile.Id },
+                    ApiResponse<EmployeeProfileDto>.SuccessResult(profile, "Employee profile created successfully"));
             }
             catch (ArgumentException ex)
             {
@@ -157,16 +164,8 @@ namespace HRManagement.API.Controllers.V1
                     return BadRequest(ApiResponse<EmployeeProfileDto>.ErrorResult("Validation failed", errors));
                 }
 
-                var profile = await _employeeProfileRepository.GetByIdAsync(id);
-                if (profile == null)
-                {
-                    return NotFound(ApiResponse<EmployeeProfileDto>.ErrorResult($"Employee profile with ID {id} not found"));
-                }
-
-                UpdateProfileProperties(updateDto, profile);
-
-                var updatedProfile = await _employeeProfileRepository.UpdateAsync(profile);
-                return Ok(ApiResponse<EmployeeProfileDto>.SuccessResult(_mapper.Map<EmployeeProfileDto>(updatedProfile), "Employee profile updated successfully"));
+                var profile = await _employeeProfileService.UpdateAsync(id, updateDto);
+                return Ok(ApiResponse<EmployeeProfileDto>.SuccessResult(profile, "Employee profile updated successfully"));
             }
             catch (ArgumentException ex)
             {
@@ -191,13 +190,7 @@ namespace HRManagement.API.Controllers.V1
         {
             try
             {
-                var profile = await _employeeProfileRepository.GetByIdAsync(id);
-                if (profile == null)
-                {
-                    return NotFound(ApiResponse.ErrorResult($"Employee profile with ID {id} not found"));
-                }
-
-                await _employeeProfileRepository.DeleteAsync(profile);
+                await _employeeProfileService.DeleteAsync(id);
                 return NoContent();
             }
             catch (ArgumentException ex)
@@ -208,25 +201,6 @@ namespace HRManagement.API.Controllers.V1
             {
                 return StatusCode(500, ApiResponse.ErrorResult("An error occurred while deleting the employee profile", new List<string> { ex.Message }));
             }
-        }
-
-        private static void UpdateProfileProperties(UpdateEmployeeProfileDto updateDto, EmployeeProfile profile)
-        {
-            updateDto.Height.SetIfHasValue(val => profile.Height = val);
-            updateDto.BloodGroup.SetIfHasValue(val => profile.BloodGroup = val);
-            updateDto.SkinColor.SetIfNotNull(val => profile.SkinColor = val);
-            updateDto.MobileNumber.SetIfHasValue(val => profile.MobileNumber = val);
-            updateDto.HairColor.SetIfNotNull(val => profile.HairColor = val);
-            updateDto.EyeColor.SetIfNotNull(val => profile.EyeColor = val);
-            updateDto.DisabilityType.SetIfNotNull(val => profile.DisabilityType = val);
-            updateDto.DistinctiveSigns.SetIfNotNull(val => profile.DistinctiveSigns = val);
-            updateDto.CurrentNationality.SetIfNotNull(val => profile.CurrentNationality = val);
-            updateDto.Religion.SetIfHasValue(val => profile.Religion = val);
-            updateDto.PreviousNationality.SetIfNotNull(val => profile.PreviousNationality = val);
-            updateDto.IssueNationalityDate.SetIfHasValue(val => profile.IssueNationalityDate = val);
-            updateDto.SocialCondition.SetIfHasValue(val => profile.SocialCondition = val);
-            updateDto.PlaceOfBirth.SetIfNotNull(val => profile.PlaceOfBirth = val);
-            updateDto.InsuranceNumber.SetIfNotNull(val => profile.InsuranceNumber = val);
         }
     }
 }

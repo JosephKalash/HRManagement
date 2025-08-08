@@ -2,6 +2,8 @@ using HRManagement.Core.Entities;
 using HRManagement.Core.Interfaces;
 using HRManagement.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using HRManagement.Core.Extensions;
+using HRManagement.Core.Models;
 
 namespace HRManagement.Infrastructure.Repositories
 {
@@ -24,6 +26,15 @@ namespace HRManagement.Infrastructure.Repositories
 
             employeeProfile.ImagePath = imagePath;
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<PagedResult<EmployeeProfile>> GetPagedAsync(int pageNumber, int pageSize)
+        {
+            var query = _dbSet
+                .Include(ep => ep.Employee)
+                .AsNoTracking();
+
+            return await query.ToPagedResultAsync(pageNumber, pageSize);
         }
     }
 }

@@ -5,6 +5,7 @@ using HRManagement.Core.Entities;
 using HRManagement.Core.Interfaces;
 using AutoMapper;
 using HRManagement.Core.Enums;
+using HRManagement.Core.Models;
 
 namespace HRManagement.Application.Services
 {
@@ -17,6 +18,30 @@ namespace HRManagement.Application.Services
         {
             var roles = await _roleRepository.GetAllAsync();
             return _mapper.Map<IEnumerable<RoleDto>>(roles);
+        }
+
+        public async Task<PagedResult<RoleDto>> GetPagedRolesAsync(int pageNumber, int pageSize)
+        {
+            var pagedRoles = await _roleRepository.GetPagedAsync(pageNumber, pageSize);
+            return new PagedResult<RoleDto>
+            {
+                Items = _mapper.Map<List<RoleDto>>(pagedRoles.Items),
+                PageNumber = pagedRoles.PageNumber,
+                PageSize = pagedRoles.PageSize,
+                TotalCount = pagedRoles.TotalCount
+            };
+        }
+
+        public async Task<PagedResult<RoleDto>> GetPagedRolesByLevelAsync(RoleLevel level, int pageNumber, int pageSize)
+        {
+            var pagedRoles = await _roleRepository.GetPagedByLevelAsync(level, pageNumber, pageSize);
+            return new PagedResult<RoleDto>
+            {
+                Items = _mapper.Map<List<RoleDto>>(pagedRoles.Items),
+                PageNumber = pagedRoles.PageNumber,
+                PageSize = pagedRoles.PageSize,
+                TotalCount = pagedRoles.TotalCount
+            };
         }
 
         public async Task<RoleDto?> GetRoleByIdAsync(Guid id)
