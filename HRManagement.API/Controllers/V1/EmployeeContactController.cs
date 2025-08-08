@@ -1,6 +1,6 @@
 using AutoMapper;
+using HRManagement.Application.DTOs;
 using HRManagement.Application.Helpers;
-using HRManagement.Core.DTOs;
 using HRManagement.Core.Entities;
 using HRManagement.Core.Models;
 using HRManagement.Core.Repositories;

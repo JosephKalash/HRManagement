@@ -3,6 +3,7 @@ using HRManagement.Core.Entities;
 using HRManagement.Core.Interfaces;
 using HRManagement.Core.Models;
 using Microsoft.AspNetCore.Mvc;
+using AutoMapper;
 
 namespace HRManagement.API.Controllers.V1
 {
@@ -10,14 +11,10 @@ namespace HRManagement.API.Controllers.V1
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [Produces("application/json")]
-    public class EmployeeAssignmentsController : ControllerBase
+    public class EmployeeAssignmentsController(IEmployeeAssignmentRepository employeeAssignmentRepository, IMapper mapper) : ControllerBase
     {
-        private readonly IEmployeeAssignmentRepository _employeeAssignmentRepository;
-
-        public EmployeeAssignmentsController(IEmployeeAssignmentRepository employeeAssignmentRepository)
-        {
-            _employeeAssignmentRepository = employeeAssignmentRepository;
-        }
+        private readonly IEmployeeAssignmentRepository _employeeAssignmentRepository = employeeAssignmentRepository;
+        private readonly IMapper _mapper = mapper;
 
         /// <summary>
         /// Get all employee assignments
@@ -31,7 +28,7 @@ namespace HRManagement.API.Controllers.V1
             try
             {
                 var assignments = await _employeeAssignmentRepository.GetAllAsync();
-                var dtos = assignments.Select(MapToDto);
+                var dtos = _mapper.Map<IEnumerable<EmployeeAssignmentDto>>(assignments);
                 return Ok(ApiResponse<IEnumerable<EmployeeAssignmentDto>>.SuccessResult(dtos, "Employee assignments retrieved successfully"));
             }
             catch (Exception ex)
@@ -59,7 +56,7 @@ namespace HRManagement.API.Controllers.V1
                     return NotFound(ApiResponse<EmployeeAssignmentDto>.ErrorResult($"Employee assignment with ID {id} not found"));
                 }
 
-                return Ok(ApiResponse<EmployeeAssignmentDto>.SuccessResult(MapToDto(assignment), "Employee assignment retrieved successfully"));
+                return Ok(ApiResponse<EmployeeAssignmentDto>.SuccessResult(_mapper.Map<EmployeeAssignmentDto>(assignment), "Employee assignment retrieved successfully"));
             }
             catch (Exception ex)
             {
@@ -80,7 +77,7 @@ namespace HRManagement.API.Controllers.V1
             try
             {
                 var assignments = await _employeeAssignmentRepository.GetByEmployeeIdAsync(employeeId);
-                var dtos = assignments.Select(MapToDto);
+                var dtos = _mapper.Map<IEnumerable<EmployeeAssignmentDto>>(assignments);
                 return Ok(ApiResponse<IEnumerable<EmployeeAssignmentDto>>.SuccessResult(dtos, "Employee assignments retrieved successfully"));
             }
             catch (Exception ex)
@@ -108,7 +105,7 @@ namespace HRManagement.API.Controllers.V1
                     return NotFound(ApiResponse<EmployeeAssignmentDto>.ErrorResult($"Active employee assignment for employee ID {employeeId} not found"));
                 }
 
-                return Ok(ApiResponse<EmployeeAssignmentDto>.SuccessResult(MapToDto(assignment), "Active employee assignment retrieved successfully"));
+                return Ok(ApiResponse<EmployeeAssignmentDto>.SuccessResult(_mapper.Map<EmployeeAssignmentDto>(assignment), "Active employee assignment retrieved successfully"));
             }
             catch (Exception ex)
             {
@@ -138,24 +135,11 @@ namespace HRManagement.API.Controllers.V1
                     return BadRequest(ApiResponse<EmployeeAssignmentDto>.ErrorResult("Validation failed", errors));
                 }
 
-                var assignment = new EmployeeAssignment
-                {
-                    EmployeeId = createDto.EmployeeId,
-                    IsActive = createDto.IsActive,
-                    AssignedUnitId = createDto.AssignedUnitId,
-                    DueDate = createDto.DueDate,
-                    JobRoleId = createDto.JobRoleId,
-                    HiringDate = createDto.HiringDate,
-                    GrantingAuthority = createDto.GrantingAuthority,
-                    LastPromotion = createDto.LastPromotion,
-                    ContractDuration = createDto.ContractDuration,
-                    ServiceDuration = createDto.ServiceDuration,
-                    AssignmentType = createDto.AssignmentType
-                };
+                var assignment = _mapper.Map<EmployeeAssignment>(createDto);
 
                 var createdAssignment = await _employeeAssignmentRepository.AddAsync(assignment);
                 return CreatedAtAction(nameof(GetEmployeeAssignment), new { id = createdAssignment.Id }, 
-                    ApiResponse<EmployeeAssignmentDto>.SuccessResult(MapToDto(createdAssignment), "Employee assignment created successfully"));
+                    ApiResponse<EmployeeAssignmentDto>.SuccessResult(_mapper.Map<EmployeeAssignmentDto>(createdAssignment), "Employee assignment created successfully"));
             }
             catch (ArgumentException ex)
             {
@@ -202,8 +186,8 @@ namespace HRManagement.API.Controllers.V1
                     assignment.IsActive = updateDto.IsActive.Value;
                 if (updateDto.AssignedUnitId.HasValue)
                     assignment.AssignedUnitId = updateDto.AssignedUnitId.Value;
-                if (updateDto.DueDate.HasValue)
-                    assignment.DueDate = updateDto.DueDate.Value;
+                if (updateDto.EndDate.HasValue)
+                    assignment.EndDate = updateDto.EndDate.Value;
                 if (updateDto.JobRoleId.HasValue)
                     assignment.JobRoleId = updateDto.JobRoleId.Value;
                 if (updateDto.HiringDate.HasValue)
@@ -218,9 +202,13 @@ namespace HRManagement.API.Controllers.V1
                     assignment.ServiceDuration = updateDto.ServiceDuration.Value;
                 if (updateDto.AssignmentType.HasValue)
                     assignment.AssignmentType = updateDto.AssignmentType.Value;
+                if (updateDto.Name != null)
+                    assignment.Name = updateDto.Name;
+                if (updateDto.Description != null)
+                    assignment.Description = updateDto.Description;
 
                 var updatedAssignment = await _employeeAssignmentRepository.UpdateAsync(assignment);
-                return Ok(ApiResponse<EmployeeAssignmentDto>.SuccessResult(MapToDto(updatedAssignment), "Employee assignment updated successfully"));
+                return Ok(ApiResponse<EmployeeAssignmentDto>.SuccessResult(_mapper.Map<EmployeeAssignmentDto>(updatedAssignment), "Employee assignment updated successfully"));
             }
             catch (ArgumentException ex)
             {
@@ -262,25 +250,6 @@ namespace HRManagement.API.Controllers.V1
             {
                 return StatusCode(500, ApiResponse.ErrorResult("An error occurred while deleting the employee assignment", new List<string> { ex.Message }));
             }
-        }
-
-        private static EmployeeAssignmentDto MapToDto(EmployeeAssignment assignment)
-        {
-            return new EmployeeAssignmentDto
-            {
-                Id = assignment.Id,
-                EmployeeId = assignment.EmployeeId,
-                IsActive = assignment.IsActive,
-                AssignedUnitId = assignment.AssignedUnitId,
-                DueDate = assignment.DueDate,
-                JobRoleId = assignment.JobRoleId,
-                HiringDate = assignment.HiringDate,
-                GrantingAuthority = assignment.GrantingAuthority,
-                LastPromotion = assignment.LastPromotion,
-                ContractDuration = assignment.ContractDuration,
-                ServiceDuration = assignment.ServiceDuration,
-                AssignmentType = assignment.AssignmentType
-            };
         }
     }
 } 

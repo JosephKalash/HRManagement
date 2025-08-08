@@ -159,10 +159,10 @@ namespace HRManagement.Application.Services
                 jobSummaries.Add(_mapper.Map<EmployeeJobSummaryDto>(activeServiceInfo));
             }
 
-            var assignments = await _employeeAssignmentRepository.GetByEmployeeIdAsync(employeeId);
-            foreach (var assignment in assignments)
+            var assignments = await _employeeAssignmentRepository.GetActiveByEmployeeIdAsync(employeeId);
+            if (assignments != null) // Check if the active assignment is found.
             {
-                jobSummaries.Add(_mapper.Map<EmployeeJobSummaryDto>(assignment));
+                jobSummaries.Add(_mapper.Map<EmployeeJobSummaryDto>(assignments));
             }
 
             return jobSummaries;

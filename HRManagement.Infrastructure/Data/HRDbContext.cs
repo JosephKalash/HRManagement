@@ -91,6 +91,8 @@ namespace HRManagement.Infrastructure.Data
             modelBuilder.Entity<EmployeeAssignment>(entity =>
             {
                 entity.HasKey(e => e.Id);
+                entity.Property(e => e.AssignmentDate).IsRequired();
+                entity.Property(e => e.HiringDate).IsRequired();
                 entity.HasOne(e => e.Employee)
                     .WithMany(e => e.Assignments)
                     .HasForeignKey(e => e.EmployeeId)
@@ -102,6 +104,14 @@ namespace HRManagement.Infrastructure.Data
                 entity.HasOne(e => e.JobRole)
                     .WithMany(e => e.EmployeeAssignments)
                     .HasForeignKey(e => e.JobRoleId)
+                    .OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(e => e.CreatedByUser)
+                    .WithMany()
+                    .HasForeignKey(e => e.CreatedBy)
+                    .OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(e => e.UpdatedByUser)
+                    .WithMany()
+                    .HasForeignKey(e => e.UpdatedBy)
                     .OnDelete(DeleteBehavior.Restrict);
             });
 

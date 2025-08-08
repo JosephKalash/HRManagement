@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using HRManagement.Core.enums;
 using HRManagement.Core.Enums;
 
 namespace HRManagement.Core.Entities

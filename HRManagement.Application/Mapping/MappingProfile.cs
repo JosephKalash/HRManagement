@@ -1,6 +1,5 @@
 using AutoMapper;
 using HRManagement.Application.DTOs;
-using HRManagement.Core.DTOs;
 using HRManagement.Core.Entities;
 
 namespace HRManagement.Application.Mapping
@@ -74,19 +73,27 @@ namespace HRManagement.Application.Mapping
 
             // EmployeeAssignment mappings
             CreateMap<EmployeeAssignment, EmployeeAssignmentDto>()
+                // .ForMember(dest => dest.CreatedByName, opt => opt.MapFrom(src => src.CreatedByUser.ArabicFirstName + " " + src.CreatedByUser.ArabicLastName))
+                // .ForMember(dest => dest.UpdatedByName, opt => opt.MapFrom(src => src.UpdatedByUser.ArabicFirstName + " " + src.UpdatedByUser.ArabicLastName))
                 .ReverseMap();
 
             CreateMap<CreateEmployeeAssignmentDto, EmployeeAssignment>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.Employee, opt => opt.Ignore())
                 .ForMember(dest => dest.AssignedUnit, opt => opt.Ignore())
-                .ForMember(dest => dest.JobRole, opt => opt.Ignore());
+                .ForMember(dest => dest.JobRole, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedBy, opt => opt.Ignore());
 
             CreateMap<UpdateEmployeeAssignmentDto, EmployeeAssignment>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.Employee, opt => opt.Ignore())
                 .ForMember(dest => dest.AssignedUnit, opt => opt.Ignore())
                 .ForMember(dest => dest.JobRole, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedBy, opt => opt.Ignore())
+                .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => DateTime.UtcNow))
+                .ForMember(dest => dest.UpdatedBy, opt => opt.Ignore())
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
             // OrgUnit mappings

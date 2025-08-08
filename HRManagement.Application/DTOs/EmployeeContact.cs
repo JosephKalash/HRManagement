@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace HRManagement.Core.DTOs
+namespace HRManagement.Application.DTOs
 {
     public class EmployeeContactDto
     {

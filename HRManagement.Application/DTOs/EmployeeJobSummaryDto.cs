@@ -1,6 +1,3 @@
-using System;
-using HRManagement.Application.DTOs;
-
 namespace HRManagement.Application.DTOs
 {
     public class EmployeeJobSummaryDto

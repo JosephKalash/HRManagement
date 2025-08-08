@@ -3,6 +3,7 @@ using HRManagement.Application.Interfaces;
 using HRManagement.Application.Mapping;
 using HRManagement.Application.Services;
 using HRManagement.Core.Entities;
+using HRManagement.Core.enums;
 using HRManagement.Core.Enums;
 using HRManagement.Core.Interfaces;
 using HRManagement.Core.Repositories;
@@ -32,6 +33,7 @@ public static class ProgramConfigExtensions
                 Description = "A comprehensive HR management system API",
             });
             MapEnum<RoleLevel>(c);
+            MapEnum<AssignmentType>(c);
             MapEnum<SocialCondition>(c);
             MapEnum<BloodGroup>(c);
             MapEnum<Religions>(c);
