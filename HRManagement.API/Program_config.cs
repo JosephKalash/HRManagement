@@ -96,8 +96,18 @@ public static class ProgramConfigExtensions
 
     public static WebApplicationBuilder AddDbContextAndRepositories(this WebApplicationBuilder builder)
     {
-        builder.Services.AddDbContext<HRDbContext>(options =>
-            options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+        var dbProvider = builder.Configuration["DatabaseProvider"];
+
+        if (dbProvider == "Postgres")
+        {
+            builder.Services.AddDbContext<HRDbContext>(options =>
+                options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+        }
+        else 
+        {
+            builder.Services.AddDbContext<HRDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+        }
         // Register repositories
         builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();

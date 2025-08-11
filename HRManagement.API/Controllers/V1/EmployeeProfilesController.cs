@@ -1,9 +1,12 @@
+using System.Text.Json;
 using AutoMapper;
+using HRManagement.API.Models;
 using HRManagement.Application.DTOs;
 using HRManagement.Application.Helpers;
 using HRManagement.Application.Interfaces;
 using HRManagement.Core.Entities;
 using HRManagement.Core.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HRManagement.API.Controllers.V1
@@ -108,30 +111,38 @@ namespace HRManagement.API.Controllers.V1
         }
 
         /// <summary>
-        /// Create a new employee profile
+        /// Create a new employee profile with optional image upload (multipart/form-data)
         /// </summary>
-        /// <param name="createDto">Employee profile creation data</param>
+        /// <param name="profile">JSON string of CreateEmployeeProfileDto</param>
+        /// <param name="image">Optional image file</param>
         /// <returns>Created employee profile</returns>
         [HttpPost]
+        [Consumes("multipart/form-data")]
         [ProducesResponseType(typeof(ApiResponse<EmployeeProfileDto>), 201)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
         [ProducesResponseType(typeof(ApiResponse), 500)]
-        public async Task<ActionResult<ApiResponse<EmployeeProfileDto>>> CreateEmployeeProfile(CreateEmployeeProfileDto createDto)
+        public async Task<ActionResult<ApiResponse<EmployeeProfileDto>>> CreateEmployeeProfile([FromForm] CreateEmployeeProfileRequest profile)
         {
             try
             {
                 if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+                var createDto = _mapper.Map<CreateEmployeeProfileDto>(profile);
+
+
+                if (createDto == null)
                 {
-                    var errors = ModelState.Values
-                        .SelectMany(v => v.Errors)
-                        .Select(e => e.ErrorMessage)
-                        .ToList();
-                    return BadRequest(ApiResponse<EmployeeProfileDto>.ErrorResult("Validation failed", errors));
+                    return BadRequest(ApiResponse<EmployeeProfileDto>.ErrorResult("Invalid profile data"));
                 }
 
-                var profile = await _employeeProfileService.CreateAsync(createDto);
-                return CreatedAtAction(nameof(GetEmployeeProfile), new { id = profile.Id },
-                    ApiResponse<EmployeeProfileDto>.SuccessResult(profile, "Employee profile created successfully"));
+
+                using var stream = profile.Image?.OpenReadStream();
+                var createdProfile = await _employeeProfileService.CreateAsync(createDto, stream, profile.Image?.FileName);
+
+
+                return CreatedAtAction(nameof(GetEmployeeProfile), new { id = createdProfile.Id },
+                    ApiResponse<EmployeeProfileDto>.SuccessResult(createdProfile, "Employee profile created successfully"));
             }
             catch (ArgumentException ex)
             {
