@@ -9,7 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace HRManagement.API.Controllers.V1
 {
     [ApiController]
-    [Route("api/v1/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
+    [Produces("application/json")]
     public class EmployeeContactController(IEmployeeContactService employeeContactService, IMapper mapper) : ControllerBase
     {
         private readonly IEmployeeContactService _employeeContactService = employeeContactService;

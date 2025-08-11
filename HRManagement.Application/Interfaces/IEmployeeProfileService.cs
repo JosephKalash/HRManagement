@@ -9,7 +9,7 @@ namespace HRManagement.Application.Interfaces
         Task<EmployeeProfileDto?> GetByIdAsync(Guid id);
         Task<EmployeeProfileDto?> GetByEmployeeIdAsync(Guid employeeId);
         Task<IEnumerable<EmployeeProfileDto>> GetAllAsync();
-        Task<EmployeeProfileDto> CreateAsync(CreateEmployeeProfileDto createDto);
+        Task<EmployeeProfileDto> CreateAsync(CreateEmployeeProfileDto createDto, Stream? stream, string? fileName);
         Task<EmployeeProfileDto> UpdateAsync(Guid id, UpdateEmployeeProfileDto updateDto);
         Task DeleteAsync(Guid id);
         Task<bool> ExistsAsync(Guid id);

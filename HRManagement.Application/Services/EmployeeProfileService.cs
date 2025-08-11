@@ -8,8 +8,9 @@ using HRManagement.Core.Models;
 
 namespace HRManagement.Application.Services
 {
-    public class EmployeeProfileService(IEmployeeProfileRepository employeeProfileRepository, IMapper mapper) : IEmployeeProfileService
+    public class EmployeeProfileService(IEmployeeProfileRepository employeeProfileRepository, IImageService imageService, IMapper mapper) : IEmployeeProfileService
     {
+        private readonly IImageService _imageService = imageService;
         private readonly IEmployeeProfileRepository _employeeProfileRepository = employeeProfileRepository;
         private readonly IMapper _mapper = mapper;
 
@@ -31,10 +32,23 @@ namespace HRManagement.Application.Services
             return _mapper.Map<IEnumerable<EmployeeProfileDto>>(profiles);
         }
 
-        public async Task<EmployeeProfileDto> CreateAsync(CreateEmployeeProfileDto createDto)
+        public async Task<EmployeeProfileDto> CreateAsync(CreateEmployeeProfileDto createDto, Stream? imageStream, string? imageName)
         {
             var profile = _mapper.Map<EmployeeProfile>(createDto);
             var createdProfile = await _employeeProfileRepository.AddAsync(profile);
+
+            string? savedRelativePath = null;
+            if (imageStream != null && imageStream.Length > 0)
+            {
+                var (filePath, _) = await _imageService.SaveImageAsync(imageStream, "profiles", imageName!);
+                savedRelativePath = filePath;
+                await UpdateEmployeeImageAsync(createDto.EmployeeId, filePath);
+            }
+
+            if (!string.IsNullOrEmpty(savedRelativePath))
+            {
+                createdProfile.ImagePath = '/' + savedRelativePath;
+            }
             return _mapper.Map<EmployeeProfileDto>(createdProfile);
         }
 
@@ -76,4 +90,4 @@ namespace HRManagement.Application.Services
             await _employeeProfileRepository.UpdateEmployeeImageAsync(employeeId, imagePath);
         }
     }
-} 
+}

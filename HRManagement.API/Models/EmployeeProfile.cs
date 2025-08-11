@@ -1,33 +1,12 @@
+
 using System.ComponentModel.DataAnnotations;
 using HRManagement.Core.enums;
 using HRManagement.Core.Enums;
 
-namespace HRManagement.Application.DTOs
+namespace HRManagement.API.Models
 {
-    public class EmployeeProfileDto
-    {
-        public Guid Id { get; set; }
-        public Guid EmployeeId { get; set; }
-        public int? Height { get; set; }
-        public BloodGroup? BloodGroup { get; set; }
-        public string? SkinColor { get; set; }
-        public string? HairColor { get; set; }
-        public string? EyeColor { get; set; }
-        public string? DisabilityType { get; set; }
-        public string? DistinctiveSigns { get; set; }
-        public string CurrentNationality { get; set; } = string.Empty;
-        public Religions Religion { get; set; }
-        public string? PreviousNationality { get; set; }
-        public DateTime? IssueNationalityDate { get; set; }
-        public SocialCondition? SocialCondition { get; set; }
 
-        public string PlaceOfBirth { get; set; } = string.Empty;
-        public string? InsuranceNumber { get; set; }
-        //for return 
-        public string? ImagePath { get; set; } = string.Empty;
-    }
-
-    public class CreateEmployeeProfileDto
+    public class CreateEmployeeProfileRequest
     {
         [Required]
         public Guid EmployeeId { get; set; }
@@ -69,10 +48,12 @@ namespace HRManagement.Application.DTOs
 
         [StringLength(50)]
         public string? InsuranceNumber { get; set; }
+        public IFormFile? Image { get; set; }
     }
 
-    public class UpdateEmployeeProfileDto
+    public class UpdateEmployeeProfileRequest
     {
+        public IFormFile? Image { get; set; }
         public int? Height { get; set; }
         public BloodGroup? BloodGroup { get; set; }
 
