@@ -20,10 +20,8 @@ namespace HRManagement.Core.Entities
         Cancelled
     }
 
-    public class LeaveRequest
+    public class LeaveRequest : BaseEntity
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
-        
         // public Guid EmployeeId { get; set; }
         
         [Required]
@@ -42,10 +40,6 @@ namespace HRManagement.Core.Entities
         
         [StringLength(500)]
         public string? ManagerComments { get; set; }
-        
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        
-        public DateTime? UpdatedAt { get; set; }
         
         // Navigation property
         public virtual Employee Employee { get; set; } = null!;

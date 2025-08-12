@@ -2,10 +2,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace HRManagement.Core.Entities
 {
-    public class EmployeeSignature
+    public class EmployeeSignature : BaseEntity
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
-
         [Required]
         public Guid EmployeeId { get; set; }
 
@@ -19,10 +17,6 @@ namespace HRManagement.Core.Entities
 
         [StringLength(255)]
         public string? OriginalFileName { get; set; }
-
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
-        public DateTime? UpdatedAt { get; set; }
 
         // Navigation property
         public virtual Employee Employee { get; set; } = null!;

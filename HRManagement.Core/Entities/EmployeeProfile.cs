@@ -4,10 +4,8 @@ using HRManagement.Core.Enums;
 
 namespace HRManagement.Core.Entities
 {
-    public class EmployeeProfile
+    public class EmployeeProfile : BaseEntity
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
-
         [Required]
         public Guid EmployeeId { get; set; }
         public Employee Employee { get; set; } = null!;

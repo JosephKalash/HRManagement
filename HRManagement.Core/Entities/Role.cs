@@ -3,10 +3,8 @@ using HRManagement.Core.Enums;
 
 namespace HRManagement.Core.Entities
 {
-    public class Role
+    public class Role : BaseEntity
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
-
         [Required]
         [StringLength(100)]
         public string Name { get; set; } = string.Empty;
@@ -28,8 +26,6 @@ namespace HRManagement.Core.Entities
 
         // public virtual ICollection<RolePermission> RolePermissions { get; set; } = new List<RolePermission>();
 
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public DateTime? UpdatedAt { get; set; }
         public string? CreatedBy { get; set; }
         public string? UpdatedBy { get; set; }
 

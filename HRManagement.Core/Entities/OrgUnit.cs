@@ -4,11 +4,8 @@ using HRManagement.Core.Enums;
 namespace HRManagement.Core.Entities
 {
 
-    public class OrgUnit
+    public class OrgUnit : BaseEntity
     {
-        [Key]
-        public Guid Id { get; set; } = Guid.NewGuid();
-
         public OrgUnitType Type { get; set; }
         public int Level => (int)Type;
 

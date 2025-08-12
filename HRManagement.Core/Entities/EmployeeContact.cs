@@ -2,9 +2,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace HRManagement.Core.Entities
 {
-    public class EmployeeContact
+    public class EmployeeContact : BaseEntity
     {
-        public int Id { get; set; }
         public Guid EmployeeId { get; set; }
         [EmailAddress]
         public string? Email { get; set; }

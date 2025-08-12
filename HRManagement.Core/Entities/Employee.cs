@@ -4,10 +4,8 @@ using HRManagement.Core.Enums;
 namespace HRManagement.Core.Entities
 {
 
-    public class Employee
+    public class Employee : BaseEntity
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
-
         [Required]
         public int MilitaryNumber { get; set; }
 
@@ -45,10 +43,6 @@ namespace HRManagement.Core.Entities
         public string IdNumber { get; set; } = string.Empty;
 
         public bool IsActive { get; set; } = true;
-
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
-        public DateTime? UpdatedAt { get; set; }
 
         // Navigation properties
         public virtual EmployeeProfile? Profile { get; set; }

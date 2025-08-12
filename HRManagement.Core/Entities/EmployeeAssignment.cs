@@ -3,10 +3,8 @@ using HRManagement.Core.enums;
 
 namespace HRManagement.Core.Entities
 {
-    public class EmployeeAssignment
+    public class EmployeeAssignment : BaseEntity
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
-
         [Required]
         public Guid EmployeeId { get; set; }
         public virtual Employee Employee { get; set; } = null!;
@@ -42,9 +40,7 @@ namespace HRManagement.Core.Entities
         public string? Description { get; set; }
         public string? Name { get; set; }
 
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public Guid? CreatedBy { get; set; }
-        public DateTime? UpdatedAt { get; set; }
         public Guid? UpdatedBy { get; set; }
         public virtual Employee? CreatedByUser { get; set; }
         public virtual Employee? UpdatedByUser { get; set; }
