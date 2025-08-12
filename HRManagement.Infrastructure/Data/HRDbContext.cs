@@ -1,13 +1,12 @@
+using HRManagement.Application.Interfaces;
 using HRManagement.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace HRManagement.Infrastructure.Data
 {
-    public class HRDbContext : DbContext
+    public class HRDbContext(DbContextOptions<HRDbContext> options, ICurrentUserService? currentUser = null) : DbContext(options)
     {
-        public HRDbContext(DbContextOptions<HRDbContext> options) : base(options)
-        {
-        }
+        private readonly ICurrentUserService? _currentUser = currentUser;
 
         public DbSet<Employee> Employees { get; set; }
         public DbSet<EmployeeProfile> EmployeeProfiles { get; set; }
@@ -168,19 +167,48 @@ namespace HRManagement.Infrastructure.Data
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            var entries = ChangeTracker.Entries()
-                .Where(e => e.Entity is Employee || e.Entity is LeaveRequest ||
-                           e.Entity is EmployeeProfile || e.Entity is EmployeeContact || e.Entity is EmployeeSignature ||
-                           e.Entity is EmployeeServiceInfo || e.Entity is EmployeeAssignment)
-                .Where(e => e.State == EntityState.Modified);
+            var utcNow = DateTime.UtcNow;
+            var userId = _currentUser?.UserId;
+            var userName = _currentUser?.UserName;
 
-            foreach (var entry in entries)
+            foreach (var entry in ChangeTracker.Entries<BaseEntity>())
             {
-                var entity = entry.Entity;
-                var updatedAtProperty = entity.GetType().GetProperty("UpdatedAt");
-                if (updatedAtProperty != null)
+                if (entry.State == EntityState.Added)
                 {
-                    updatedAtProperty.SetValue(entity, DateTime.UtcNow);
+                    entry.Entity.CreatedAt = utcNow;
+                    entry.Entity.UpdatedAt = null;
+
+                    // Set CreatedBy if available on the entity
+                    var createdByProp = entry.Entity.GetType().GetProperty("CreatedBy");
+                    if (createdByProp != null)
+                    {
+                        if (createdByProp.PropertyType == typeof(Guid?) && userId.HasValue)
+                        {
+                            createdByProp.SetValue(entry.Entity, userId);
+                        }
+                        else if (createdByProp.PropertyType == typeof(string) && !string.IsNullOrWhiteSpace(userName))
+                        {
+                            createdByProp.SetValue(entry.Entity, userName);
+                        }
+                    }
+                }
+                else if (entry.State == EntityState.Modified)
+                {
+                    entry.Entity.UpdatedAt = utcNow;
+
+                    // Set UpdatedBy if available on the entity
+                    var updatedByProp = entry.Entity.GetType().GetProperty("UpdatedBy");
+                    if (updatedByProp != null)
+                    {
+                        if (updatedByProp.PropertyType == typeof(Guid?) && userId.HasValue)
+                        {
+                            updatedByProp.SetValue(entry.Entity, userId);
+                        }
+                        else if (updatedByProp.PropertyType == typeof(string) && !string.IsNullOrWhiteSpace(userName))
+                        {
+                            updatedByProp.SetValue(entry.Entity, userName);
+                        }
+                    }
                 }
             }
 

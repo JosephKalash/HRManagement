@@ -139,6 +139,10 @@ public static class ProgramConfigExtensions
         // Register the web host environment adapter
         _ = builder.Services.AddScoped<Application.Interfaces.IWebHostEnvironment, WebHostEnvironmentAdapter>();
 
+        // Current user service
+        builder.Services.AddHttpContextAccessor();
+        builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+
         return builder;
     }
 
