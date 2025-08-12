@@ -184,7 +184,6 @@ Debug/
 Release/
 build/
 bld/
-*.py
 
 # Logs
 *.log
