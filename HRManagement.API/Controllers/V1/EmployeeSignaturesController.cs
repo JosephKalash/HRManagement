@@ -1,0 +1,252 @@
+using AutoMapper;
+using HRManagement.API.Models;
+using HRManagement.Application.DTOs;
+using HRManagement.Application.Interfaces;
+using HRManagement.Core.Models;
+using Microsoft.AspNetCore.Mvc;
+
+namespace HRManagement.API.Controllers.V1
+{
+    [ApiController]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
+    [Produces("application/json")]
+    public class EmployeeSignaturesController(IEmployeeSignatureService employeeSignatureService, IMapper mapper) : ControllerBase
+    {
+        private readonly IEmployeeSignatureService _employeeSignatureService = employeeSignatureService;
+        private readonly IMapper _mapper = mapper;
+
+        /// <summary>
+        /// Get all employee signatures
+        /// </summary>
+        /// <returns>List of all employee signatures</returns>
+        [HttpGet]
+        [ProducesResponseType(typeof(ApiResponse<PagedResult<EmployeeSignatureDto>>), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 500)]
+        public async Task<ActionResult<ApiResponse<PagedResult<EmployeeSignatureDto>>>> GetEmployeeSignatures([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        {
+            try
+            {
+                var pagedResult = await _employeeSignatureService.GetPagedAsync(pageNumber, pageSize);
+                var baseUrl = $"{Request.Scheme}://{Request.Host}";
+                var dtos = pagedResult.Items.Select(signature =>
+                {
+                    var dto = _mapper.Map<EmployeeSignatureDto>(signature);
+                    return dto;
+                }).ToList();
+
+                return Ok(ApiResponse<PagedResult<EmployeeSignatureDto>>.SuccessResult(new PagedResult<EmployeeSignatureDto>
+                {
+                    Items = dtos,
+                    PageNumber = pagedResult.PageNumber,
+                    PageSize = pagedResult.PageSize,
+                    TotalCount = pagedResult.TotalCount
+                }, "Employee signatures retrieved successfully"));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<PagedResult<EmployeeSignatureDto>>.ErrorResult("An error occurred while retrieving employee signatures", new List<string> { ex.Message }));
+            }
+        }
+
+        /// <summary>
+        /// Get employee signature by ID
+        /// </summary>
+        /// <param name="id">Employee Signature ID</param>
+        /// <returns>Employee signature details</returns>
+        [HttpGet("{id}")]
+        [ProducesResponseType(typeof(ApiResponse<EmployeeSignatureDto>), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 404)]
+        [ProducesResponseType(typeof(ApiResponse), 500)]
+        public async Task<ActionResult<ApiResponse<EmployeeSignatureDto>>> GetEmployeeSignature(Guid id)
+        {
+            try
+            {
+                var signature = await _employeeSignatureService.GetByIdAsync(id);
+                if (signature == null)
+                {
+                    return NotFound(ApiResponse<EmployeeSignatureDto>.ErrorResult($"Employee signature with ID {id} not found"));
+                }
+
+                var baseUrl = $"{Request.Scheme}://{Request.Host}";
+                if (!string.IsNullOrEmpty(signature.FilePath))
+                {
+                    signature.FilePath = baseUrl + '/' + signature.FilePath;
+                }
+
+                return Ok(ApiResponse<EmployeeSignatureDto>.SuccessResult(signature, "Employee signature retrieved successfully"));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<EmployeeSignatureDto>.ErrorResult("An error occurred while retrieving the employee signature", new List<string> { ex.Message }));
+            }
+        }
+
+        /// <summary>
+        /// Get employee signature by employee ID
+        /// </summary>
+        /// <param name="employeeId">Employee ID</param>
+        /// <returns>Employee signature details</returns>
+        [HttpGet("employee/{employeeId}")]
+        [ProducesResponseType(typeof(ApiResponse<EmployeeSignatureDto>), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 404)]
+        [ProducesResponseType(typeof(ApiResponse), 500)]
+        public async Task<ActionResult<ApiResponse<EmployeeSignatureDto>>> GetEmployeeSignatureByEmployeeId(Guid employeeId)
+        {
+            try
+            {
+                var signature = await _employeeSignatureService.GetByEmployeeIdAsync(employeeId);
+                if (signature == null)
+                {
+                    return NotFound(ApiResponse<EmployeeSignatureDto>.ErrorResult($"Employee signature for employee ID {employeeId} not found"));
+                }
+
+                var baseUrl = $"{Request.Scheme}://{Request.Host}";
+                if (!string.IsNullOrEmpty(signature.FilePath))
+                {
+                    signature.FilePath = baseUrl + '/' + signature.FilePath;
+                }
+
+                return Ok(ApiResponse<EmployeeSignatureDto>.SuccessResult(signature, "Employee signature retrieved successfully"));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<EmployeeSignatureDto>.ErrorResult("An error occurred while retrieving the employee signature", new List<string> { ex.Message }));
+            }
+        }
+
+        /// <summary>
+        /// Create a new employee signature with image upload (multipart/form-data)
+        /// </summary>
+        /// <param name="signature">JSON string of CreateEmployeeSignatureRequest</param>
+        /// <param name="image">Image file</param>
+        /// <returns>Created employee signature</returns>
+        [HttpPost]
+        [Consumes("multipart/form-data")]
+        [ProducesResponseType(typeof(ApiResponse<EmployeeSignatureDto>), 201)]
+        [ProducesResponseType(typeof(ApiResponse), 400)]
+        [ProducesResponseType(typeof(ApiResponse), 500)]
+        public async Task<ActionResult<ApiResponse<EmployeeSignatureDto>>> CreateEmployeeSignature([FromForm] CreateEmployeeSignatureRequest signature)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+                var createDto = _mapper.Map<CreateEmployeeSignatureDto>(signature);
+
+                if (createDto == null)
+                {
+                    return BadRequest(ApiResponse<EmployeeSignatureDto>.ErrorResult("Invalid signature data"));
+                }
+
+                using var stream = signature.Image?.OpenReadStream();
+                var createdSignature = await _employeeSignatureService.CreateAsync(createDto, stream, signature.Image?.FileName);
+
+                return CreatedAtAction(nameof(GetEmployeeSignature), new { id = createdSignature.Id },
+                    ApiResponse<EmployeeSignatureDto>.SuccessResult(createdSignature, "Employee signature created successfully"));
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ApiResponse<EmployeeSignatureDto>.ErrorResult(ex.Message));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<EmployeeSignatureDto>.ErrorResult("An error occurred while creating the employee signature", new List<string> { ex.Message }));
+            }
+        }
+
+        /// <summary>
+        /// Update an employee signature
+        /// </summary>
+        /// <param name="id">Employee Signature ID</param>
+        /// <param name="updateDto">Employee signature update data</param>
+        /// <returns>Updated employee signature</returns>
+        [HttpPatch("{id}")]
+        [ProducesResponseType(typeof(ApiResponse<EmployeeSignatureDto>), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 400)]
+        [ProducesResponseType(typeof(ApiResponse), 404)]
+        [ProducesResponseType(typeof(ApiResponse), 500)]
+        public async Task<ActionResult<ApiResponse<EmployeeSignatureDto>>> UpdateEmployeeSignature(Guid id, UpdateEmployeeSignatureDto updateDto)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                    return BadRequest(ApiResponse<EmployeeSignatureDto>.ErrorResult("Validation failed", errors));
+                }
+
+                var signature = await _employeeSignatureService.UpdateAsync(id, updateDto);
+                return Ok(ApiResponse<EmployeeSignatureDto>.SuccessResult(signature, "Employee signature updated successfully"));
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ApiResponse<EmployeeSignatureDto>.ErrorResult(ex.Message));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<EmployeeSignatureDto>.ErrorResult("An error occurred while updating the employee signature", new List<string> { ex.Message }));
+            }
+        }
+
+        /// <summary>
+        /// Update employee signature image
+        /// </summary>
+        /// <param name="id">Employee Signature ID</param>
+        /// <param name="image">New image file</param>
+        /// <returns>Updated employee signature</returns>
+        [HttpPatch("{id}/image")]
+        [Consumes("multipart/form-data")]
+        [ProducesResponseType(typeof(ApiResponse<EmployeeSignatureDto>), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 400)]
+        [ProducesResponseType(typeof(ApiResponse), 404)]
+        [ProducesResponseType(typeof(ApiResponse), 500)]
+        public async Task<ActionResult<ApiResponse<EmployeeSignatureDto>>> UpdateEmployeeSignatureImage(Guid id, IFormFile image)
+        {
+            try
+            {
+                if (image == null)
+                    return BadRequest(ApiResponse<EmployeeSignatureDto>.ErrorResult("Image file is required"));
+
+                using var stream = image.OpenReadStream();
+                var signature = await _employeeSignatureService.UpdateSignatureImageAsync(id, stream, image.FileName);
+                return Ok(ApiResponse<EmployeeSignatureDto>.SuccessResult(signature, "Employee signature image updated successfully"));
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ApiResponse<EmployeeSignatureDto>.ErrorResult(ex.Message));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<EmployeeSignatureDto>.ErrorResult("An error occurred while updating the employee signature image", new List<string> { ex.Message }));
+            }
+        }
+
+        /// <summary>
+        /// Delete an employee signature
+        /// </summary>
+        /// <param name="id">Employee Signature ID</param>
+        /// <returns>No content</returns>
+        [HttpDelete("{id}")]
+        [ProducesResponseType(typeof(ApiResponse), 204)]
+        [ProducesResponseType(typeof(ApiResponse), 404)]
+        [ProducesResponseType(typeof(ApiResponse), 500)]
+        public async Task<ActionResult<ApiResponse>> DeleteEmployeeSignature(Guid id)
+        {
+            try
+            {
+                await _employeeSignatureService.DeleteAsync(id);
+                return NoContent();
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ApiResponse.ErrorResult(ex.Message));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse.ErrorResult("An error occurred while deleting the employee signature", new List<string> { ex.Message }));
+            }
+        }
+    }
+}

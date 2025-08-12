@@ -36,10 +36,6 @@ namespace HRManagement.API.Controllers.V1
                 var dtos = pagedResult.Items.Select(profile =>
                 {
                     var dto = _mapper.Map<EmployeeProfileDto>(profile);
-                    if (profile.ImagePath != null)
-                    {
-                        dto.ImagePath = baseUrl + '/' + profile.ImagePath;
-                    }
                     return dto;
                 }).ToList();
                 return Ok(ApiResponse<PagedResult<EmployeeProfileDto>>.SuccessResult(new PagedResult<EmployeeProfileDto>
@@ -126,7 +122,10 @@ namespace HRManagement.API.Controllers.V1
             try
             {
                 if (!ModelState.IsValid)
-                    return BadRequest(ModelState);
+                {
+                    var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                    return BadRequest(ApiResponse<EmployeeProfileDto>.ErrorResult("Validation failed", errors));
+                }
 
                 var createDto = _mapper.Map<CreateEmployeeProfileDto>(profile);
 
@@ -165,7 +164,7 @@ namespace HRManagement.API.Controllers.V1
         [ProducesResponseType(typeof(ApiResponse), 400)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
         [ProducesResponseType(typeof(ApiResponse), 500)]
-        public async Task<ActionResult<ApiResponse<EmployeeProfileDto>>> UpdateEmployeeProfile(Guid id, UpdateEmployeeProfileDto updateDto)
+        public async Task<ActionResult<ApiResponse<EmployeeProfileDto>>> UpdateEmployeeProfile(Guid id,[FromForm] UpdateEmployeeProfileRequest updateRequest)
         {
             try
             {
@@ -175,7 +174,15 @@ namespace HRManagement.API.Controllers.V1
                     return BadRequest(ApiResponse<EmployeeProfileDto>.ErrorResult("Validation failed", errors));
                 }
 
-                var profile = await _employeeProfileService.UpdateAsync(id, updateDto);
+                var updateDto = _mapper.Map<UpdateEmployeeProfileDto>(updateRequest);
+
+
+                if (updateDto == null)
+                {
+                    return BadRequest(ApiResponse<EmployeeProfileDto>.ErrorResult("Invalid profile data"));
+                }
+                using var stream = updateRequest.Image?.OpenReadStream();
+                var profile = await _employeeProfileService.UpdateAsync(id, updateDto, stream, updateRequest.Image?.FileName);
                 return Ok(ApiResponse<EmployeeProfileDto>.SuccessResult(profile, "Employee profile updated successfully"));
             }
             catch (ArgumentException ex)

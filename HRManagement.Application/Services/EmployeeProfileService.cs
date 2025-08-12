@@ -35,27 +35,35 @@ namespace HRManagement.Application.Services
         public async Task<EmployeeProfileDto> CreateAsync(CreateEmployeeProfileDto createDto, Stream? imageStream, string? imageName)
         {
             var profile = _mapper.Map<EmployeeProfile>(createDto);
-            var createdProfile = await _employeeProfileRepository.AddAsync(profile);
 
-            string? savedRelativePath = null;
             if (imageStream != null && imageStream.Length > 0)
             {
-                var (filePath, _) = await _imageService.SaveImageAsync(imageStream, "profiles", imageName!);
-                savedRelativePath = filePath;
-                await UpdateEmployeeImageAsync(createDto.EmployeeId, filePath);
+                var (savedRelativePath, _) = await _imageService.SaveImageAsync(imageStream, "profiles", imageName!);
+                if (!string.IsNullOrEmpty(savedRelativePath))
+                {
+                    profile.ImagePath = '/' + savedRelativePath;
+                }
             }
 
-            if (!string.IsNullOrEmpty(savedRelativePath))
-            {
-                createdProfile.ImagePath = '/' + savedRelativePath;
-            }
+            var createdProfile = await _employeeProfileRepository.AddAsync(profile);
             return _mapper.Map<EmployeeProfileDto>(createdProfile);
         }
 
-        public async Task<EmployeeProfileDto> UpdateAsync(Guid id, UpdateEmployeeProfileDto updateDto)
+
+        public async Task<EmployeeProfileDto> UpdateAsync(Guid id, UpdateEmployeeProfileDto updateDto, Stream? stream, string? fileName = null)
         {
             var profile = await _employeeProfileRepository.GetByIdAsync(id) ?? throw new ArgumentException("Employee profile not found");
             _mapper.Map(updateDto, profile);
+
+            if (stream != null && stream.Length > 0)
+            {
+                var (savedRelativePath, _) = await _imageService.SaveImageAsync(stream, "profiles", fileName!);
+                if (!string.IsNullOrEmpty(savedRelativePath))
+                {
+                    profile.ImagePath = '/' + savedRelativePath;
+                }
+            }
+
             var updatedProfile = await _employeeProfileRepository.UpdateAsync(profile);
             return _mapper.Map<EmployeeProfileDto>(updatedProfile);
         }

@@ -53,6 +53,7 @@ namespace HRManagement.Core.Entities
         // Navigation properties
         public virtual EmployeeProfile? Profile { get; set; }
         public virtual EmployeeContact? Contact { get; set; }
+        public virtual EmployeeSignature? Signature { get; set; }
         public virtual ICollection<EmployeeServiceInfo> ServiceInfos { get; set; } = new List<EmployeeServiceInfo>();
         public virtual ICollection<EmployeeAssignment> Assignments { get; set; } = new List<EmployeeAssignment>();
         // public virtual ICollection<LeaveRequest> LeaveRequests { get; set; } = new List<LeaveRequest>();

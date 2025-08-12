@@ -11,12 +11,13 @@ namespace HRManagement.Infrastructure.Data
 
         public DbSet<Employee> Employees { get; set; }
         public DbSet<EmployeeProfile> EmployeeProfiles { get; set; }
+        public DbSet<EmployeeContact> EmployeeContacts { get; set; }
+        public DbSet<EmployeeSignature> EmployeeSignatures { get; set; }
         public DbSet<EmployeeServiceInfo> EmployeeServiceInfos { get; set; }
         public DbSet<EmployeeAssignment> EmployeeAssignments { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<OrgUnit> OrgUnits { get; set; }
         public DbSet<LeaveRequest> LeaveRequests { get; set; }
-        public DbSet<EmployeeContact> EmployeeContacts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -65,6 +66,19 @@ namespace HRManagement.Infrastructure.Data
                 entity.HasOne(e => e.Employee)
                     .WithOne(e => e.Contact)
                     .HasForeignKey<EmployeeContact>(e => e.EmployeeId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // EmployeeSignature configuration
+            modelBuilder.Entity<EmployeeSignature>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.SignatureName).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.FilePath).IsRequired().HasMaxLength(500);
+                entity.Property(e => e.OriginalFileName).HasMaxLength(255);
+                entity.HasOne(e => e.Employee)
+                    .WithOne(e => e.Signature)
+                    .HasForeignKey<EmployeeSignature>(e => e.EmployeeId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
@@ -156,7 +170,8 @@ namespace HRManagement.Infrastructure.Data
         {
             var entries = ChangeTracker.Entries()
                 .Where(e => e.Entity is Employee || e.Entity is LeaveRequest ||
-                           e.Entity is EmployeeProfile || e.Entity is EmployeeServiceInfo || e.Entity is EmployeeAssignment)
+                           e.Entity is EmployeeProfile || e.Entity is EmployeeContact || e.Entity is EmployeeSignature ||
+                           e.Entity is EmployeeServiceInfo || e.Entity is EmployeeAssignment)
                 .Where(e => e.State == EntityState.Modified);
 
             foreach (var entry in entries)

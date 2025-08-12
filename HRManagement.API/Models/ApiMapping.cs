@@ -11,9 +11,14 @@ namespace HRManagement.API.Models
     {
         public ApiMappingProfile()
         {
-            // API RProfileequest to Application DTO
+            // API Profile Request to Application DTO
             CreateMap<CreateEmployeeProfileRequest, CreateEmployeeProfileDto>();
             CreateMap<UpdateEmployeeProfileRequest, UpdateEmployeeProfileDto>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            // API Signature Request to Application DTO
+            CreateMap<CreateEmployeeSignatureRequest, CreateEmployeeSignatureDto>();
+            CreateMap<UpdateEmployeeSignatureRequest, UpdateEmployeeSignatureDto>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
         }
     }

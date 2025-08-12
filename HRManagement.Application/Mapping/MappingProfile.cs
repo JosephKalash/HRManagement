@@ -156,10 +156,32 @@ namespace HRManagement.Application.Mapping
                 .ForMember(dest => dest.EffectiveDate, opt => opt.MapFrom(src => src.AssignmentDate))
                 .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => true)); // Assuming assignments are always active for job details
 
+            // EmployeeSignature mappings
+            CreateMap<EmployeeSignature, EmployeeSignatureDto>()
+                .ReverseMap();
+
+            CreateMap<CreateEmployeeSignatureDto, EmployeeSignature>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.Employee, opt => opt.Ignore())
+                .ForMember(dest => dest.FilePath, opt => opt.Ignore())
+                .ForMember(dest => dest.OriginalFileName, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+                .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore());
+
+            CreateMap<UpdateEmployeeSignatureDto, EmployeeSignature>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.Employee, opt => opt.Ignore())
+                .ForMember(dest => dest.FilePath, opt => opt.Ignore())
+                .ForMember(dest => dest.OriginalFileName, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+                .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => DateTime.UtcNow))
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
             // ComprehensiveEmployeeDto mapping
             CreateMap<Employee, ComprehensiveEmployeeDto>()
                 .ForMember(dest => dest.Profile, opt => opt.MapFrom(src => src.Profile))
                 .ForMember(dest => dest.Contact, opt => opt.MapFrom(src => src.Contact))
+                .ForMember(dest => dest.Signature, opt => opt.MapFrom(src => src.Signature))
                 .ForMember(dest => dest.ActiveServiceInfo, opt => opt.MapFrom(src => src.ServiceInfos.FirstOrDefault(si => si.IsActive)))
                 .ForMember(dest => dest.Assignments, opt => opt.MapFrom(src => src.Assignments));
         }

@@ -90,7 +90,7 @@ public static class ProgramConfigExtensions
     {
         builder.Services.Configure<FormOptions>(options =>
         {
-            options.MultipartBodyLengthLimit = 10 * 1024 * 1024; // 10MB
+            options.MultipartBodyLengthLimit = 5 * 1024 * 1024; // 5MB
         });
         return builder;
     }
@@ -117,6 +117,7 @@ public static class ProgramConfigExtensions
         builder.Services.AddScoped<ILeaveRequestRepository, LeaveRequestRepository>();
         builder.Services.AddScoped<IOrgUnitRepository, OrgUnitRepository>();
         builder.Services.AddScoped<IEmployeeContactRepository, EmployeeContactRepository>();
+        builder.Services.AddScoped<IEmployeeSignatureRepository, EmployeeSignatureRepository>();
         return builder;
     }
 
@@ -130,6 +131,7 @@ public static class ProgramConfigExtensions
         builder.Services.AddScoped<IOrgUnitService, OrgUnitService>();
         builder.Services.AddScoped<IImageService, ImageService>();
         builder.Services.AddScoped<IRoleService, RoleService>();
+        builder.Services.AddScoped<IEmployeeSignatureService, EmployeeSignatureService>();
 
         // Add AutoMapper
         builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

@@ -10,7 +10,7 @@ namespace HRManagement.Application.Interfaces
         Task<EmployeeProfileDto?> GetByEmployeeIdAsync(Guid employeeId);
         Task<IEnumerable<EmployeeProfileDto>> GetAllAsync();
         Task<EmployeeProfileDto> CreateAsync(CreateEmployeeProfileDto createDto, Stream? stream, string? fileName);
-        Task<EmployeeProfileDto> UpdateAsync(Guid id, UpdateEmployeeProfileDto updateDto);
+        Task<EmployeeProfileDto> UpdateAsync(Guid id, UpdateEmployeeProfileDto updateDto, Stream? stream, string? fileName = null);
         Task DeleteAsync(Guid id);
         Task<bool> ExistsAsync(Guid id);
         Task<PagedResult<EmployeeProfileDto>> GetPagedAsync(int pageNumber, int pageSize);
