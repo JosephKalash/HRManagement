@@ -6,5 +6,6 @@ namespace HRManagement.Core.Interfaces
     {
         Task<EmployeeProfile?> GetByEmployeeIdAsync(Guid employeeId);
         Task UpdateEmployeeImageAsync(Guid employeeId, string imagePath);
+        Task<string?> GetEmployeeImagePathAsync(Guid employeeId);
     }
 }

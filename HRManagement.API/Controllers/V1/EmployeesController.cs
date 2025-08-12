@@ -12,10 +12,12 @@ namespace HRManagement.API.Controllers.V1
     public class EmployeesController : ControllerBase
     {
         private readonly IEmployeeService _employeeService;
+        private readonly ICurrentUserService _currentUserService;
 
-        public EmployeesController(IEmployeeService employeeService)
+        public EmployeesController(IEmployeeService employeeService, ICurrentUserService currentUserService)
         {
             _employeeService = employeeService;
+            _currentUserService = currentUserService;
         }
 
         /// <summary>
@@ -37,6 +39,43 @@ namespace HRManagement.API.Controllers.V1
             catch (Exception ex)
             {
                 return StatusCode(500, ApiResponse<PagedResult<EmployeeDto>>.ErrorResult("An error occurred while retrieving employees", new List<string> { ex.Message }));
+            }
+        }
+
+        /// <summary>
+        /// Get current employee using the authenticated user context
+        /// </summary>
+        /// <returns>Current employee details with profile image path and job summary</returns>
+        /// <response code="200">Returns the current employee summary</response>
+        /// <response code="401">If the user is not authenticated</response>
+        /// <response code="404">If the corresponding employee is not found</response>
+        /// <response code="500">If there was an internal server error</response>
+        [HttpGet("me")]
+        [ProducesResponseType(typeof(ApiResponse<CurrentEmployeeSummaryDto>), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 401)]
+        [ProducesResponseType(typeof(ApiResponse), 404)]
+        [ProducesResponseType(typeof(ApiResponse), 500)]
+        public async Task<ActionResult<ApiResponse<CurrentEmployeeSummaryDto>>> GetCurrentEmployee()
+        {
+            try
+            {
+                var userId = _currentUserService.UserId;
+                if (!userId.HasValue)
+                {
+                    return Unauthorized(ApiResponse.ErrorResult("User is not authenticated"));
+                }
+
+                var summary = await _employeeService.GetCurrentEmployeeSummaryAsync(userId.Value);
+                if (summary == null)
+                {
+                    return NotFound(ApiResponse<CurrentEmployeeSummaryDto>.ErrorResult("Employee not found for current user"));
+                }
+
+                return Ok(ApiResponse<CurrentEmployeeSummaryDto>.SuccessResult(summary, "Current employee retrieved successfully"));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<CurrentEmployeeSummaryDto>.ErrorResult("An error occurred while retrieving the current employee", new List<string> { ex.Message }));
             }
         }
 
@@ -91,8 +130,6 @@ namespace HRManagement.API.Controllers.V1
                 return StatusCode(500, ApiResponse<IEnumerable<EmployeeDto>>.ErrorResult("An error occurred while retrieving active employees", new List<string> { ex.Message }));
             }
         }
-
-
 
         /// <summary>
         /// Search employees

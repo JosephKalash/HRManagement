@@ -167,5 +167,30 @@ namespace HRManagement.Application.Services
 
             return jobSummaries;
         }
+
+        public async Task<CurrentEmployeeSummaryDto?> GetCurrentEmployeeSummaryAsync(Guid userId)
+        {
+            // Match current user id to an employee record
+            var employee = await _employeeRepository.GetByIdAsync(userId);
+            if (employee == null)
+            {
+                return null;
+            }
+
+            var employeeDto = _mapper.Map<EmployeeDto>(employee);
+
+            // Get profile image path (optimized)
+            var imagePath = await _employeeProfileRepository.GetEmployeeImagePathAsync(employee.Id);
+
+            // Get job summary
+            var jobSummary = await GetEmployeeJobSummaryAsync(employee.Id);
+
+            return new CurrentEmployeeSummaryDto
+            {
+                Employee = employeeDto,
+                ProfileImagePath = imagePath,
+                JobSummary = jobSummary
+            };
+        }
     }
 }

@@ -25,5 +25,13 @@ namespace HRManagement.Infrastructure.Repositories
             employeeProfile.ImagePath = imagePath;
             await _context.SaveChangesAsync();
         }
+
+        public async Task<string?> GetEmployeeImagePathAsync(Guid employeeId)
+        {
+            return await _dbSet
+                .Where(e => e.EmployeeId == employeeId)
+                .Select(e => e.ImagePath)
+                .FirstOrDefaultAsync();
+        }
     }
 }
