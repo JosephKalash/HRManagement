@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Runtime.InteropServices;
 using HRManagement.Application.Interfaces;
 using HRManagement.Application.Mapping;
 using HRManagement.Application.Services;
@@ -96,17 +97,15 @@ public static class ProgramConfigExtensions
 
     public static WebApplicationBuilder AddDbContextAndRepositories(this WebApplicationBuilder builder)
     {
-        var dbProvider = builder.Configuration["DatabaseProvider"];
-
-        if (dbProvider == "Postgres")
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
         {
             builder.Services.AddDbContext<HRDbContext>(options =>
-                options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+                options.UseNpgsql(builder.Configuration.GetConnectionString("mac.DefaultConnection")));
         }
-        else 
+        else
         {
             builder.Services.AddDbContext<HRDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("win.DefaultConnection")));
         }
         // Register repositories
         builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
