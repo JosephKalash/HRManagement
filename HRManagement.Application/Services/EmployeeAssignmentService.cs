@@ -66,7 +66,7 @@ namespace HRManagement.Application.Services
 
         public async Task<bool> ExistsAsync(Guid id)
         {
-            return await _employeeAssignmentRepository.ExistsAsync(id);
+            return await _employeeAssignmentRepository.ActiveExistsAsync(id);
         }
 
         public async Task<PagedResult<EmployeeAssignmentDto>> GetPagedAsync(int pageNumber, int pageSize)
@@ -83,4 +83,4 @@ namespace HRManagement.Application.Services
             };
         }
     }
-} 
+}

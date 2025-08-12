@@ -38,6 +38,7 @@ namespace HRManagement.Infrastructure.Repositories
             return await _dbSet
                 .Include(e => e.Profile)
                 .Include(e => e.Contact)
+                .Include(e => e.Signature)
                 .Include(e => e.ServiceInfos)
                     .ThenInclude(si => si.JobRole)
                 .Include(e => e.Assignments)

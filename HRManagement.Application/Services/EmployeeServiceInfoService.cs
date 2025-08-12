@@ -64,9 +64,9 @@ namespace HRManagement.Application.Services
             await _employeeServiceInfoRepository.DeleteAsync(serviceInfo);
         }
 
-        public async Task<bool> ExistsAsync(Guid id)
+        public async Task<bool> ActiveExistsAsync(Guid id)
         {
-            return await _employeeServiceInfoRepository.ExistsAsync(id);
+            return await _employeeServiceInfoRepository.ActiveExistsAsync(id);
         }
 
         public async Task<PagedResult<EmployeeServiceInfoDto>> GetPagedAsync(int pageNumber, int pageSize)
@@ -98,4 +98,4 @@ namespace HRManagement.Application.Services
             };
         }
     }
-} 
+}

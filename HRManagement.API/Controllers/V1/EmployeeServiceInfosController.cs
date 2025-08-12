@@ -1,9 +1,9 @@
+using AutoMapper;
 using HRManagement.Application.DTOs;
 using HRManagement.Application.Interfaces;
 using HRManagement.Core.Entities;
 using HRManagement.Core.Models;
 using Microsoft.AspNetCore.Mvc;
-using AutoMapper;
 
 namespace HRManagement.API.Controllers.V1
 {
@@ -153,6 +153,12 @@ namespace HRManagement.API.Controllers.V1
                     return BadRequest(ApiResponse<EmployeeServiceInfoDto>.ErrorResult("Validation failed", errors));
                 }
 
+                var service = await _employeeServiceInfoService.GetActiveByEmployeeIdAsync(createDto.EmployeeId);
+                if (service != null)
+                {
+                    return BadRequest(ApiResponse<EmployeeServiceInfoDto>.ErrorResult($"Employee has already an active service"));
+                }
+                
                 var serviceInfo = await _employeeServiceInfoService.CreateAsync(createDto);
                 return CreatedAtAction(nameof(GetEmployeeServiceInfo), new { id = serviceInfo.Id },
                     ApiResponse<EmployeeServiceInfoDto>.SuccessResult(serviceInfo, "Employee service info created successfully"));

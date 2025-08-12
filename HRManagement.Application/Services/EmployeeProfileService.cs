@@ -76,7 +76,7 @@ namespace HRManagement.Application.Services
 
         public async Task<bool> ExistsAsync(Guid id)
         {
-            return await _employeeProfileRepository.ExistsAsync(id);
+            return await _employeeProfileRepository.ActiveExistsAsync(id);
         }
 
         public async Task<PagedResult<EmployeeProfileDto>> GetPagedAsync(int pageNumber, int pageSize)

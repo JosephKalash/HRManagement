@@ -39,7 +39,7 @@ namespace HRManagement.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public virtual async Task<bool> ExistsAsync(Guid id)
+        public virtual async Task<bool> ActiveExistsAsync(Guid id)
         {
             return await _dbSet.FindAsync(id) != null;
         }
@@ -49,4 +49,4 @@ namespace HRManagement.Infrastructure.Repositories
             return _dbSet.AsNoTracking();
         }
     }
-} 
+}

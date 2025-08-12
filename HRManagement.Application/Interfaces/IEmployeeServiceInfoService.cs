@@ -13,8 +13,8 @@ namespace HRManagement.Application.Interfaces
         Task<EmployeeServiceInfoDto> CreateAsync(CreateEmployeeServiceInfoDto createDto);
         Task<EmployeeServiceInfoDto> UpdateAsync(Guid id, UpdateEmployeeServiceInfoDto updateDto);
         Task DeleteAsync(Guid id);
-        Task<bool> ExistsAsync(Guid id);
+        Task<bool> ActiveExistsAsync(Guid id);
         Task<PagedResult<EmployeeServiceInfoDto>> GetPagedAsync(int pageNumber, int pageSize);
         Task<PagedResult<EmployeeServiceInfoDto>> GetPagedByEmployeeIdAsync(Guid employeeId, int pageNumber, int pageSize);
     }
-} 
+}

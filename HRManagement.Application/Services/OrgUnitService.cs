@@ -1,11 +1,11 @@
+using AutoMapper;
 using HRManagement.Application.DTOs;
 using HRManagement.Application.Interfaces;
 using HRManagement.Core.Entities;
+using HRManagement.Core.Enums;
 using HRManagement.Core.Extensions;
 using HRManagement.Core.Interfaces;
 using HRManagement.Core.Models;
-using AutoMapper;
-using HRManagement.Core.Enums;
 
 namespace HRManagement.Application.Services
 {
@@ -70,7 +70,7 @@ namespace HRManagement.Application.Services
             var orgUnit = await _orgUnitRepository.GetByIdAsync(id);
             if (orgUnit == null)
                 throw new ArgumentException("OrgUnit not found");
-            
+
             _mapper.Map(dto, orgUnit);
             var updated = await _orgUnitRepository.UpdateAsync(orgUnit);
             return _mapper.Map<OrgUnitDto>(updated);
@@ -86,7 +86,7 @@ namespace HRManagement.Application.Services
 
         public async Task<bool> ExistsAsync(Guid id)
         {
-            return await _orgUnitRepository.ExistsAsync(id);
+            return await _orgUnitRepository.ActiveExistsAsync(id);
         }
 
         public async Task<OrgUnitHierarchyDto> GetHierarchyAsync()

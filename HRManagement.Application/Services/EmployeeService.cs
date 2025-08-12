@@ -92,7 +92,7 @@ namespace HRManagement.Application.Services
 
         public async Task<bool> ExistsAsync(Guid id)
         {
-            return await _employeeRepository.ExistsAsync(id);
+            return await _employeeRepository.ActiveExistsAsync(id);
         }
 
         public async Task<string> UploadProfileImageAsync(Guid employeeId, Stream imageStream, string fileName)

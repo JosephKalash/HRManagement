@@ -7,7 +7,7 @@ namespace HRManagement.Core.Interfaces
         Task<T> AddAsync(T entity);
         Task<T> UpdateAsync(T entity);
         Task DeleteAsync(T entity);
-        Task<bool> ExistsAsync(Guid id);
+        Task<bool> ActiveExistsAsync(Guid id);
         IQueryable<T> AsQueryable();
     }
-} 
+}
