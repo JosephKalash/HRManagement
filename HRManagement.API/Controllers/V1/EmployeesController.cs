@@ -2,6 +2,7 @@ using HRManagement.Application.DTOs;
 using HRManagement.Application.Interfaces;
 using HRManagement.Core.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 
 namespace HRManagement.API.Controllers.V1
 {
@@ -9,16 +10,10 @@ namespace HRManagement.API.Controllers.V1
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [Produces("application/json")]
-    public class EmployeesController : ControllerBase
+    public class EmployeesController(IEmployeeService employeeService, ICurrentUserService currentUserService) : ControllerBase
     {
-        private readonly IEmployeeService _employeeService;
-        private readonly ICurrentUserService _currentUserService;
-
-        public EmployeesController(IEmployeeService employeeService, ICurrentUserService currentUserService)
-        {
-            _employeeService = employeeService;
-            _currentUserService = currentUserService;
-        }
+        private readonly IEmployeeService _employeeService = employeeService;
+        private readonly ICurrentUserService _currentUserService = currentUserService;
 
         /// <summary>
         /// Get all employees
@@ -27,6 +22,7 @@ namespace HRManagement.API.Controllers.V1
         /// <response code="200">Returns the list of employees</response>
         /// <response code="500">If there was an internal server error</response>
         [HttpGet]
+        [OutputCache(PolicyName = "EmployeesPaged")]
         [ProducesResponseType(typeof(ApiResponse<PagedResult<EmployeeDto>>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 500)]
         public async Task<ActionResult<ApiResponse<PagedResult<EmployeeDto>>>> GetEmployees([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
@@ -51,6 +47,7 @@ namespace HRManagement.API.Controllers.V1
         /// <response code="404">If the corresponding employee is not found</response>
         /// <response code="500">If there was an internal server error</response>
         [HttpGet("me")]
+        [OutputCache(PolicyName = "CurrentEmployee")]
         [ProducesResponseType(typeof(ApiResponse<CurrentEmployeeSummaryDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 401)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
@@ -88,6 +85,7 @@ namespace HRManagement.API.Controllers.V1
         /// <response code="404">If employee is not found</response>
         /// <response code="500">If there was an internal server error</response>
         [HttpGet("{id}")]
+        [OutputCache(PolicyName = "EmployeeById")]
         [ProducesResponseType(typeof(ApiResponse<EmployeeDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
         [ProducesResponseType(typeof(ApiResponse), 500)]
@@ -116,6 +114,7 @@ namespace HRManagement.API.Controllers.V1
         /// <response code="200">Returns the list of active employees</response>
         /// <response code="500">If there was an internal server error</response>
         [HttpGet("active")]
+        [OutputCache(PolicyName = "ActiveEmployees")]
         [ProducesResponseType(typeof(ApiResponse<IEnumerable<EmployeeDto>>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 500)]
         public async Task<ActionResult<ApiResponse<IEnumerable<EmployeeDto>>>> GetActiveEmployees()
@@ -139,6 +138,7 @@ namespace HRManagement.API.Controllers.V1
         /// <response code="200">Returns the list of matching employees</response>
         /// <response code="500">If there was an internal server error</response>
         [HttpGet("search")]
+        [OutputCache(PolicyName = "SearchEmployees")]
         [ProducesResponseType(typeof(ApiResponse<IEnumerable<EmployeeDto>>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 500)]
         public async Task<ActionResult<ApiResponse<IEnumerable<EmployeeDto>>>> SearchEmployees([FromQuery] string searchTerm)
@@ -377,6 +377,7 @@ namespace HRManagement.API.Controllers.V1
         /// <response code="404">If employee is not found</response>
         /// <response code="500">If there was an internal server error</response>
         [HttpGet("{id}/details")]
+        [OutputCache(PolicyName = "EmployeeDetails")]
         [ProducesResponseType(typeof(ApiResponse<ComprehensiveEmployeeDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
         [ProducesResponseType(typeof(ApiResponse), 500)]
@@ -406,6 +407,7 @@ namespace HRManagement.API.Controllers.V1
         /// <response code="200">Returns the list of employee job summaries</response>
         /// <response code="500">If there was an internal server error</response>
         [HttpGet("{employeeId}/job-summary")]
+        [OutputCache(PolicyName = "EmployeeJobSummary")]
         [ProducesResponseType(typeof(ApiResponse<List<EmployeeJobSummaryDto>>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 500)]
         public async Task<ActionResult<ApiResponse<List<EmployeeJobSummaryDto>>>> GetEmployeeJobSummary(Guid employeeId)

@@ -38,6 +38,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseCors("AllowAll");
 app.UseGlobalExceptionHandler();
+app.UseOutputCache();
 app.UseAuthorization();
 app.MapControllers();
 

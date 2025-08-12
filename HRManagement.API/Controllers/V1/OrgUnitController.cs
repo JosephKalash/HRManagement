@@ -4,6 +4,7 @@ using HRManagement.Core.Entities;
 using HRManagement.Core.Enums;
 using HRManagement.Core.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 
 namespace HRManagement.API.Controllers.V1
 {
@@ -180,6 +181,7 @@ namespace HRManagement.API.Controllers.V1
         }
 
         [HttpGet("hierarchy")]
+        [OutputCache(PolicyName = "OrgHierarchy")]
         [ProducesResponseType(typeof(ApiResponse<OrgUnitHierarchyDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 500)]
         public async Task<ActionResult<ApiResponse<OrgUnitHierarchyDto>>> GetHierarchy()

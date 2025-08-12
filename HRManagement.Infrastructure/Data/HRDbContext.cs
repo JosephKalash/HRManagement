@@ -132,6 +132,7 @@ namespace HRManagement.Infrastructure.Data
             modelBuilder.Entity<Role>(entity =>
             {
                 entity.HasKey(e => e.Id);
+                entity.Property(e => e.Code).IsRequired().HasMaxLength(10);
                 entity.Property(e => e.Name).IsRequired().HasMaxLength(200);
             });
 

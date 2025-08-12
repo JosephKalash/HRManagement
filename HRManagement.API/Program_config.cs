@@ -1,7 +1,6 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 using HRManagement.Application.Interfaces;
-using HRManagement.Application.Mapping;
 using HRManagement.Application.Services;
 using HRManagement.Core.Entities;
 using HRManagement.Core.enums;
@@ -142,6 +141,38 @@ public static class ProgramConfigExtensions
         // Current user service
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+
+        // Output caching (ASP.NET Core 8)
+        builder.Services.AddOutputCache(options =>
+        {
+            options.AddPolicy("EmployeesPaged", b => b
+                .Expire(TimeSpan.FromSeconds(60))
+                .SetVaryByQuery("pageNumber", "pageSize"));
+            options.AddPolicy("EmployeeById", b => b
+                .Expire(TimeSpan.FromMinutes(2))
+                .SetVaryByRouteValue("id"));
+            options.AddPolicy("ActiveEmployees", b => b
+                .Expire(TimeSpan.FromSeconds(60)));
+            options.AddPolicy("SearchEmployees", b => b
+                .Expire(TimeSpan.FromSeconds(60))
+                .SetVaryByQuery("searchTerm"));
+            options.AddPolicy("EmployeeDetails", b => b
+                .Expire(TimeSpan.FromMinutes(2))
+                .SetVaryByRouteValue("id"));
+            options.AddPolicy("EmployeeJobSummary", b => b
+                .Expire(TimeSpan.FromSeconds(60))
+                .SetVaryByRouteValue("employeeId"));
+            // New policies
+            options.AddPolicy("CurrentEmployee", b => b
+                .Expire(TimeSpan.FromSeconds(30))
+                .SetCacheKeyPrefix("me")
+                .SetVaryByHeader("Authorization"));
+            options.AddPolicy("OrgHierarchy", b => b
+                .Expire(TimeSpan.FromMinutes(5)));
+            options.AddPolicy("RolesPaged", b => b
+                .Expire(TimeSpan.FromMinutes(2))
+                .SetVaryByQuery("pageNumber", "pageSize"));
+        });
 
         return builder;
     }

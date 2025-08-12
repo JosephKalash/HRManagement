@@ -7,6 +7,7 @@ using HRManagement.Core.Enums;
 // using HRManagement.Core.Enums;
 using HRManagement.Core.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 
 namespace HRManagement.API.Controllers.V1
 {
@@ -28,6 +29,7 @@ namespace HRManagement.API.Controllers.V1
         /// </summary>
         /// <returns>List of all roles</returns>
         [HttpGet]
+        [OutputCache(PolicyName = "RolesPaged")]
         [ProducesResponseType(typeof(ApiResponse<PagedResult<RoleDto>>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 500)]
         public async Task<ActionResult<ApiResponse<PagedResult<RoleDto>>>> GetRoles([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
