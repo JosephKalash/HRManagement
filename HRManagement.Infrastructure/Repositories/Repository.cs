@@ -1,17 +1,18 @@
+using HRManagement.Core.Entities;
 using HRManagement.Core.Interfaces;
 using HRManagement.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace HRManagement.Infrastructure.Repositories
 {
-    public class Repository<T>(HRDbContext context) : IRepository<T> where T : class
+    public class Repository<T>(HRDbContext context) : IRepository<T> where T : BaseEntity
     {
         protected readonly HRDbContext _context = context;
         protected readonly DbSet<T> _dbSet = context.Set<T>();
 
         public virtual async Task<T?> GetByIdAsync(Guid id)
         {
-            return await _dbSet.FindAsync(id);
+            return await _dbSet.FirstOrDefaultAsync(e => e.Id == id && !e.IsDeleted);
         }
 
         public virtual async Task<IEnumerable<T>> GetAllAsync()
@@ -41,7 +42,7 @@ namespace HRManagement.Infrastructure.Repositories
 
         public virtual async Task<bool> ActiveExistsAsync(Guid id)
         {
-            return await _dbSet.FindAsync(id) != null;
+            return await _dbSet.AnyAsync(e => e.Id == id && !e.IsDeleted);
         }
 
         public virtual IQueryable<T> AsQueryable()

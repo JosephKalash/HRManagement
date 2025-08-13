@@ -9,5 +9,8 @@ namespace HRManagement.Core.Entities
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         public DateTime? UpdatedAt { get; set; }
+
+        // Soft delete flag
+        public bool IsDeleted { get; set; } = false;
     }
 }

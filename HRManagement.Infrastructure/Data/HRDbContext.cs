@@ -22,6 +22,17 @@ namespace HRManagement.Infrastructure.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            // Global query filters to exclude soft-deleted records
+            modelBuilder.Entity<Employee>().HasQueryFilter(e => !e.IsDeleted);
+            modelBuilder.Entity<EmployeeProfile>().HasQueryFilter(e => !e.IsDeleted);
+            modelBuilder.Entity<EmployeeContact>().HasQueryFilter(e => !e.IsDeleted);
+            modelBuilder.Entity<EmployeeSignature>().HasQueryFilter(e => !e.IsDeleted);
+            modelBuilder.Entity<EmployeeServiceInfo>().HasQueryFilter(e => !e.IsDeleted);
+            modelBuilder.Entity<EmployeeAssignment>().HasQueryFilter(e => !e.IsDeleted);
+            modelBuilder.Entity<Role>().HasQueryFilter(e => !e.IsDeleted);
+            modelBuilder.Entity<OrgUnit>().HasQueryFilter(e => !e.IsDeleted);
+            modelBuilder.Entity<LeaveRequest>().HasQueryFilter(e => !e.IsDeleted);
+
             // Employee configuration
             modelBuilder.Entity<Employee>(entity =>
             {
@@ -178,6 +189,7 @@ namespace HRManagement.Infrastructure.Data
                 {
                     entry.Entity.CreatedAt = utcNow;
                     entry.Entity.UpdatedAt = null;
+                    entry.Entity.IsDeleted = false;
 
                     // Set CreatedBy if available on the entity
                     var createdByProp = entry.Entity.GetType().GetProperty("CreatedBy");
@@ -198,6 +210,26 @@ namespace HRManagement.Infrastructure.Data
                     entry.Entity.UpdatedAt = utcNow;
 
                     // Set UpdatedBy if available on the entity
+                    var updatedByProp = entry.Entity.GetType().GetProperty("UpdatedBy");
+                    if (updatedByProp != null)
+                    {
+                        if (updatedByProp.PropertyType == typeof(Guid?) && userId.HasValue)
+                        {
+                            updatedByProp.SetValue(entry.Entity, userId);
+                        }
+                        else if (updatedByProp.PropertyType == typeof(string) && !string.IsNullOrWhiteSpace(userName))
+                        {
+                            updatedByProp.SetValue(entry.Entity, userName);
+                        }
+                    }
+                }
+                else if (entry.State == EntityState.Deleted)
+                {
+                    // Convert hard delete to soft delete
+                    entry.State = EntityState.Modified;
+                    entry.Entity.IsDeleted = true;
+                    entry.Entity.UpdatedAt = utcNow;
+
                     var updatedByProp = entry.Entity.GetType().GetProperty("UpdatedBy");
                     if (updatedByProp != null)
                     {
