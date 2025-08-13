@@ -192,5 +192,33 @@ namespace HRManagement.Application.Services
                 JobSummary = jobSummary
             };
         }
+
+        public async Task<IEnumerable<EmployeeDto>> GetEmployeeByRoleIdAsync(Guid roleId)
+        {
+            var employees = new HashSet<Employee>();
+
+            // Get employees from service info
+            var serviceInfoEmployees = await _employeeServiceInfoRepository.GetByRoleIdAsync(roleId);
+            foreach (var serviceInfo in serviceInfoEmployees)
+            {
+                if (serviceInfo.Employee != null)
+                {
+                    employees.Add(serviceInfo.Employee);
+                }
+            }
+
+            // Get employees from assignments
+            var assignmentEmployees = await _employeeAssignmentRepository.GetByRoleIdAsync(roleId);
+            foreach (var assignment in assignmentEmployees)
+            {
+                if (assignment.Employee != null)
+                {
+                    employees.Add(assignment.Employee);
+                }
+            }
+
+            // Map to DTOs and return
+            return _mapper.Map<IEnumerable<EmployeeDto>>(employees);
+        }
     }
 }

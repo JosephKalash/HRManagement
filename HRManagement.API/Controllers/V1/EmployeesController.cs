@@ -10,9 +10,10 @@ namespace HRManagement.API.Controllers.V1
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [Produces("application/json")]
-    public class EmployeesController(IEmployeeService employeeService, ICurrentUserService currentUserService) : ControllerBase
+    public class EmployeesController(IRoleService roleService, IEmployeeService employeeService, ICurrentUserService currentUserService) : ControllerBase
     {
         private readonly IEmployeeService _employeeService = employeeService;
+        private readonly IRoleService _roleService = roleService;
         private readonly ICurrentUserService _currentUserService = currentUserService;
 
         /// <summary>
@@ -426,6 +427,30 @@ namespace HRManagement.API.Controllers.V1
             catch (Exception ex)
             {
                 return StatusCode(500, ApiResponse<List<EmployeeJobSummaryDto>>.ErrorResult("An error occurred while retrieving employee job summary", new List<string> { ex.Message }));
+            }
+        }
+
+        /// <summary>
+        /// Get employees by role ID
+        /// </summary>
+        /// <param name="roleId">Role ID</param>
+        /// <returns>List of employees with the specified role</returns>
+        /// <response code="200">Returns the list of employees with the specified role</response>
+        /// <response code="500">If there was an internal server error</response>
+        [HttpGet("by-role/{roleId}")]
+        [OutputCache(PolicyName = "EmployeesByRole")]
+        [ProducesResponseType(typeof(ApiResponse<IEnumerable<EmployeeDto>>), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 500)]
+        public async Task<ActionResult<ApiResponse<IEnumerable<EmployeeDto>>>> GetEmployeesByRoleId(Guid roleId)
+        {
+            try
+            {
+                var employees = await _employeeService.GetEmployeeByRoleIdAsync(roleId);
+                return Ok(ApiResponse<IEnumerable<EmployeeDto>>.SuccessResult(employees, "Employees with the specified role retrieved successfully"));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<IEnumerable<EmployeeDto>>.ErrorResult("An error occurred while retrieving employees by role", new List<string> { ex.Message }));
             }
         }
 

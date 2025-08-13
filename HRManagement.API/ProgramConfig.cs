@@ -1,5 +1,6 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Threading.RateLimiting;
 using HRManagement.Application.Interfaces;
 using HRManagement.Application.Services;
 using HRManagement.Core.Entities;
@@ -142,6 +143,22 @@ public static class ProgramConfigExtensions
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
+        builder.Services.AddResponseCompression(options =>
+        {
+            options.EnableForHttps = true;
+        });
+        builder.Services.AddRateLimiter(options =>
+        {
+            options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(context =>
+                RateLimitPartition.GetFixedWindowLimiter(
+                    partitionKey: context.User.Identity?.Name ?? context.Request.Headers.Host.ToString(),
+                    factory: partition => new FixedWindowRateLimiterOptions
+                    {
+                        AutoReplenishment = true,
+                        PermitLimit = 100,
+                        Window = TimeSpan.FromMinutes(1)
+                    }));
+        });
         // Output caching (ASP.NET Core 8)
         builder.Services.AddOutputCache(options =>
         {

@@ -18,7 +18,7 @@ namespace HRManagement.Application.DTOs
         public string? Email { get; set; }
         [Required]
         [Phone]
-        public string MobileNumber { get; set; }
+        public required string MobileNumber { get; set; }
         [Phone]
         public string? SecondMobileNumber { get; set; }
         [StringLength(300)]

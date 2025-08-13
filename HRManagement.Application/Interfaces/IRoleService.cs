@@ -14,6 +14,7 @@ namespace HRManagement.Application.Interfaces
         Task<RoleDto> CreateRoleAsync(CreateRoleDto createDto);
         Task<RoleDto?> UpdateRoleAsync(Guid id, UpdateRoleDto updateDto);
         Task<bool> DeleteRoleAsync(Guid id);
+        Task<bool> ActiveExistsRoleAsync(Guid id);
         Task<PagedResult<RoleDto>> GetPagedRolesAsync(int pageNumber, int pageSize);
         Task<PagedResult<RoleDto>> GetPagedRolesByLevelAsync(RoleLevel level, int pageNumber, int pageSize);
     }

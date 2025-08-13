@@ -9,12 +9,12 @@ namespace HRManagement.Core.Entities
         public string? Email { get; set; }
         [Required]
         [Phone]
-        public string MobileNumber { get; set; }
+        public required string MobileNumber { get; set; }
         [Phone]
         public string? SecondMobileNumber { get; set; }
         [StringLength(300)]
         public string? Address { get; set; }
 
-        public virtual Employee Employee { get; set; }
+        public virtual Employee? Employee { get; set; }
     }
 }

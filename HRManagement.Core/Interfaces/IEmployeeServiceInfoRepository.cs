@@ -6,5 +6,6 @@ namespace HRManagement.Core.Interfaces
     {
         Task<IEnumerable<EmployeeServiceInfo>> GetByEmployeeIdAsync(Guid employeeId);
         Task<EmployeeServiceInfo?> GetActiveByEmployeeIdAsync(Guid employeeId);
+        Task<IEnumerable<EmployeeServiceInfo>> GetByRoleIdAsync(Guid roleId);
     }
 } 

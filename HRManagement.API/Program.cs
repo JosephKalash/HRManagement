@@ -1,7 +1,6 @@
 using System.Text.Json.Serialization;
 using HRManagement.API;
 using HRManagement.API.Middleware;
-using Microsoft.AspNetCore.Http.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,8 +35,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
 app.UseCors("AllowAll");
+
 app.UseGlobalExceptionHandler();
+app.UseSecurityHeaders();
+app.UseRequestLogging();
+
 app.UseOutputCache();
 app.UseAuthorization();
 app.MapControllers();

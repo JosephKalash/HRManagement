@@ -1,9 +1,9 @@
+using AutoMapper;
 using HRManagement.Application.DTOs;
-using HRManagement.Core.Extensions;
 using HRManagement.Application.Interfaces;
 using HRManagement.Core.Entities;
+using HRManagement.Core.Extensions;
 using HRManagement.Core.Interfaces;
-using AutoMapper;
 using HRManagement.Core.Models;
 
 namespace HRManagement.Application.Services
@@ -84,6 +84,13 @@ namespace HRManagement.Application.Services
 
             await _roleRepository.DeleteAsync(role);
             return true;
+        }
+
+        public async Task<bool> ActiveExistsRoleAsync(Guid id)
+        {
+            var isExist = await _roleRepository.ActiveExistsAsync(id);
+
+            return isExist;
         }
     }
 }

@@ -4,16 +4,10 @@ using System.Text.Json;
 
 namespace HRManagement.API.Middleware
 {
-    public class GlobalExceptionHandler
+    public class GlobalExceptionHandler(RequestDelegate next, ILogger<GlobalExceptionHandler> logger)
     {
-        private readonly RequestDelegate _next;
-        private readonly ILogger<GlobalExceptionHandler> _logger;
-
-        public GlobalExceptionHandler(RequestDelegate next, ILogger<GlobalExceptionHandler> logger)
-        {
-            _next = next;
-            _logger = logger;
-        }
+        private readonly RequestDelegate _next = next;
+        private readonly ILogger<GlobalExceptionHandler> _logger = logger;
 
         public async Task InvokeAsync(HttpContext context)
         {
@@ -75,14 +69,6 @@ namespace HRManagement.API.Middleware
             });
 
             await context.Response.WriteAsync(jsonResponse);
-        }
-    }
-
-    public static class GlobalExceptionHandlerExtensions
-    {
-        public static IApplicationBuilder UseGlobalExceptionHandler(this IApplicationBuilder builder)
-        {
-            return builder.UseMiddleware<GlobalExceptionHandler>();
         }
     }
 } 

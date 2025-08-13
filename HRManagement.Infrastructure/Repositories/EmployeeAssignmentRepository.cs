@@ -29,5 +29,15 @@ namespace HRManagement.Infrastructure.Repositories
                 .Include(ea => ea.JobRole)
                 .FirstOrDefaultAsync(ea => ea.EmployeeId == employeeId && ea.IsActive);
         }
+
+        public async Task<IEnumerable<EmployeeAssignment>> GetByRoleIdAsync(Guid roleId)
+        {
+            return await _context.EmployeeAssignments
+                .Include(ea => ea.Employee)
+                .Include(ea => ea.AssignedUnit)
+                .Include(ea => ea.JobRole)
+                .Where(ea => ea.JobRoleId == roleId && ea.IsActive)
+                .ToListAsync();
+        }
     }
 } 
