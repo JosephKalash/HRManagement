@@ -34,7 +34,7 @@ namespace HRManagement.API.Middleware
             {
                 Success = false,
                 Message = message,
-                Errors = new List<string> { exception.Message },
+                Errors = [exception.Message],
                 Timestamp = DateTime.UtcNow
             };
 
@@ -57,32 +57,17 @@ namespace HRManagement.API.Middleware
             }
 
             // Handle other specific exceptions
-            switch (exception)
+            return exception switch
             {
-                case ArgumentNullException:
-                    return (ExceptionMessages.Validation.RequiredField, (int)HttpStatusCode.BadRequest);
-
-                case ArgumentException:
-                    return (exception.Message, (int)HttpStatusCode.BadRequest);
-
-                case InvalidOperationException:
-                    return (exception.Message, (int)HttpStatusCode.BadRequest);
-
-                case UnauthorizedAccessException:
-                    return (ExceptionMessages.General.Unauthorized, (int)HttpStatusCode.Unauthorized);
-
-                case KeyNotFoundException:
-                    return (exception.Message, (int)HttpStatusCode.NotFound);
-
-                case FileNotFoundException:
-                    return (ExceptionMessages.File.FileNotFound, (int)HttpStatusCode.NotFound);
-
-                case FormatException:
-                    return (ExceptionMessages.Validation.InvalidFormat, (int)HttpStatusCode.BadRequest);
-
-                default:
-                    return (ExceptionMessages.General.InternalServerError, (int)HttpStatusCode.InternalServerError);
-            }
+                ArgumentNullException => (ExceptionMessages.Validation.RequiredField, (int)HttpStatusCode.BadRequest),
+                ArgumentException => (exception.Message, (int)HttpStatusCode.BadRequest),
+                InvalidOperationException => (exception.Message, (int)HttpStatusCode.BadRequest),
+                UnauthorizedAccessException => (ExceptionMessages.General.Unauthorized, (int)HttpStatusCode.Unauthorized),
+                KeyNotFoundException => (exception.Message, (int)HttpStatusCode.NotFound),
+                FileNotFoundException => (ExceptionMessages.File.FileNotFound, (int)HttpStatusCode.NotFound),
+                FormatException => (ExceptionMessages.Validation.InvalidFormat, (int)HttpStatusCode.BadRequest),
+                _ => (ExceptionMessages.General.InternalServerError, (int)HttpStatusCode.InternalServerError),
+            };
         }
 
         private bool IsDatabaseException(Exception exception)

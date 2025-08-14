@@ -9,6 +9,7 @@ using HRManagement.Core.Enums;
 using HRManagement.Core.Interfaces;
 using HRManagement.Core.Repositories;
 using HRManagement.Infrastructure.Data;
+using HRManagement.Infrastructure.Interfaces;
 using HRManagement.Infrastructure.Repositories;
 using HRManagement.Infrastructure.Services;
 using Microsoft.AspNetCore.Http.Features;
@@ -144,7 +145,7 @@ public static class ProgramConfigExtensions
         builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
         // Database exception handler
-        builder.Services.AddScoped<Infrastructure.Interfaces.IDatabaseExceptionHandler, Infrastructure.Services.DatabaseExceptionHandler>();
+        builder.Services.AddSingleton<IDatabaseExceptionHandler, DatabaseExceptionHandler>();
 
         builder.Services.AddResponseCompression(options =>
         {
