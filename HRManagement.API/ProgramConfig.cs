@@ -143,6 +143,9 @@ public static class ProgramConfigExtensions
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
+        // Database exception handler
+        builder.Services.AddScoped<Infrastructure.Interfaces.IDatabaseExceptionHandler, Infrastructure.Services.DatabaseExceptionHandler>();
+
         builder.Services.AddResponseCompression(options =>
         {
             options.EnableForHttps = true;
