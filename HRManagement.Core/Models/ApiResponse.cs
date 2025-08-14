@@ -5,7 +5,7 @@ namespace HRManagement.Core.Models
         public bool Success { get; set; }
         public string Message { get; set; } = string.Empty;
         public T? Data { get; set; }
-        public List<string> Errors { get; set; } = new List<string>();
+        public List<string> Errors { get; set; } = [];
         public DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
         public static ApiResponse<T> SuccessResult(T data, string message = "Operation completed successfully")

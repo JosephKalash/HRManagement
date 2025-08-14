@@ -10,6 +10,6 @@ namespace HRManagement.Infrastructure.Interfaces
         /// </summary>
         /// <param name="ex">The database exception</param>
         /// <returns>User-friendly error message and HTTP status code</returns>
-        (string Message, int StatusCode) HandleDatabaseException(Exception ex);
+        (string Message, int StatusCode) Handle(Exception ex);
     }
 }

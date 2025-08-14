@@ -1,7 +1,7 @@
-using HRManagement.Core.Models;
-using HRManagement.Infrastructure.Interfaces;
 using System.Net;
 using System.Text.Json;
+using HRManagement.Core.Models;
+using HRManagement.Infrastructure.Interfaces;
 
 namespace HRManagement.API.Middleware
 {
@@ -29,7 +29,7 @@ namespace HRManagement.API.Middleware
             context.Response.ContentType = "application/json";
 
             var (message, statusCode) = DetermineResponse(exception);
-            
+
             var response = new ApiResponse<object>
             {
                 Success = false,
@@ -53,7 +53,7 @@ namespace HRManagement.API.Middleware
             // Handle database exceptions first
             if (IsDatabaseException(exception))
             {
-                return _databaseExceptionHandler.HandleDatabaseException(exception);
+                return _databaseExceptionHandler.Handle(exception);
             }
 
             // Handle other specific exceptions
@@ -95,14 +95,14 @@ namespace HRManagement.API.Middleware
 
             // Check message content for database-related keywords
             var message = exception.Message.ToLower();
-            return message.Contains("database") || 
-                   message.Contains("sql") || 
+            return message.Contains("database") ||
+                   message.Contains("sql") ||
                    message.Contains("postgresql") ||
                    message.Contains("postgres") ||
                    message.Contains("npgsql") ||
-                   message.Contains("constraint") || 
-                   message.Contains("foreign key") || 
-                   message.Contains("unique") || 
+                   message.Contains("constraint") ||
+                   message.Contains("foreign key") ||
+                   message.Contains("unique") ||
                    message.Contains("connection") ||
                    message.Contains("transaction") ||
                    // PostgreSQL specific error codes
@@ -112,4 +112,4 @@ namespace HRManagement.API.Middleware
                    message.Contains("23502");  // not null violation
         }
     }
-} 
+}
