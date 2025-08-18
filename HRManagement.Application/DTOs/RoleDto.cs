@@ -12,6 +12,7 @@ namespace HRManagement.Application.DTOs
         public string Code { get; set; } = string.Empty; // System identification
         public string? Description { get; set; }
         public RoleLevel Level { get; set; } // Organizational role level
+        public int LevelNumber { get; set; } // Organizational role level
         public bool IsActive { get; set; } // Indicates if the role is active
         public bool IsSystemRole { get; set; } = false; // Indicates if the role is a system role
     }
