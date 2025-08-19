@@ -7,6 +7,10 @@ namespace HRManagement.Application.Interfaces
     public interface IEmployeeService
     {
         Task<EmployeeDto?> GetByIdAsync(Guid id);
+        Task<ShortEmployeeDto> GetByIdShort(Guid id);
+        Task<List<ShortEmployeeDto>> GetByIdsShortAsync(List<Guid> ids);
+        Task<ShortEmployeeDto> GetByMilitaryShort(int militaryNumber);
+        Task<List<ShortEmployeeDto>> GetByMilitariesShortList(List<int> militaryNumbers);
         Task<EmployeeProfile?> GetProfileByEmployeeIdAsync(Guid id);
         Task<IEnumerable<EmployeeDto>> GetAllAsync();
         Task<IEnumerable<EmployeeDto>> GetActiveEmployeesAsync();

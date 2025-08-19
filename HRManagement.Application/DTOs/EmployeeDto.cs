@@ -3,6 +3,14 @@ using HRManagement.Core.Enums;
 
 namespace HRManagement.Application.DTOs
 {
+    public class ShortEmployeeDto
+    {
+        public Guid Id { get; set; }
+        public int MilitaryNumber { get; set; }
+        public string ArabicName { get; set; } = string.Empty;
+        public MilitaryRank Rank { get; set; }
+        // public string? ImagePath { get; set; }
+    }
     public class EmployeeDto
     {
         public Guid Id { get; set; }
@@ -94,4 +102,4 @@ namespace HRManagement.Application.DTOs
 
         public bool? IsActive { get; set; }
     }
-} 
+}

@@ -158,7 +158,7 @@ namespace HRManagement.API.Controllers.V1
                 {
                     return BadRequest(ApiResponse<EmployeeServiceInfoDto>.ErrorResult($"Employee has already an active service"));
                 }
-                
+
                 var serviceInfo = await _employeeServiceInfoService.CreateAsync(createDto);
                 return CreatedAtAction(nameof(GetEmployeeServiceInfo), new { id = serviceInfo.Id },
                     ApiResponse<EmployeeServiceInfoDto>.SuccessResult(serviceInfo, "Employee service info created successfully"));

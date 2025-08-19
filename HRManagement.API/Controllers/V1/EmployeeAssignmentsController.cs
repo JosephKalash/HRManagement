@@ -141,7 +141,7 @@ namespace HRManagement.API.Controllers.V1
                 }
 
                 var assignment = await _employeeAssignmentService.CreateAsync(createDto);
-                return CreatedAtAction(nameof(GetEmployeeAssignment), new { id = assignment.Id }, 
+                return CreatedAtAction(nameof(GetEmployeeAssignment), new { id = assignment.Id },
                     ApiResponse<EmployeeAssignmentDto>.SuccessResult(assignment, "Employee assignment created successfully"));
             }
             catch (ArgumentException ex)
@@ -217,4 +217,4 @@ namespace HRManagement.API.Controllers.V1
             }
         }
     }
-} 
+}

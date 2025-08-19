@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using AutoMapper;
 using HRManagement.Application.DTOs;
 using HRManagement.Application.Interfaces;
@@ -5,6 +6,7 @@ using HRManagement.Core.Entities;
 using HRManagement.Core.Extensions;
 using HRManagement.Core.Interfaces;
 using HRManagement.Core.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace HRManagement.Application.Services
 {
@@ -219,6 +221,49 @@ namespace HRManagement.Application.Services
 
             // Map to DTOs and return
             return _mapper.Map<IEnumerable<EmployeeDto>>(employees);
+        }
+
+        public async Task<ShortEmployeeDto?> GetByIdShort(Guid id)
+        {
+            ShortEmployeeDto shortEmployee = (await GetShortEmployeeBy(e => e.Id == id)).First();
+            return shortEmployee;
+        }
+
+        private async Task<List<ShortEmployeeDto>> GetShortEmployeeBy(Expression<Func<Employee, bool>> predicate, bool isMultiple = false)
+        {
+            var query = _employeeRepository.AsQueryable();
+            var shortEmployeeQuery = query
+                .Where(predicate)
+                .Select(e => new ShortEmployeeDto
+                {
+                    Id = e.Id,
+                    MilitaryNumber = e.MilitaryNumber,
+                    ArabicName = e.ArabicFirstName + " " + e.ArabicLastName,
+                });
+            if (isMultiple)
+            {
+                return await shortEmployeeQuery.ToListAsync();
+            }
+            var shortEmployee = await shortEmployeeQuery.FirstOrDefaultAsync() ?? throw new ArgumentException("Employee not found");
+            return [shortEmployee];
+        }
+
+        public async Task<List<ShortEmployeeDto>?> GetByIdsShortAsync(List<Guid> ids)
+        {
+            List<ShortEmployeeDto> shortEmployees = await GetShortEmployeeBy(e => ids.Contains(e.Id));
+            return shortEmployees;
+        }
+
+        public async Task<ShortEmployeeDto?> GetByMilitaryShort(int militaryNumber)
+        {
+            ShortEmployeeDto shortEmployee = (await GetShortEmployeeBy(e => e.MilitaryNumber == militaryNumber)).First();
+            return shortEmployee;
+        }
+
+        public async Task<List<ShortEmployeeDto>?> GetByMilitariesShortList(List<int> militaryNumbers)
+        {
+            List<ShortEmployeeDto> shortEmployees = await GetShortEmployeeBy(e => militaryNumbers.Contains(e.MilitaryNumber));
+            return shortEmployees;
         }
     }
 }

@@ -29,4 +29,4 @@ namespace HRManagement.API.Controllers.V1
             return Ok(ApiResponse<object>.SuccessResult(healthInfo, "API is running"));
         }
     }
-} 
+}

@@ -13,7 +13,7 @@ namespace HRManagement.API.Middleware
             var userAgent = context.Request.Headers.UserAgent.ToString();
             var remoteIpAddress = context.Connection.RemoteIpAddress?.ToString() ?? "Unknown";
 
-            _logger.LogInformation("Request started: {Method} {Path} from {IP} - UserAgent: {UserAgent}", 
+            _logger.LogInformation("Request started: {Method} {Path} from {IP} - UserAgent: {UserAgent}",
                 requestMethod, requestPath, remoteIpAddress, userAgent);
 
             try
@@ -25,7 +25,7 @@ namespace HRManagement.API.Middleware
                 var duration = DateTime.UtcNow - startTime;
                 var statusCode = context.Response.StatusCode;
 
-                _logger.LogInformation("Request completed: {Method} {Path} - Status: {StatusCode} - Duration: {Duration}ms", 
+                _logger.LogInformation("Request completed: {Method} {Path} - Status: {StatusCode} - Duration: {Duration}ms",
                     requestMethod, requestPath, statusCode, duration.TotalMilliseconds);
             }
         }

@@ -16,16 +16,16 @@ namespace HRManagement.API.Controllers.V1
         private readonly IRoleService _roleService = roleService;
         private readonly ICurrentUserService _currentUserService = currentUserService;
 
-        /// <summary>
-        /// Get all employees
-        /// </summary>
-        /// <returns>List of all employees</returns>
-        /// <response code="200">Returns the list of employees</response>
-        /// <response code="500">If there was an internal server error</response>
+
+
+
+
+
+
         [HttpGet]
         [OutputCache(PolicyName = "EmployeesPaged")]
         [ProducesResponseType(typeof(ApiResponse<PagedResult<EmployeeDto>>), 200)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<PagedResult<EmployeeDto>>>> GetEmployees([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             try
@@ -39,20 +39,20 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        /// <summary>
-        /// Get current employee using the authenticated user context
-        /// </summary>
-        /// <returns>Current employee details with profile image path and job summary</returns>
-        /// <response code="200">Returns the current employee summary</response>
-        /// <response code="401">If the user is not authenticated</response>
-        /// <response code="404">If the corresponding employee is not found</response>
-        /// <response code="500">If there was an internal server error</response>
+
+
+
+
+
+
+
+
         [HttpGet("me")]
         [OutputCache(PolicyName = "CurrentEmployee")]
         [ProducesResponseType(typeof(ApiResponse<CurrentEmployeeSummaryDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 401)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<CurrentEmployeeSummaryDto>>> GetCurrentEmployee()
         {
             try
@@ -77,19 +77,10 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        /// <summary>
-        /// Get employee by ID
-        /// </summary>
-        /// <param name="id">Employee ID</param>
-        /// <returns>Employee details</returns>
-        /// <response code="200">Returns the employee</response>
-        /// <response code="404">If employee is not found</response>
-        /// <response code="500">If there was an internal server error</response>
         [HttpGet("{id}")]
         [OutputCache(PolicyName = "EmployeeById")]
         [ProducesResponseType(typeof(ApiResponse<EmployeeDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
         public async Task<ActionResult<ApiResponse<EmployeeDto>>> GetEmployee(Guid id)
         {
             try
@@ -108,16 +99,81 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        /// <summary>
-        /// Get active employees only
-        /// </summary>
-        /// <returns>List of active employees</returns>
-        /// <response code="200">Returns the list of active employees</response>
-        /// <response code="500">If there was an internal server error</response>
+        [HttpGet("short/{id}")]
+        [OutputCache(PolicyName = "ShortEmployeeById")]
+        [ProducesResponseType(typeof(ApiResponse<ShortEmployeeDto>), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 404)]
+        public async Task<ActionResult<ApiResponse<ShortEmployeeDto>>> GetShortEmployee(Guid id)
+        {
+            try
+            {
+                var employee = await _employeeService.GetByIdShort(id);
+                return Ok(ApiResponse<ShortEmployeeDto>.SuccessResult(employee, "Employee retrieved successfully"));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<ShortEmployeeDto>.ErrorResult("An error occurred while retrieving the employee", new List<string> { ex.Message }));
+            }
+        }
+        [HttpPost("short/list")]
+        [OutputCache(PolicyName = "ShortEmployeeById")]
+        [ProducesResponseType(typeof(ApiResponse<List<ShortEmployeeDto>>), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 404)]
+        public async Task<ActionResult<ApiResponse<List<ShortEmployeeDto>>>> GetShortEmployee(List<Guid> ids)
+        {
+            try
+            {
+                var employee = await _employeeService.GetByIdsShortAsync(ids);
+                return Ok(ApiResponse<List<ShortEmployeeDto>>.SuccessResult(employee, "Employee retrieved successfully"));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<List<ShortEmployeeDto>>.ErrorResult("An error occurred while retrieving the employee", new List<string> { ex.Message }));
+            }
+        }
+        [HttpPost("short/by-military/{militaryNumber}")]
+        [OutputCache(PolicyName = "ShortEmployeeById")]
+        [ProducesResponseType(typeof(ApiResponse<ShortEmployeeDto>), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 404)]
+        public async Task<ActionResult<ApiResponse<ShortEmployeeDto>>> GetShortEmployee(int militaryNumber)
+        {
+            try
+            {
+                var employee = await _employeeService.GetByMilitaryShort(militaryNumber);
+                return Ok(ApiResponse<ShortEmployeeDto>.SuccessResult(employee, "Employee retrieved successfully"));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<ShortEmployeeDto>.ErrorResult("An error occurred while retrieving the employee", new List<string> { ex.Message }));
+            }
+        }
+
+        [HttpPost("short/list/by-military")]
+        [OutputCache(PolicyName = "ShortEmployeeById")]
+        [ProducesResponseType(typeof(ApiResponse<List<ShortEmployeeDto>>), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 404)]
+        public async Task<ActionResult<ApiResponse<List<ShortEmployeeDto>>>> GetShortEmployee(List<int> militaryNumbers)
+        {
+            try
+            {
+                var employee = await _employeeService.GetByMilitariesShortList(militaryNumbers);
+                return Ok(ApiResponse<List<ShortEmployeeDto>>.SuccessResult(employee, "Employee retrieved successfully"));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<List<ShortEmployeeDto>>.ErrorResult("An error occurred while retrieving the employee", new List<string> { ex.Message }));
+            }
+        }
+
+
+
+
+
+
         [HttpGet("active")]
         [OutputCache(PolicyName = "ActiveEmployees")]
         [ProducesResponseType(typeof(ApiResponse<IEnumerable<EmployeeDto>>), 200)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<IEnumerable<EmployeeDto>>>> GetActiveEmployees()
         {
             try
@@ -131,17 +187,17 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        /// <summary>
-        /// Search employees
-        /// </summary>
-        /// <param name="searchTerm">Search term</param>
-        /// <returns>List of matching employees</returns>
-        /// <response code="200">Returns the list of matching employees</response>
-        /// <response code="500">If there was an internal server error</response>
+
+
+
+
+
+
+
         [HttpGet("search")]
         [OutputCache(PolicyName = "SearchEmployees")]
         [ProducesResponseType(typeof(ApiResponse<IEnumerable<EmployeeDto>>), 200)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<IEnumerable<EmployeeDto>>>> SearchEmployees([FromQuery] string searchTerm)
         {
             try
@@ -155,18 +211,18 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        /// <summary>
-        /// Create a new employee
-        /// </summary>
-        /// <param name="createDto">Employee creation data</param>
-        /// <returns>Created employee</returns>
-        /// <response code="201">Returns the created employee</response>
-        /// <response code="400">If the input is invalid</response>
-        /// <response code="500">If there was an internal server error</response>
+
+
+
+
+
+
+
+
         [HttpPost]
         [ProducesResponseType(typeof(ApiResponse<EmployeeDto>), 201)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<EmployeeDto>>> CreateEmployee([FromBody] CreateEmployeeDto createDto)
         {
             try
@@ -194,21 +250,21 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        /// <summary>
-        /// Update an employee
-        /// </summary>
-        /// <param name="id">Employee ID</param>
-        /// <param name="updateDto">Employee update data</param>
-        /// <returns>Updated employee</returns>
-        /// <response code="200">Returns the updated employee</response>
-        /// <response code="400">If the input is invalid</response>
-        /// <response code="404">If employee is not found</response>
-        /// <response code="500">If there was an internal server error</response>
+
+
+
+
+
+
+
+
+
+
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(ApiResponse<EmployeeDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<EmployeeDto>>> UpdateEmployee(Guid id, UpdateEmployeeDto updateDto)
         {
             try
@@ -235,18 +291,18 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        /// <summary>
-        /// Delete an employee
-        /// </summary>
-        /// <param name="id">Employee ID</param>
-        /// <returns>No content</returns>
-        /// <response code="204">Employee deleted successfully</response>
-        /// <response code="404">If employee is not found</response>
-        /// <response code="500">If there was an internal server error</response>
+
+
+
+
+
+
+
+
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(ApiResponse), 204)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse>> DeleteEmployee(Guid id)
         {
             try
@@ -264,19 +320,19 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        /// <summary>
-        /// Upload profile image for an employee
-        /// </summary>
-        /// <param name="employeeId">Employee ID</param>
-        /// <param name="file">Image file</param>
-        /// <returns>Upload result</returns>
-        /// <response code="200">Image uploaded successfully</response>
-        /// <response code="400">If the file is invalid or employee not found</response>
-        /// <response code="500">If there was an internal server error</response>
+
+
+
+
+
+
+
+
+
         [HttpPost("{employeeId}/profile-image")]
         [ProducesResponseType(typeof(ApiResponse<object>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<object>>> UploadProfileImage(Guid employeeId, IFormFile file)
         {
             try
@@ -299,18 +355,18 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        /// <summary>
-        /// Get profile image for an employee
-        /// </summary>
-        /// <param name="employeeId">Employee ID</param>
-        /// <returns>Image file</returns>
-        /// <response code="200">Returns the image file</response>
-        /// <response code="404">If image is not found</response>
-        /// <response code="500">If there was an internal server error</response>
+
+
+
+
+
+
+
+
         [HttpGet("{employeeId}/profile-image")]
         [ProducesResponseType(typeof(FileContentResult), 200)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<IActionResult> GetProfileImage(Guid employeeId)
         {
             try
@@ -340,18 +396,18 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        /// <summary>
-        /// Delete profile image for an employee
-        /// </summary>
-        /// <param name="employeeId">Employee ID</param>
-        /// <returns>Deletion result</returns>
-        /// <response code="200">Image deleted successfully</response>
-        /// <response code="400">If employee not found</response>
-        /// <response code="500">If there was an internal server error</response>
+
+
+
+
+
+
+
+
         [HttpDelete("{employeeId}/profile-image")]
         [ProducesResponseType(typeof(ApiResponse), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse>> DeleteProfileImage(Guid employeeId)
         {
             try
@@ -369,19 +425,19 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        /// <summary>
-        /// Get comprehensive employee details by ID
-        /// </summary>
-        /// <param name="id">Employee ID</param>
-        /// <returns>Comprehensive employee details</returns>
-        /// <response code="200">Returns the comprehensive employee details</response>
-        /// <response code="404">If employee is not found</response>
-        /// <response code="500">If there was an internal server error</response>
+
+
+
+
+
+
+
+
         [HttpGet("{id}/details")]
         [OutputCache(PolicyName = "EmployeeDetails")]
         [ProducesResponseType(typeof(ApiResponse<ComprehensiveEmployeeDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<ComprehensiveEmployeeDto>>> GetComprehensiveEmployeeDetails(Guid id)
         {
             try
@@ -400,17 +456,17 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        /// <summary>
-        /// Get employee job summary by employee ID
-        /// </summary>
-        /// <param name="employeeId">Employee ID</param>
-        /// <returns>List of employee job summaries</returns>
-        /// <response code="200">Returns the list of employee job summaries</response>
-        /// <response code="500">If there was an internal server error</response>
+
+
+
+
+
+
+
         [HttpGet("{employeeId}/job-summary")]
         [OutputCache(PolicyName = "EmployeeJobSummary")]
         [ProducesResponseType(typeof(ApiResponse<List<EmployeeJobSummaryDto>>), 200)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<List<EmployeeJobSummaryDto>>>> GetEmployeeJobSummary(Guid employeeId)
         {
             try
@@ -430,17 +486,17 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        /// <summary>
-        /// Get employees by role ID
-        /// </summary>
-        /// <param name="roleId">Role ID</param>
-        /// <returns>List of employees with the specified role</returns>
-        /// <response code="200">Returns the list of employees with the specified role</response>
-        /// <response code="500">If there was an internal server error</response>
+
+
+
+
+
+
+
         [HttpGet("by-role/{roleId}")]
         [OutputCache(PolicyName = "EmployeesByRole")]
         [ProducesResponseType(typeof(ApiResponse<IEnumerable<EmployeeDto>>), 200)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<IEnumerable<EmployeeDto>>>> GetEmployeesByRoleId(Guid roleId)
         {
             try
