@@ -223,7 +223,7 @@ namespace HRManagement.Application.Services
             return _mapper.Map<IEnumerable<EmployeeDto>>(employees);
         }
 
-        public async Task<ShortEmployeeDto?> GetByIdShort(Guid id)
+        public async Task<ShortEmployeeDto> GetByIdShort(Guid id)
         {
             ShortEmployeeDto shortEmployee = (await GetShortEmployeeBy(e => e.Id == id)).First();
             return shortEmployee;
@@ -248,22 +248,34 @@ namespace HRManagement.Application.Services
             return [shortEmployee];
         }
 
-        public async Task<List<ShortEmployeeDto>?> GetByIdsShortAsync(List<Guid> ids)
+        public async Task<List<ShortEmployeeDto>> GetByIdsShortAsync(List<Guid> ids)
         {
             List<ShortEmployeeDto> shortEmployees = await GetShortEmployeeBy(e => ids.Contains(e.Id));
             return shortEmployees;
         }
 
-        public async Task<ShortEmployeeDto?> GetByMilitaryShort(int militaryNumber)
+        public async Task<ShortEmployeeDto> GetByMilitaryShort(int militaryNumber)
         {
             ShortEmployeeDto shortEmployee = (await GetShortEmployeeBy(e => e.MilitaryNumber == militaryNumber)).First();
             return shortEmployee;
         }
 
-        public async Task<List<ShortEmployeeDto>?> GetByMilitariesShortList(List<int> militaryNumbers)
+        public async Task<List<ShortEmployeeDto>> GetByMilitariesShortList(List<int> militaryNumbers)
         {
             List<ShortEmployeeDto> shortEmployees = await GetShortEmployeeBy(e => militaryNumbers.Contains(e.MilitaryNumber));
             return shortEmployees;
+        }
+
+        Task<List<EmployeeDto>> IEmployeeService.GetEmployeeByRoleIdAsync(Guid roleId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<List<Guid>> GetEmployeeRoleIds(Guid employeeId)
+        {
+            var jobs = await GetEmployeeJobSummaryAsync(employeeId);
+            var roleIds = jobs.Select(j => j.JobRoleId).Distinct().ToList();
+            return roleIds;
         }
     }
 }

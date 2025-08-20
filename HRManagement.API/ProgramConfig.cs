@@ -183,16 +183,29 @@ public static class ProgramConfigExtensions
             options.AddPolicy("EmployeeJobSummary", b => b
                 .Expire(TimeSpan.FromSeconds(60))
                 .SetVaryByRouteValue("employeeId"));
-            // New policies
             options.AddPolicy("CurrentEmployee", b => b
                 .Expire(TimeSpan.FromSeconds(30))
                 .SetCacheKeyPrefix("me")
                 .SetVaryByHeader("Authorization"));
+            ///org unit
             options.AddPolicy("OrgHierarchy", b => b
                 .Expire(TimeSpan.FromMinutes(5)));
+            // Roles
             options.AddPolicy("RolesPaged", b => b
                 .Expire(TimeSpan.FromMinutes(2))
                 .SetVaryByQuery("pageNumber", "pageSize"));
+            /// summarized api
+            options.AddPolicy("EmployeeRoleIds", b => b
+                .Expire(TimeSpan.FromMinutes(2))
+                .SetVaryByRouteValue("employeeId"));
+
+            options.AddPolicy("ShortEmployeeByMilitary", b => b
+                .Expire(TimeSpan.FromMinutes(2))
+                .SetVaryByRouteValue("militaryNumber"));
+            options.AddPolicy("ShortEmployeeById", b => b
+                .Expire(TimeSpan.FromMinutes(2))
+                .SetVaryByRouteValue("id"));
+            /// end summarized 
         });
 
         return builder;

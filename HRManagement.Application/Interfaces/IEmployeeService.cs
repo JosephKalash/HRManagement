@@ -25,6 +25,7 @@ namespace HRManagement.Application.Interfaces
         Task<ComprehensiveEmployeeDto?> GetComprehensiveEmployeeByIdAsync(Guid id);
         Task<List<EmployeeJobSummaryDto>> GetEmployeeJobSummaryAsync(Guid employeeId);
         Task<CurrentEmployeeSummaryDto?> GetCurrentEmployeeSummaryAsync(Guid userId);
-        Task<IEnumerable<EmployeeDto>> GetEmployeeByRoleIdAsync(Guid roleId);
+        Task<List<EmployeeDto>> GetEmployeeByRoleIdAsync(Guid roleId);
+        Task<List<Guid>> GetEmployeeRoleIds(Guid employeeId);
     }
 }

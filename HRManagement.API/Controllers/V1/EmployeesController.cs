@@ -10,10 +10,9 @@ namespace HRManagement.API.Controllers.V1
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [Produces("application/json")]
-    public class EmployeesController(IRoleService roleService, IEmployeeService employeeService, ICurrentUserService currentUserService) : ControllerBase
+    public class EmployeesController(IEmployeeService employeeService, ICurrentUserService currentUserService) : ControllerBase
     {
         private readonly IEmployeeService _employeeService = employeeService;
-        private readonly IRoleService _roleService = roleService;
         private readonly ICurrentUserService _currentUserService = currentUserService;
 
 
@@ -33,9 +32,9 @@ namespace HRManagement.API.Controllers.V1
                 var pagedResult = await _employeeService.GetPagedAsync(pageNumber, pageSize);
                 return Ok(ApiResponse<PagedResult<EmployeeDto>>.SuccessResult(pagedResult, "Employees retrieved successfully"));
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                return StatusCode(500, ApiResponse<PagedResult<EmployeeDto>>.ErrorResult("An error occurred while retrieving employees", new List<string> { ex.Message }));
+                return StatusCode(400, ApiResponse<List<Guid>>.ErrorResult(ex.Message, [ex.Message]));
             }
         }
 
@@ -51,7 +50,7 @@ namespace HRManagement.API.Controllers.V1
         [OutputCache(PolicyName = "CurrentEmployee")]
         [ProducesResponseType(typeof(ApiResponse<CurrentEmployeeSummaryDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 401)]
-        [ProducesResponseType(typeof(ApiResponse), 404)]
+        [ProducesResponseType(typeof(ApiResponse), 400)]
 
         public async Task<ActionResult<ApiResponse<CurrentEmployeeSummaryDto>>> GetCurrentEmployee()
         {
@@ -71,16 +70,16 @@ namespace HRManagement.API.Controllers.V1
 
                 return Ok(ApiResponse<CurrentEmployeeSummaryDto>.SuccessResult(summary, "Current employee retrieved successfully"));
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                return StatusCode(500, ApiResponse<CurrentEmployeeSummaryDto>.ErrorResult("An error occurred while retrieving the current employee", new List<string> { ex.Message }));
+                return StatusCode(400, ApiResponse<List<Guid>>.ErrorResult(ex.Message, [ex.Message]));
             }
         }
 
         [HttpGet("{id}")]
         [OutputCache(PolicyName = "EmployeeById")]
         [ProducesResponseType(typeof(ApiResponse<EmployeeDto>), 200)]
-        [ProducesResponseType(typeof(ApiResponse), 404)]
+        [ProducesResponseType(typeof(ApiResponse), 400)]
         public async Task<ActionResult<ApiResponse<EmployeeDto>>> GetEmployee(Guid id)
         {
             try
@@ -93,16 +92,16 @@ namespace HRManagement.API.Controllers.V1
 
                 return Ok(ApiResponse<EmployeeDto>.SuccessResult(employee, "Employee retrieved successfully"));
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                return StatusCode(500, ApiResponse<EmployeeDto>.ErrorResult("An error occurred while retrieving the employee", new List<string> { ex.Message }));
+                return StatusCode(400, ApiResponse<List<Guid>>.ErrorResult(ex.Message, [ex.Message]));
             }
         }
 
         [HttpGet("short/{id}")]
         [OutputCache(PolicyName = "ShortEmployeeById")]
         [ProducesResponseType(typeof(ApiResponse<ShortEmployeeDto>), 200)]
-        [ProducesResponseType(typeof(ApiResponse), 404)]
+        [ProducesResponseType(typeof(ApiResponse), 400)]
         public async Task<ActionResult<ApiResponse<ShortEmployeeDto>>> GetShortEmployee(Guid id)
         {
             try
@@ -110,15 +109,15 @@ namespace HRManagement.API.Controllers.V1
                 var employee = await _employeeService.GetByIdShort(id);
                 return Ok(ApiResponse<ShortEmployeeDto>.SuccessResult(employee, "Employee retrieved successfully"));
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                return StatusCode(500, ApiResponse<ShortEmployeeDto>.ErrorResult("An error occurred while retrieving the employee", new List<string> { ex.Message }));
+                return StatusCode(400, ApiResponse<List<Guid>>.ErrorResult(ex.Message, [ex.Message]));
             }
         }
+        
         [HttpPost("short/list")]
-        [OutputCache(PolicyName = "ShortEmployeeById")]
         [ProducesResponseType(typeof(ApiResponse<List<ShortEmployeeDto>>), 200)]
-        [ProducesResponseType(typeof(ApiResponse), 404)]
+        [ProducesResponseType(typeof(ApiResponse), 400)]
         public async Task<ActionResult<ApiResponse<List<ShortEmployeeDto>>>> GetShortEmployee(List<Guid> ids)
         {
             try
@@ -126,15 +125,16 @@ namespace HRManagement.API.Controllers.V1
                 var employee = await _employeeService.GetByIdsShortAsync(ids);
                 return Ok(ApiResponse<List<ShortEmployeeDto>>.SuccessResult(employee, "Employee retrieved successfully"));
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                return StatusCode(500, ApiResponse<List<ShortEmployeeDto>>.ErrorResult("An error occurred while retrieving the employee", new List<string> { ex.Message }));
+                return StatusCode(400, ApiResponse<List<Guid>>.ErrorResult(ex.Message, [ex.Message]));
             }
         }
-        [HttpPost("short/by-military/{militaryNumber}")]
-        [OutputCache(PolicyName = "ShortEmployeeById")]
+
+        [HttpGet("short/by-military/{militaryNumber}")]
+        [OutputCache(PolicyName = "ShortEmployeeByMilitary")]
         [ProducesResponseType(typeof(ApiResponse<ShortEmployeeDto>), 200)]
-        [ProducesResponseType(typeof(ApiResponse), 404)]
+        [ProducesResponseType(typeof(ApiResponse), 400)]
         public async Task<ActionResult<ApiResponse<ShortEmployeeDto>>> GetShortEmployee(int militaryNumber)
         {
             try
@@ -142,16 +142,15 @@ namespace HRManagement.API.Controllers.V1
                 var employee = await _employeeService.GetByMilitaryShort(militaryNumber);
                 return Ok(ApiResponse<ShortEmployeeDto>.SuccessResult(employee, "Employee retrieved successfully"));
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                return StatusCode(500, ApiResponse<ShortEmployeeDto>.ErrorResult("An error occurred while retrieving the employee", new List<string> { ex.Message }));
+                return StatusCode(400, ApiResponse<List<Guid>>.ErrorResult(ex.Message, [ex.Message]));
             }
         }
 
         [HttpPost("short/list/by-military")]
-        [OutputCache(PolicyName = "ShortEmployeeById")]
         [ProducesResponseType(typeof(ApiResponse<List<ShortEmployeeDto>>), 200)]
-        [ProducesResponseType(typeof(ApiResponse), 404)]
+        [ProducesResponseType(typeof(ApiResponse), 400)]
         public async Task<ActionResult<ApiResponse<List<ShortEmployeeDto>>>> GetShortEmployee(List<int> militaryNumbers)
         {
             try
@@ -159,9 +158,26 @@ namespace HRManagement.API.Controllers.V1
                 var employee = await _employeeService.GetByMilitariesShortList(militaryNumbers);
                 return Ok(ApiResponse<List<ShortEmployeeDto>>.SuccessResult(employee, "Employee retrieved successfully"));
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                return StatusCode(500, ApiResponse<List<ShortEmployeeDto>>.ErrorResult("An error occurred while retrieving the employee", new List<string> { ex.Message }));
+                return StatusCode(400, ApiResponse<List<Guid>>.ErrorResult(ex.Message, [ex.Message]));
+            }
+        }
+
+        [HttpGet("role-ids/{employeeId}")]
+        [OutputCache(PolicyName = "EmployeeRoleIds")]
+        [ProducesResponseType(typeof(ApiResponse<List<Guid>>), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 400)]
+        public async Task<ActionResult<ApiResponse<List<Guid>>>> GetEmployeeRoleIds(Guid employeeId)
+        {
+            try
+            {
+                var ids = await _employeeService.GetEmployeeRoleIds(employeeId);
+                return Ok(ApiResponse<List<Guid>>.SuccessResult(ids, "Employee roles ids retrieved successfully"));
+            }
+            catch (InvalidOperationException ex)
+            {
+                return StatusCode(400, ApiResponse<List<Guid>>.ErrorResult(ex.Message, [ex.Message]));
             }
         }
 
@@ -173,7 +189,7 @@ namespace HRManagement.API.Controllers.V1
         [HttpGet("active")]
         [OutputCache(PolicyName = "ActiveEmployees")]
         [ProducesResponseType(typeof(ApiResponse<IEnumerable<EmployeeDto>>), 200)]
-
+        [ProducesResponseType(typeof(ApiResponse<IEnumerable<EmployeeDto>>), 400)]
         public async Task<ActionResult<ApiResponse<IEnumerable<EmployeeDto>>>> GetActiveEmployees()
         {
             try
@@ -181,9 +197,9 @@ namespace HRManagement.API.Controllers.V1
                 var employees = await _employeeService.GetActiveEmployeesAsync();
                 return Ok(ApiResponse<IEnumerable<EmployeeDto>>.SuccessResult(employees, "Active employees retrieved successfully"));
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                return StatusCode(500, ApiResponse<IEnumerable<EmployeeDto>>.ErrorResult("An error occurred while retrieving active employees", new List<string> { ex.Message }));
+                return StatusCode(400, ApiResponse<List<Guid>>.ErrorResult(ex.Message, [ex.Message]));
             }
         }
 
@@ -205,19 +221,11 @@ namespace HRManagement.API.Controllers.V1
                 var employees = await _employeeService.SearchEmployeesAsync(searchTerm);
                 return Ok(ApiResponse<IEnumerable<EmployeeDto>>.SuccessResult(employees, $"Search results for '{searchTerm}' retrieved successfully"));
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                return StatusCode(500, ApiResponse<IEnumerable<EmployeeDto>>.ErrorResult("An error occurred while searching employees", new List<string> { ex.Message }));
+                return StatusCode(400, ApiResponse<List<Guid>>.ErrorResult(ex.Message, [ex.Message]));
             }
         }
-
-
-
-
-
-
-
-
 
         [HttpPost]
         [ProducesResponseType(typeof(ApiResponse<EmployeeDto>), 201)]
@@ -244,17 +252,11 @@ namespace HRManagement.API.Controllers.V1
             {
                 return BadRequest(ApiResponse<EmployeeDto>.ErrorResult(ex.Message));
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                return StatusCode(500, ApiResponse<EmployeeDto>.ErrorResult("An error occurred while creating the employee", new List<string> { ex.Message }));
+                return StatusCode(400, ApiResponse<List<Guid>>.ErrorResult(ex.Message, [ex.Message]));
             }
         }
-
-
-
-
-
-
 
 
 
@@ -285,19 +287,11 @@ namespace HRManagement.API.Controllers.V1
             {
                 return NotFound(ApiResponse<EmployeeDto>.ErrorResult(ex.Message));
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                return StatusCode(500, ApiResponse<EmployeeDto>.ErrorResult("An error occurred while updating the employee", new List<string> { ex.Message }));
+                return StatusCode(400, ApiResponse<List<Guid>>.ErrorResult(ex.Message, [ex.Message]));
             }
         }
-
-
-
-
-
-
-
-
 
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(ApiResponse), 204)]
@@ -319,15 +313,6 @@ namespace HRManagement.API.Controllers.V1
                 return StatusCode(500, ApiResponse.ErrorResult("An error occurred while deleting the employee", new List<string> { ex.Message }));
             }
         }
-
-
-
-
-
-
-
-
-
 
         [HttpPost("{employeeId}/profile-image")]
         [ProducesResponseType(typeof(ApiResponse<object>), 200)]
@@ -354,14 +339,6 @@ namespace HRManagement.API.Controllers.V1
                 return StatusCode(500, ApiResponse.ErrorResult("An error occurred while uploading the image", new List<string> { ex.Message }));
             }
         }
-
-
-
-
-
-
-
-
 
         [HttpGet("{employeeId}/profile-image")]
         [ProducesResponseType(typeof(FileContentResult), 200)]
