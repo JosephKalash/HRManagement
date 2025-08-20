@@ -14,6 +14,81 @@ namespace HRManagement.Application.Services
         private readonly IOrgUnitRepository _orgUnitRepository = orgUnitRepository;
         private readonly IMapper _mapper = mapper;
 
+        public bool ValidateHierarchyAsync(OrgUnit unit)
+        {
+            if (unit.Parent == null && unit.Type != OrgUnitType.LeaderOffice)
+                return false; // Only leader office can be root
+
+            if (unit.Parent != null)
+            {
+                var validTransitions = new Dictionary<OrgUnitType, List<OrgUnitType>>
+                {
+                    [OrgUnitType.LeaderOffice] = [OrgUnitType.ViceLeaderOffice, OrgUnitType.GeneralManagement],
+                    [OrgUnitType.ViceLeaderOffice] = [OrgUnitType.GeneralManagement, OrgUnitType.Department],
+                    [OrgUnitType.GeneralManagement] = [OrgUnitType.Department],
+                    [OrgUnitType.Department] = [OrgUnitType.Section, OrgUnitType.Branch],
+                    [OrgUnitType.Section] = [],
+                    [OrgUnitType.Branch] = []
+                };
+
+                return validTransitions[unit.Parent.Type].Contains(unit.Type);
+            }
+
+            return true;
+        }
+        private static string GetHierarchyPath(OrgUnit unit)
+        {
+            var path = "";
+            var current = unit;
+
+            while (current != null)
+            {
+                path = string.Join(current.Name, path);
+                current = current.Parent;
+            }
+
+            return path;
+        }
+
+        public async Task<List<OrgUnit>> GetAllChildUnitsAsync(Guid unitId)
+        {
+            var children = new List<OrgUnit>();
+            var directChildren = await _orgUnitRepository.GetChildUnitsAsync(unitId);
+
+            children.AddRange(directChildren);
+
+            foreach (var child in directChildren)
+            {
+                var grandChildren = await GetAllChildUnitsAsync(child.Id);
+                children.AddRange(grandChildren);
+            }
+
+            return children;
+        }
+        public int CalculateHierarchyLevel(OrgUnitType unitType)
+        {
+            return unitType switch
+            {
+                OrgUnitType.LeaderOffice => 0,
+                OrgUnitType.ViceLeaderOffice => 1,
+                OrgUnitType.GeneralManagement => 2,
+                OrgUnitType.Department => 3,
+                OrgUnitType.Section => 4,
+                OrgUnitType.Branch => 4, // Same level as Section
+                _ => 5
+            };
+        }
+        static readonly Dictionary<OrgUnitType, List<OrgUnitType>> sameLevel = new()
+        {
+            [OrgUnitType.LeaderOffice] = [OrgUnitType.LeaderOffice],
+            [OrgUnitType.ViceLeaderOffice] = [OrgUnitType.ViceLeaderOffice],
+            [OrgUnitType.GeneralManagement] = [OrgUnitType.GeneralManagement],
+            [OrgUnitType.Department] = [OrgUnitType.Department],
+            [OrgUnitType.Section] = [OrgUnitType.Section, OrgUnitType.Branch],
+            [OrgUnitType.Branch] = [OrgUnitType.Section, OrgUnitType.Branch]
+        };
+        // Check if units are at same hierarchical level
+        public bool AreSameHierarchyLevel(OrgUnitType type1, OrgUnitType type2) => sameLevel[type1].Contains(type2);
         public async Task<OrgUnitDto?> GetByIdAsync(Guid id)
         {
             var orgUnit = await _orgUnitRepository.GetByIdAsync(id);
@@ -61,6 +136,9 @@ namespace HRManagement.Application.Services
         public async Task<OrgUnitDto> CreateAsync(CreateOrgUnitDto dto)
         {
             var orgUnit = _mapper.Map<OrgUnit>(dto);
+            if (!ValidateHierarchyAsync(orgUnit))
+                throw new ArgumentException("Invalid hierarchy for the organization unit");
+            orgUnit.HierarchyPath = GetHierarchyPath(orgUnit);
             var created = await _orgUnitRepository.AddAsync(orgUnit);
             return _mapper.Map<OrgUnitDto>(created);
         }
@@ -92,7 +170,7 @@ namespace HRManagement.Application.Services
         public async Task<OrgUnitHierarchyDto> GetHierarchyAsync()
         {
             var allOrgUnits = await _orgUnitRepository.GetAllWithChildrenAsync();
-            var leaderUnit = allOrgUnits.Where(o => o.ParentId == null).FirstOrDefault();
+            var leaderUnit = allOrgUnits.FirstOrDefault(o => o.ParentId == null);
             return _mapper.Map<OrgUnitHierarchyDto>(leaderUnit!);
         }
     }

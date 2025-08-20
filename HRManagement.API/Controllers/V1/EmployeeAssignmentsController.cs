@@ -22,7 +22,7 @@ namespace HRManagement.API.Controllers.V1
         /// <returns>List of all employee assignments</returns>
         [HttpGet]
         [ProducesResponseType(typeof(ApiResponse<PagedResult<EmployeeAssignmentDto>>), 200)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<PagedResult<EmployeeAssignmentDto>>>> GetEmployeeAssignments([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             try
@@ -37,9 +37,9 @@ namespace HRManagement.API.Controllers.V1
                     TotalCount = pagedResult.TotalCount
                 }, "Employee assignments retrieved successfully"));
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                return StatusCode(500, ApiResponse<PagedResult<EmployeeAssignmentDto>>.ErrorResult("An error occurred while retrieving employee assignments", new List<string> { ex.Message }));
+                return StatusCode(400, ApiResponse<PagedResult<EmployeeAssignmentDto>>.ErrorResult(ex.Message, new List<string> { ex.Message }));
             }
         }
 
@@ -51,7 +51,7 @@ namespace HRManagement.API.Controllers.V1
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(ApiResponse<EmployeeAssignmentDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<EmployeeAssignmentDto>>> GetEmployeeAssignment(Guid id)
         {
             try
@@ -64,9 +64,9 @@ namespace HRManagement.API.Controllers.V1
 
                 return Ok(ApiResponse<EmployeeAssignmentDto>.SuccessResult(assignment, "Employee assignment retrieved successfully"));
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                return StatusCode(500, ApiResponse<EmployeeAssignmentDto>.ErrorResult("An error occurred while retrieving the employee assignment", new List<string> { ex.Message }));
+                return StatusCode(400, ApiResponse<EmployeeAssignmentDto>.ErrorResult(ex.Message, new List<string> { ex.Message }));
             }
         }
 
@@ -77,7 +77,7 @@ namespace HRManagement.API.Controllers.V1
         /// <returns>Employee assignment details</returns>
         [HttpGet("employee/{employeeId}")]
         [ProducesResponseType(typeof(ApiResponse<IEnumerable<EmployeeAssignmentDto>>), 200)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<IEnumerable<EmployeeAssignmentDto>>>> GetEmployeeAssignmentsByEmployeeId(Guid employeeId)
         {
             try
@@ -85,9 +85,9 @@ namespace HRManagement.API.Controllers.V1
                 var assignments = await _employeeAssignmentService.GetByEmployeeIdAsync(employeeId);
                 return Ok(ApiResponse<IEnumerable<EmployeeAssignmentDto>>.SuccessResult(assignments, "Employee assignments retrieved successfully"));
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                return StatusCode(500, ApiResponse<IEnumerable<EmployeeAssignmentDto>>.ErrorResult("An error occurred while retrieving employee assignments", new List<string> { ex.Message }));
+                return StatusCode(400, ApiResponse<IEnumerable<EmployeeAssignmentDto>>.ErrorResult(ex.Message, new List<string> { ex.Message }));
             }
         }
 
@@ -99,7 +99,7 @@ namespace HRManagement.API.Controllers.V1
         [HttpGet("employee/{employeeId}/active")]
         [ProducesResponseType(typeof(ApiResponse<EmployeeAssignmentDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<EmployeeAssignmentDto>>> GetActiveEmployeeAssignmentByEmployeeId(Guid employeeId)
         {
             try
@@ -112,9 +112,9 @@ namespace HRManagement.API.Controllers.V1
 
                 return Ok(ApiResponse<EmployeeAssignmentDto>.SuccessResult(assignment, "Active employee assignment retrieved successfully"));
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                return StatusCode(500, ApiResponse<EmployeeAssignmentDto>.ErrorResult("An error occurred while retrieving the active employee assignment", new List<string> { ex.Message }));
+                return StatusCode(400, ApiResponse<EmployeeAssignmentDto>.ErrorResult(ex.Message, new List<string> { ex.Message }));
             }
         }
 
@@ -126,7 +126,7 @@ namespace HRManagement.API.Controllers.V1
         [HttpPost]
         [ProducesResponseType(typeof(ApiResponse<EmployeeAssignmentDto>), 201)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<EmployeeAssignmentDto>>> CreateEmployeeAssignment(CreateEmployeeAssignmentDto createDto)
         {
             try
@@ -148,9 +148,9 @@ namespace HRManagement.API.Controllers.V1
             {
                 return BadRequest(ApiResponse<EmployeeAssignmentDto>.ErrorResult(ex.Message));
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                return StatusCode(500, ApiResponse<EmployeeAssignmentDto>.ErrorResult("An error occurred while creating the employee assignment", new List<string> { ex.Message }));
+                return StatusCode(400, ApiResponse<EmployeeAssignmentDto>.ErrorResult(ex.Message, new List<string> { ex.Message }));
             }
         }
 
@@ -164,7 +164,7 @@ namespace HRManagement.API.Controllers.V1
         [ProducesResponseType(typeof(ApiResponse<EmployeeAssignmentDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<EmployeeAssignmentDto>>> UpdateEmployeeAssignment(Guid id, UpdateEmployeeAssignmentDto updateDto)
         {
             try
@@ -185,9 +185,9 @@ namespace HRManagement.API.Controllers.V1
             {
                 return NotFound(ApiResponse<EmployeeAssignmentDto>.ErrorResult(ex.Message));
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                return StatusCode(500, ApiResponse<EmployeeAssignmentDto>.ErrorResult("An error occurred while updating the employee assignment", new List<string> { ex.Message }));
+                return StatusCode(400, ApiResponse<EmployeeAssignmentDto>.ErrorResult(ex.Message, new List<string> { ex.Message }));
             }
         }
 
@@ -199,7 +199,7 @@ namespace HRManagement.API.Controllers.V1
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(ApiResponse), 204)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse>> DeleteEmployeeAssignment(Guid id)
         {
             try
@@ -211,9 +211,9 @@ namespace HRManagement.API.Controllers.V1
             {
                 return NotFound(ApiResponse.ErrorResult(ex.Message));
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                return StatusCode(500, ApiResponse.ErrorResult("An error occurred while deleting the employee assignment", new List<string> { ex.Message }));
+                return StatusCode(400, ApiResponse.ErrorResult(ex.Message, new List<string> { ex.Message }));
             }
         }
     }

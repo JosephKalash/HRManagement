@@ -46,10 +46,7 @@ namespace HRManagement.Application.Services
 
         public async Task<EmployeeAssignmentDto> UpdateAsync(Guid id, UpdateEmployeeAssignmentDto updateDto)
         {
-            var assignment = await _employeeAssignmentRepository.GetByIdAsync(id);
-            if (assignment == null)
-                throw new ArgumentException("Employee assignment not found");
-
+            var assignment = await _employeeAssignmentRepository.GetByIdAsync(id) ?? throw new ArgumentException("Employee assignment not found");
             _mapper.Map(updateDto, assignment);
             var updatedAssignment = await _employeeAssignmentRepository.UpdateAsync(assignment);
             return _mapper.Map<EmployeeAssignmentDto>(updatedAssignment);
@@ -57,10 +54,7 @@ namespace HRManagement.Application.Services
 
         public async Task DeleteAsync(Guid id)
         {
-            var assignment = await _employeeAssignmentRepository.GetByIdAsync(id);
-            if (assignment == null)
-                throw new ArgumentException("Employee assignment not found");
-
+            var assignment = await _employeeAssignmentRepository.GetByIdAsync(id) ?? throw new ArgumentException("Employee assignment not found");
             await _employeeAssignmentRepository.DeleteAsync(assignment);
         }
 
@@ -81,6 +75,12 @@ namespace HRManagement.Application.Services
                 PageSize = paged.PageSize,
                 TotalCount = paged.TotalCount
             };
+        }
+
+        public async Task<List<EmployeeAssignmentDto>> GetByUnitIdAsync(Guid unitId)
+        {
+            var assignments = await _employeeAssignmentRepository.GetByUnitIdAsync(unitId);
+            return _mapper.Map<List<EmployeeAssignmentDto>>(assignments);
         }
     }
 }

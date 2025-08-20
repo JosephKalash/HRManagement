@@ -23,7 +23,7 @@ namespace HRManagement.API.Controllers.V1
 
         [HttpGet]
         [ProducesResponseType(typeof(ApiResponse<PagedResult<OrgUnitDto>>), 200)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<PagedResult<OrgUnitDto>>>> GetOrgUnits([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             try
@@ -31,16 +31,16 @@ namespace HRManagement.API.Controllers.V1
                 var pagedResult = await _orgUnitService.GetPagedAsync(pageNumber, pageSize);
                 return Ok(ApiResponse<PagedResult<OrgUnitDto>>.SuccessResult(pagedResult, "Org units retrieved successfully"));
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                return StatusCode(500, ApiResponse<PagedResult<OrgUnitDto>>.ErrorResult("An error occurred while retrieving org units", new List<string> { ex.Message }));
+                return StatusCode(400, ApiResponse<PagedResult<OrgUnitDto>>.ErrorResult(ex.Message, new List<string> { ex.Message }));
             }
         }
 
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(ApiResponse<OrgUnitDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<OrgUnitDto>>> GetOrgUnit(Guid id)
         {
             try
@@ -52,15 +52,15 @@ namespace HRManagement.API.Controllers.V1
                 }
                 return Ok(ApiResponse<OrgUnitDto>.SuccessResult(orgUnit, "Org unit retrieved successfully"));
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                return StatusCode(500, ApiResponse<OrgUnitDto>.ErrorResult("An error occurred while retrieving the org unit", new List<string> { ex.Message }));
+                return StatusCode(400, ApiResponse<OrgUnitDto>.ErrorResult(ex.Message, new List<string> { ex.Message }));
             }
         }
 
         [HttpGet("parent/{parentId}")]
         [ProducesResponseType(typeof(ApiResponse<IEnumerable<OrgUnitDto>>), 200)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<IEnumerable<OrgUnitDto>>>> GetByParentId(Guid? parentId)
         {
             try
@@ -68,15 +68,15 @@ namespace HRManagement.API.Controllers.V1
                 var orgUnits = await _orgUnitService.GetByParentIdAsync(parentId);
                 return Ok(ApiResponse<IEnumerable<OrgUnitDto>>.SuccessResult(orgUnits, "Org units by parent retrieved successfully"));
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                return StatusCode(500, ApiResponse<IEnumerable<OrgUnitDto>>.ErrorResult("An error occurred while retrieving org units by parent", new List<string> { ex.Message }));
+                return StatusCode(400, ApiResponse<IEnumerable<OrgUnitDto>>.ErrorResult(ex.Message, new List<string> { ex.Message }));
             }
         }
 
         [HttpGet("type/{type}")]
         [ProducesResponseType(typeof(ApiResponse<IEnumerable<OrgUnitDto>>), 200)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<IEnumerable<OrgUnitDto>>>> GetByType(OrgUnitType type)
         {
             try
@@ -84,15 +84,15 @@ namespace HRManagement.API.Controllers.V1
                 var orgUnits = await _orgUnitService.GetByTypeAsync(type);
                 return Ok(ApiResponse<IEnumerable<OrgUnitDto>>.SuccessResult(orgUnits, "Org units by type retrieved successfully"));
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                return StatusCode(500, ApiResponse<IEnumerable<OrgUnitDto>>.ErrorResult("An error occurred while retrieving org units by type", new List<string> { ex.Message }));
+                return StatusCode(400, ApiResponse<IEnumerable<OrgUnitDto>>.ErrorResult(ex.Message, new List<string> { ex.Message }));
             }
         }
 
         [HttpGet("search")]
         [ProducesResponseType(typeof(ApiResponse<IEnumerable<OrgUnitDto>>), 200)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<IEnumerable<OrgUnitDto>>>> SearchByName([FromQuery] string searchTerm)
         {
             try
@@ -100,16 +100,16 @@ namespace HRManagement.API.Controllers.V1
                 var orgUnits = await _orgUnitService.SearchByNameAsync(searchTerm);
                 return Ok(ApiResponse<IEnumerable<OrgUnitDto>>.SuccessResult(orgUnits, $"Search results for '{searchTerm}' retrieved successfully"));
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                return StatusCode(500, ApiResponse<IEnumerable<OrgUnitDto>>.ErrorResult("An error occurred while searching org units", new List<string> { ex.Message }));
+                return StatusCode(400, ApiResponse<IEnumerable<OrgUnitDto>>.ErrorResult(ex.Message, new List<string> { ex.Message }));
             }
         }
 
         [HttpPost]
         [ProducesResponseType(typeof(ApiResponse<OrgUnitDto>), 201)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<OrgUnitDto>>> CreateOrgUnit(CreateOrgUnitDto dto)
         {
             try
@@ -126,9 +126,9 @@ namespace HRManagement.API.Controllers.V1
             {
                 return BadRequest(ApiResponse<OrgUnitDto>.ErrorResult(ex.Message));
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                return StatusCode(500, ApiResponse<OrgUnitDto>.ErrorResult("An error occurred while creating the org unit", new List<string> { ex.Message }));
+                return StatusCode(400, ApiResponse<OrgUnitDto>.ErrorResult(ex.Message, [ex.Message]));
             }
         }
 
@@ -136,7 +136,7 @@ namespace HRManagement.API.Controllers.V1
         [ProducesResponseType(typeof(ApiResponse<OrgUnitDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<OrgUnitDto>>> UpdateOrgUnit(Guid id, UpdateOrgUnitDto dto)
         {
             try
@@ -153,16 +153,16 @@ namespace HRManagement.API.Controllers.V1
             {
                 return NotFound(ApiResponse<OrgUnitDto>.ErrorResult(ex.Message));
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                return StatusCode(500, ApiResponse<OrgUnitDto>.ErrorResult("An error occurred while updating the org unit", new List<string> { ex.Message }));
+                return StatusCode(400, ApiResponse<OrgUnitDto>.ErrorResult(ex.Message, new List<string> { ex.Message }));
             }
         }
 
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(ApiResponse), 204)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse>> DeleteOrgUnit(Guid id)
         {
             try
@@ -174,16 +174,16 @@ namespace HRManagement.API.Controllers.V1
             {
                 return NotFound(ApiResponse.ErrorResult(ex.Message));
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                return StatusCode(500, ApiResponse.ErrorResult("An error occurred while deleting the org unit", new List<string> { ex.Message }));
+                return StatusCode(400, ApiResponse.ErrorResult(ex.Message, new List<string> { ex.Message }));
             }
         }
 
         [HttpGet("hierarchy")]
         [OutputCache(PolicyName = "OrgHierarchy")]
         [ProducesResponseType(typeof(ApiResponse<OrgUnitHierarchyDto>), 200)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<OrgUnitHierarchyDto>>> GetHierarchy()
         {
             try
@@ -191,9 +191,9 @@ namespace HRManagement.API.Controllers.V1
                 var hierarchy = await _orgUnitService.GetHierarchyAsync();
                 return Ok(ApiResponse<OrgUnitHierarchyDto>.SuccessResult(hierarchy, "Organization hierarchy retrieved successfully"));
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                return StatusCode(500, ApiResponse<OrgUnitHierarchyDto>.ErrorResult("An error occurred while retrieving the hierarchy", new List<string> { ex.Message }));
+                return StatusCode(400, ApiResponse<OrgUnitHierarchyDto>.ErrorResult(ex.Message, new List<string> { ex.Message }));
             }
         }
     }

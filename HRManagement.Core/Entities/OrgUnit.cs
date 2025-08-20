@@ -13,6 +13,8 @@ namespace HRManagement.Core.Entities
         [StringLength(200)]
         public string Name { get; set; } = string.Empty;
 
+        public string HierarchyPath { get; set; } = string.Empty;
+
         public string? Description { get; set; }
 
         public Guid? ParentId { get; set; }

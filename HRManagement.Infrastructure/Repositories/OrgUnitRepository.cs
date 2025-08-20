@@ -8,24 +8,31 @@ namespace HRManagement.Infrastructure.Repositories
 {
     public class OrgUnitRepository(HRDbContext context) : Repository<OrgUnit>(context), IOrgUnitRepository
     {
-        public async Task<IEnumerable<OrgUnit>> GetByParentIdAsync(Guid? parentId)
+        public Task<List<OrgUnit>> GetByParentIdAsync(Guid? parentId)
         {
-            return await _dbSet.Where(o => o.ParentId == parentId).ToListAsync();
+            return _dbSet.Where(o => o.ParentId == parentId).ToListAsync();
         }
 
-        public async Task<IEnumerable<OrgUnit>> GetByTypeAsync(OrgUnitType type)
+        public Task<List<OrgUnit>> GetByTypeAsync(OrgUnitType type)
         {
-            return await _dbSet.Where(o => o.Type == type).ToListAsync();
+            return _dbSet.Where(o => o.Type == type).ToListAsync();
         }
 
-        public async Task<IEnumerable<OrgUnit>> SearchByNameAsync(string searchTerm)
+        public Task<List<OrgUnit>> SearchByNameAsync(string searchTerm)
         {
-            return await _dbSet.Where(o => o.Name.Contains(searchTerm)).ToListAsync();
+            return _dbSet.Where(o => o.Name.Contains(searchTerm)).ToListAsync();
         }
 
-        public async Task<IEnumerable<OrgUnit>> GetAllWithChildrenAsync()
+        public Task<List<OrgUnit>> GetAllWithChildrenAsync()
         {
-            return await _dbSet.Include(o => o.Children).ToListAsync();
+            return _dbSet.Include(o => o.Children).ToListAsync();
+        }
+
+        public Task<List<OrgUnit>> GetChildUnitsAsync(Guid unitId)
+        {
+            return _dbSet
+                    .Where(ou => ou.ParentId == unitId)
+                    .ToListAsync();
         }
     }
 }

@@ -11,6 +11,7 @@ namespace HRManagement.Application.DTOs
         public string? Description { get; set; }
         public Guid? ParentId { get; set; }
         public Guid? ManagerId { get; set; }
+        public string HierarchyPath { get; set; } = string.Empty;
         public List<OrgUnitDto> Children { get; set; } = new(); // For hierarchical representation
     }
 
@@ -37,6 +38,7 @@ namespace HRManagement.Application.DTOs
         public Guid Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public Guid? ManagerId { get; set; }
+        public string HierarchyPath { get; set; } = string.Empty;
         public List<OrgUnitHierarchyDto> Children { get; set; } = []; // Recursive hierarchy
     }
 }

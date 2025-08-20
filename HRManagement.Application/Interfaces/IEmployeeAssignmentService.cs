@@ -12,6 +12,7 @@ namespace HRManagement.Application.Interfaces
         Task<EmployeeAssignmentDto?> GetActiveByEmployeeIdAsync(Guid employeeId);
         Task<EmployeeAssignmentDto> CreateAsync(CreateEmployeeAssignmentDto createDto);
         Task<EmployeeAssignmentDto> UpdateAsync(Guid id, UpdateEmployeeAssignmentDto updateDto);
+        Task<List<EmployeeAssignmentDto>> GetByUnitIdAsync(Guid unitId);
         Task DeleteAsync(Guid id);
         Task<bool> ExistsAsync(Guid id);
         Task<PagedResult<EmployeeAssignmentDto>> GetPagedAsync(int pageNumber, int pageSize);
