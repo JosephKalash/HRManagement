@@ -6,13 +6,13 @@ namespace HRManagement.Application.Interfaces
 {
     public interface IEmployeeContactService
     {
-        Task<EmployeeContactDto?> GetByIdAsync(Guid id);
-        Task<EmployeeContactDto?> GetByEmployeeIdAsync(Guid employeeId);
-        Task<IEnumerable<EmployeeContactDto>> GetAllAsync();
-        Task<EmployeeContactDto> CreateAsync(CreateEmployeeContactDto createDto);
-        Task<EmployeeContactDto> UpdateAsync(Guid id, UpdateEmployeeContactDto updateDto);
-        Task DeleteAsync(Guid id);
-        Task<bool> ExistsAsync(Guid id);
-        Task<PagedResult<EmployeeContactDto>> GetPagedAsync(int pageNumber, int pageSize);
+        Task<EmployeeContactDto?> GetById(Guid id);
+        Task<EmployeeContactDto?> GetByEmployeeId(Guid employeeId);
+        Task<IEnumerable<EmployeeContactDto>> GetAll();
+        Task<EmployeeContactDto> Create(CreateEmployeeContactDto createDto);
+        Task<EmployeeContactDto> Update(Guid id, UpdateEmployeeContactDto updateDto);
+        Task Delete(Guid id);
+        Task<bool> Exists(Guid id);
+        Task<PagedResult<EmployeeContactDto>> GetPaged(int pageNumber, int pageSize);
     }
-} 
+}

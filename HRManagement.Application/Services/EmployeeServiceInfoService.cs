@@ -13,63 +13,63 @@ namespace HRManagement.Application.Services
         private readonly IEmployeeServiceInfoRepository _employeeServiceInfoRepository = employeeServiceInfoRepository;
         private readonly IMapper _mapper = mapper;
 
-        public async Task<EmployeeServiceInfoDto?> GetByIdAsync(Guid id)
+        public async Task<EmployeeServiceInfoDto?> GetById(Guid id)
         {
-            var serviceInfo = await _employeeServiceInfoRepository.GetByIdAsync(id);
+            var serviceInfo = await _employeeServiceInfoRepository.GetById(id);
             return serviceInfo != null ? _mapper.Map<EmployeeServiceInfoDto>(serviceInfo) : null;
         }
 
-        public async Task<IEnumerable<EmployeeServiceInfoDto>> GetAllAsync()
+        public async Task<IEnumerable<EmployeeServiceInfoDto>> GetAll()
         {
-            var serviceInfos = await _employeeServiceInfoRepository.GetAllAsync();
+            var serviceInfos = await _employeeServiceInfoRepository.GetAll();
             return _mapper.Map<IEnumerable<EmployeeServiceInfoDto>>(serviceInfos);
         }
 
-        public async Task<IEnumerable<EmployeeServiceInfoDto>> GetByEmployeeIdAsync(Guid employeeId)
+        public async Task<IEnumerable<EmployeeServiceInfoDto>> GetByEmployeeId(Guid employeeId)
         {
-            var serviceInfos = await _employeeServiceInfoRepository.GetByEmployeeIdAsync(employeeId);
+            var serviceInfos = await _employeeServiceInfoRepository.GetByEmployeeId(employeeId);
             return _mapper.Map<IEnumerable<EmployeeServiceInfoDto>>(serviceInfos);
         }
 
-        public async Task<EmployeeServiceInfoDto?> GetActiveByEmployeeIdAsync(Guid employeeId)
+        public async Task<EmployeeServiceInfoDto?> GetActiveByEmployeeId(Guid employeeId)
         {
-            var serviceInfo = await _employeeServiceInfoRepository.GetActiveByEmployeeIdAsync(employeeId);
+            var serviceInfo = await _employeeServiceInfoRepository.GetActiveByEmployeeId(employeeId);
             return serviceInfo != null ? _mapper.Map<EmployeeServiceInfoDto>(serviceInfo) : null;
         }
 
-        public async Task<EmployeeServiceInfoDto> CreateAsync(CreateEmployeeServiceInfoDto createDto)
+        public async Task<EmployeeServiceInfoDto> Create(CreateEmployeeServiceInfoDto createDto)
         {
             var serviceInfo = _mapper.Map<EmployeeServiceInfo>(createDto);
             var createdServiceInfo = await _employeeServiceInfoRepository.AddAsync(serviceInfo);
             return _mapper.Map<EmployeeServiceInfoDto>(createdServiceInfo);
         }
 
-        public async Task<EmployeeServiceInfoDto> UpdateAsync(Guid id, UpdateEmployeeServiceInfoDto updateDto)
+        public async Task<EmployeeServiceInfoDto> Update(Guid id, UpdateEmployeeServiceInfoDto updateDto)
         {
-            var serviceInfo = await _employeeServiceInfoRepository.GetByIdAsync(id);
+            var serviceInfo = await _employeeServiceInfoRepository.GetById(id);
             if (serviceInfo == null)
                 throw new ArgumentException("Employee service info not found");
 
             _mapper.Map(updateDto, serviceInfo);
-            var updatedServiceInfo = await _employeeServiceInfoRepository.UpdateAsync(serviceInfo);
+            var updatedServiceInfo = await _employeeServiceInfoRepository.Update(serviceInfo);
             return _mapper.Map<EmployeeServiceInfoDto>(updatedServiceInfo);
         }
 
-        public async Task DeleteAsync(Guid id)
+        public async Task Delete(Guid id)
         {
-            var serviceInfo = await _employeeServiceInfoRepository.GetByIdAsync(id);
+            var serviceInfo = await _employeeServiceInfoRepository.GetById(id);
             if (serviceInfo == null)
                 throw new ArgumentException("Employee service info not found");
 
-            await _employeeServiceInfoRepository.DeleteAsync(serviceInfo);
+            await _employeeServiceInfoRepository.Delete(serviceInfo);
         }
 
-        public async Task<bool> ActiveExistsAsync(Guid id)
+        public async Task<bool> ActiveExists(Guid id)
         {
-            return await _employeeServiceInfoRepository.ActiveExistsAsync(id);
+            return await _employeeServiceInfoRepository.ActiveExists(id);
         }
 
-        public async Task<PagedResult<EmployeeServiceInfoDto>> GetPagedAsync(int pageNumber, int pageSize)
+        public async Task<PagedResult<EmployeeServiceInfoDto>> GetPaged(int pageNumber, int pageSize)
         {
             var query = _employeeServiceInfoRepository.AsQueryable();
             var paged = await query.ToPagedResultAsync(pageNumber, pageSize);
@@ -83,7 +83,7 @@ namespace HRManagement.Application.Services
             };
         }
 
-        public async Task<PagedResult<EmployeeServiceInfoDto>> GetPagedByEmployeeIdAsync(Guid employeeId, int pageNumber, int pageSize)
+        public async Task<PagedResult<EmployeeServiceInfoDto>> GetPagedByEmployeeId(Guid employeeId, int pageNumber, int pageSize)
         {
             var query = _employeeServiceInfoRepository.AsQueryable()
                 .Where(esi => esi.EmployeeId == employeeId);

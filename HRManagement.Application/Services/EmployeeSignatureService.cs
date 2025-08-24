@@ -27,15 +27,15 @@ namespace HRManagement.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<EmployeeSignatureDto> CreateAsync(CreateEmployeeSignatureDto createDto, Stream? imageStream, string? fileName)
+        public async Task<EmployeeSignatureDto> Create(CreateEmployeeSignatureDto createDto, Stream? imageStream, string? fileName)
         {
             // Check if employee exists
-            var employee = await _employeeRepository.GetByIdAsync(createDto.EmployeeId);
+            var employee = await _employeeRepository.GetById(createDto.EmployeeId);
             if (employee == null)
                 throw new ArgumentException($"Employee with ID {createDto.EmployeeId} not found");
 
             // Check if signature already exists for this employee
-            var existingSignature = await _signatureRepository.GetByEmployeeIdAsync(createDto.EmployeeId);
+            var existingSignature = await _signatureRepository.GetByEmployeeId(createDto.EmployeeId);
             if (existingSignature != null)
                 throw new ArgumentException($"Signature already exists for employee with ID {createDto.EmployeeId}");
 
@@ -43,7 +43,7 @@ namespace HRManagement.Application.Services
                 throw new ArgumentException("Image file is required");
 
             // Save the image
-            var (filePath, savedFileName) = await _imageService.SaveImageAsync(imageStream, "signatures", fileName);
+            var (filePath, savedFileName) = await _imageService.SaveImage(imageStream, "signatures", fileName);
 
             // Map DTO to entity using AutoMapper
             var signature = _mapper.Map<EmployeeSignature>(createDto);
@@ -54,19 +54,19 @@ namespace HRManagement.Application.Services
             return _mapper.Map<EmployeeSignatureDto>(createdSignature);
         }
 
-        public async Task<EmployeeSignatureDto?> GetByIdAsync(Guid id)
+        public async Task<EmployeeSignatureDto?> GetById(Guid id)
         {
-            var signature = await _signatureRepository.GetByIdAsync(id);
+            var signature = await _signatureRepository.GetById(id);
             return _mapper.Map<EmployeeSignatureDto>(signature);
         }
 
-        public async Task<EmployeeSignatureDto?> GetByEmployeeIdAsync(Guid employeeId)
+        public async Task<EmployeeSignatureDto?> GetByEmployeeId(Guid employeeId)
         {
-            var signature = await _signatureRepository.GetByEmployeeIdAsync(employeeId);
+            var signature = await _signatureRepository.GetByEmployeeId(employeeId);
             return _mapper.Map<EmployeeSignatureDto>(signature);
         }
 
-        public async Task<PagedResult<EmployeeSignatureDto>> GetPagedAsync(int pageNumber, int pageSize)
+        public async Task<PagedResult<EmployeeSignatureDto>> GetPaged(int pageNumber, int pageSize)
         {
             var query = _signatureRepository.AsQueryable();
             var paged = await query.ToPagedResultAsync(pageNumber, pageSize);
@@ -81,9 +81,9 @@ namespace HRManagement.Application.Services
             };
         }
 
-        public async Task<EmployeeSignatureDto> UpdateAsync(Guid id, UpdateEmployeeSignatureDto updateDto)
+        public async Task<EmployeeSignatureDto> Update(Guid id, UpdateEmployeeSignatureDto updateDto)
         {
-            var signature = await _signatureRepository.GetByIdAsync(id);
+            var signature = await _signatureRepository.GetById(id);
             if (signature == null)
                 throw new ArgumentException($"Signature with ID {id} not found");
 
@@ -91,13 +91,13 @@ namespace HRManagement.Application.Services
             _mapper.Map(updateDto, signature);
             signature.UpdatedAt = DateTime.UtcNow;
 
-            var updatedSignature = await _signatureRepository.UpdateAsync(signature);
+            var updatedSignature = await _signatureRepository.Update(signature);
             return _mapper.Map<EmployeeSignatureDto>(updatedSignature);
         }
 
         public async Task<EmployeeSignatureDto> UpdateSignatureImageAsync(Guid id, Stream imageStream, string fileName)
         {
-            var signature = await _signatureRepository.GetByIdAsync(id);
+            var signature = await _signatureRepository.GetById(id);
             if (signature == null)
                 throw new ArgumentException($"Signature with ID {id} not found");
 
@@ -106,19 +106,19 @@ namespace HRManagement.Application.Services
                 _imageService.DeleteImage(signature.FilePath);
 
             // Save new image
-            var (filePath, savedFileName) = await _imageService.SaveImageAsync(imageStream, "signatures", fileName);
+            var (filePath, savedFileName) = await _imageService.SaveImage(imageStream, "signatures", fileName);
 
             signature.FilePath = filePath;
             signature.OriginalFileName = fileName;
             signature.UpdatedAt = DateTime.UtcNow;
 
-            var updatedSignature = await _signatureRepository.UpdateAsync(signature);
+            var updatedSignature = await _signatureRepository.Update(signature);
             return _mapper.Map<EmployeeSignatureDto>(updatedSignature);
         }
 
-        public async Task DeleteAsync(Guid id)
+        public async Task Delete(Guid id)
         {
-            var signature = await _signatureRepository.GetByIdAsync(id);
+            var signature = await _signatureRepository.GetById(id);
             if (signature == null)
                 throw new ArgumentException($"Signature with ID {id} not found");
 
@@ -126,7 +126,7 @@ namespace HRManagement.Application.Services
             if (!string.IsNullOrEmpty(signature.FilePath))
                 _imageService.DeleteImage(signature.FilePath);
 
-            await _signatureRepository.DeleteAsync(signature);
+            await _signatureRepository.Delete(signature);
         }
     }
 }

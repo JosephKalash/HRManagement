@@ -6,14 +6,14 @@ namespace HRManagement.Application.Interfaces
 {
     public interface IEmployeeProfileService
     {
-        Task<EmployeeProfileDto?> GetByIdAsync(Guid id);
-        Task<EmployeeProfileDto?> GetByEmployeeIdAsync(Guid employeeId);
-        Task<IEnumerable<EmployeeProfileDto>> GetAllAsync();
-        Task<EmployeeProfileDto> CreateAsync(CreateEmployeeProfileDto createDto, Stream? stream, string? fileName);
-        Task<EmployeeProfileDto> UpdateAsync(Guid id, UpdateEmployeeProfileDto updateDto, Stream? stream, string? fileName = null);
-        Task DeleteAsync(Guid id);
-        Task<bool> ExistsAsync(Guid id);
-        Task<PagedResult<EmployeeProfileDto>> GetPagedAsync(int pageNumber, int pageSize);
-        Task UpdateEmployeeImageAsync(Guid employeeId, string imagePath);
+        Task<EmployeeProfileDto?> GetById(Guid id);
+        Task<EmployeeProfileDto?> GetByEmployeeId(Guid employeeId);
+        Task<IEnumerable<EmployeeProfileDto>> GetAll();
+        Task<EmployeeProfileDto> Create(CreateEmployeeProfileDto createDto, Stream? stream, string? fileName);
+        Task<EmployeeProfileDto> Update(Guid id, UpdateEmployeeProfileDto updateDto, Stream? stream, string? fileName = null);
+        Task Delete(Guid id);
+        Task<bool> Exists(Guid id);
+        Task<PagedResult<EmployeeProfileDto>> GetPaged(int pageNumber, int pageSize);
+        Task UpdateEmployeeImage(Guid employeeId, string imagePath);
     }
-} 
+}

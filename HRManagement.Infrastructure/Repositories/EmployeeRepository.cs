@@ -7,33 +7,33 @@ namespace HRManagement.Infrastructure.Repositories
 {
     public class EmployeeRepository(HRDbContext context) : Repository<Employee>(context), IEmployeeRepository
     {
-        public async Task<Employee?> GetByMilitaryNumberAsync(int militaryNumber)
+        public async Task<Employee?> GetByMilitaryNumber(int militaryNumber)
         {
             return await _dbSet.FirstOrDefaultAsync(e => e.MilitaryNumber == militaryNumber);
         }
 
-        public async Task<Employee?> GetByIdNumberAsync(string idNumber)
+        public async Task<Employee?> GetByIdNumber(string idNumber)
         {
             return await _dbSet.FirstOrDefaultAsync(e => e.IdNumber == idNumber);
         }
 
-        public async Task<IEnumerable<Employee>> GetActiveEmployeesAsync()
+        public async Task<IEnumerable<Employee>> GetActiveEmployees()
         {
             return await _dbSet.Where(e => e.IsActive).ToListAsync();
         }
 
-        public async Task<IEnumerable<Employee>> SearchEmployeesAsync(string searchTerm)
+        public async Task<IEnumerable<Employee>> SearchEmployees(string searchTerm)
         {
-            return await _dbSet.Where(e => 
-                e.ArabicFirstName.Contains(searchTerm) || 
-                e.ArabicLastName.Contains(searchTerm) || 
+            return await _dbSet.Where(e =>
+                e.ArabicFirstName.Contains(searchTerm) ||
+                e.ArabicLastName.Contains(searchTerm) ||
                 e.EnglishFirstName.Contains(searchTerm) ||
                 e.EnglishLastName.Contains(searchTerm) ||
                 e.IdNumber.Contains(searchTerm)
             ).ToListAsync();
         }
 
-        public async Task<Employee?> GetEmployeeWithAllDetailsAsync(Guid id)
+        public async Task<Employee?> GetEmployeeWithAllDetails(Guid id)
         {
             return await _dbSet
                 .Include(e => e.Profile)
@@ -53,4 +53,4 @@ namespace HRManagement.Infrastructure.Repositories
             return _dbSet.AsNoTracking();
         }
     }
-} 
+}

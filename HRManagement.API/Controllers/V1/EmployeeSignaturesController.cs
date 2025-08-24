@@ -16,18 +16,18 @@ namespace HRManagement.API.Controllers.V1
         private readonly IEmployeeSignatureService _employeeSignatureService = employeeSignatureService;
         private readonly IMapper _mapper = mapper;
 
-        /// <summary>
-        /// Get all employee signatures
-        /// </summary>
-        /// <returns>List of all employee signatures</returns>
+        
+        
+        
+        
         [HttpGet]
         [ProducesResponseType(typeof(ApiResponse<PagedResult<EmployeeSignatureDto>>), 200)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<PagedResult<EmployeeSignatureDto>>>> GetEmployeeSignatures([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             try
             {
-                var pagedResult = await _employeeSignatureService.GetPagedAsync(pageNumber, pageSize);
+                var pagedResult = await _employeeSignatureService.GetPaged(pageNumber, pageSize);
                 var baseUrl = $"{Request.Scheme}://{Request.Host}";
                 var dtos = pagedResult.Items.Select(signature =>
                 {
@@ -49,20 +49,20 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        /// <summary>
-        /// Get employee signature by ID
-        /// </summary>
-        /// <param name="id">Employee Signature ID</param>
-        /// <returns>Employee signature details</returns>
+        
+        
+        
+        
+        
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(ApiResponse<EmployeeSignatureDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<EmployeeSignatureDto>>> GetEmployeeSignature(Guid id)
         {
             try
             {
-                var signature = await _employeeSignatureService.GetByIdAsync(id);
+                var signature = await _employeeSignatureService.GetById(id);
                 if (signature == null)
                 {
                     return NotFound(ApiResponse<EmployeeSignatureDto>.ErrorResult($"Employee signature with ID {id} not found"));
@@ -82,20 +82,20 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        /// <summary>
-        /// Get employee signature by employee ID
-        /// </summary>
-        /// <param name="employeeId">Employee ID</param>
-        /// <returns>Employee signature details</returns>
+        
+        
+        
+        
+        
         [HttpGet("employee/{employeeId}")]
         [ProducesResponseType(typeof(ApiResponse<EmployeeSignatureDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<EmployeeSignatureDto>>> GetEmployeeSignatureByEmployeeId(Guid employeeId)
         {
             try
             {
-                var signature = await _employeeSignatureService.GetByEmployeeIdAsync(employeeId);
+                var signature = await _employeeSignatureService.GetByEmployeeId(employeeId);
                 if (signature == null)
                 {
                     return NotFound(ApiResponse<EmployeeSignatureDto>.ErrorResult($"Employee signature for employee ID {employeeId} not found"));
@@ -115,17 +115,17 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        /// <summary>
-        /// Create a new employee signature with image upload (multipart/form-data)
-        /// </summary>
-        /// <param name="signature">JSON string of CreateEmployeeSignatureRequest</param>
-        /// <param name="image">Image file</param>
-        /// <returns>Created employee signature</returns>
+        
+        
+        
+        
+        
+        
         [HttpPost]
         [Consumes("multipart/form-data")]
         [ProducesResponseType(typeof(ApiResponse<EmployeeSignatureDto>), 201)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<EmployeeSignatureDto>>> CreateEmployeeSignature([FromForm] CreateEmployeeSignatureRequest signature)
         {
             try
@@ -141,7 +141,7 @@ namespace HRManagement.API.Controllers.V1
                 }
 
                 using var stream = signature.Image?.OpenReadStream();
-                var createdSignature = await _employeeSignatureService.CreateAsync(createDto, stream, signature.Image?.FileName);
+                var createdSignature = await _employeeSignatureService.Create(createDto, stream, signature.Image?.FileName);
 
                 return CreatedAtAction(nameof(GetEmployeeSignature), new { id = createdSignature.Id },
                     ApiResponse<EmployeeSignatureDto>.SuccessResult(createdSignature, "Employee signature created successfully"));
@@ -156,17 +156,17 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        /// <summary>
-        /// Update an employee signature
-        /// </summary>
-        /// <param name="id">Employee Signature ID</param>
-        /// <param name="updateDto">Employee signature update data</param>
-        /// <returns>Updated employee signature</returns>
+        
+        
+        
+        
+        
+        
         [HttpPatch("{id}")]
         [ProducesResponseType(typeof(ApiResponse<EmployeeSignatureDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<EmployeeSignatureDto>>> UpdateEmployeeSignature(Guid id, UpdateEmployeeSignatureDto updateDto)
         {
             try
@@ -177,7 +177,7 @@ namespace HRManagement.API.Controllers.V1
                     return BadRequest(ApiResponse<EmployeeSignatureDto>.ErrorResult("Validation failed", errors));
                 }
 
-                var signature = await _employeeSignatureService.UpdateAsync(id, updateDto);
+                var signature = await _employeeSignatureService.Update(id, updateDto);
                 return Ok(ApiResponse<EmployeeSignatureDto>.SuccessResult(signature, "Employee signature updated successfully"));
             }
             catch (ArgumentException ex)
@@ -190,18 +190,18 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        /// <summary>
-        /// Update employee signature image
-        /// </summary>
-        /// <param name="id">Employee Signature ID</param>
-        /// <param name="image">New image file</param>
-        /// <returns>Updated employee signature</returns>
+        
+        
+        
+        
+        
+        
         [HttpPatch("{id}/image")]
         [Consumes("multipart/form-data")]
         [ProducesResponseType(typeof(ApiResponse<EmployeeSignatureDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<EmployeeSignatureDto>>> UpdateEmployeeSignatureImage(Guid id, IFormFile image)
         {
             try
@@ -223,20 +223,20 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        /// <summary>
-        /// Delete an employee signature
-        /// </summary>
-        /// <param name="id">Employee Signature ID</param>
-        /// <returns>No content</returns>
+        
+        
+        
+        
+        
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(ApiResponse), 204)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse>> DeleteEmployeeSignature(Guid id)
         {
             try
             {
-                await _employeeSignatureService.DeleteAsync(id);
+                await _employeeSignatureService.Delete(id);
                 return NoContent();
             }
             catch (ArgumentException ex)

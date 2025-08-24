@@ -13,13 +13,13 @@ namespace HRManagement.Application.Services
         private readonly IRoleRepository _roleRepository = roleRepository;
         private readonly IMapper _mapper = mapper;
 
-        public async Task<IEnumerable<RoleDto>> GetAllRolesAsync()
+        public async Task<IEnumerable<RoleDto>> GetAllRoles()
         {
-            var roles = await _roleRepository.GetAllAsync();
+            var roles = await _roleRepository.GetAll();
             return _mapper.Map<IEnumerable<RoleDto>>(roles);
         }
 
-        public async Task<PagedResult<RoleDto>> GetPagedRolesAsync(int pageNumber, int pageSize)
+        public async Task<PagedResult<RoleDto>> GetPagedRoles(int pageNumber, int pageSize)
         {
             var query = _roleRepository.AsQueryable();
             var paged = await query.ToPagedResultAsync(pageNumber, pageSize);
@@ -33,7 +33,7 @@ namespace HRManagement.Application.Services
             };
         }
 
-        public async Task<PagedResult<RoleDto>> GetPagedRolesByLevelAsync(RoleLevel level, int pageNumber, int pageSize)
+        public async Task<PagedResult<RoleDto>> GetPagedRolesByLevel(RoleLevel level, int pageNumber, int pageSize)
         {
             var query = _roleRepository.AsQueryable()
                 .Where(r => r.Level == level);
@@ -48,47 +48,47 @@ namespace HRManagement.Application.Services
             };
         }
 
-        public async Task<RoleDto?> GetRoleByIdAsync(Guid id)
+        public async Task<RoleDto?> GetRoleById(Guid id)
         {
-            var role = await _roleRepository.GetByIdAsync(id);
+            var role = await _roleRepository.GetById(id);
             return role != null ? _mapper.Map<RoleDto>(role) : null;
         }
 
-        public async Task<IEnumerable<RoleDto>> GetRolesByLevelAsync(RoleLevel level)
+        public async Task<IEnumerable<RoleDto>> GetRolesByLevel(RoleLevel level)
         {
-            var roles = await _roleRepository.GetByLevelAsync(level);
+            var roles = await _roleRepository.GetByLevel(level);
             return _mapper.Map<IEnumerable<RoleDto>>(roles);
         }
 
-        public async Task<RoleDto> CreateRoleAsync(CreateRoleDto createDto)
+        public async Task<RoleDto> Create(CreateRoleDto createDto)
         {
             var role = _mapper.Map<Role>(createDto);
             var createdRole = await _roleRepository.AddAsync(role);
             return _mapper.Map<RoleDto>(createdRole);
         }
 
-        public async Task<RoleDto?> UpdateRoleAsync(Guid id, UpdateRoleDto updateDto)
+        public async Task<RoleDto?> UpdateRole(Guid id, UpdateRoleDto updateDto)
         {
-            var existingRole = await _roleRepository.GetByIdAsync(id);
+            var existingRole = await _roleRepository.GetById(id);
             if (existingRole == null) return null;
 
             _mapper.Map(updateDto, existingRole);
-            var updatedRole = await _roleRepository.UpdateAsync(existingRole);
+            var updatedRole = await _roleRepository.Update(existingRole);
             return _mapper.Map<RoleDto>(updatedRole);
         }
 
-        public async Task<bool> DeleteRoleAsync(Guid id)
+        public async Task<bool> DeleteRole(Guid id)
         {
-            var role = await _roleRepository.GetByIdAsync(id);
+            var role = await _roleRepository.GetById(id);
             if (role == null) return false;
 
-            await _roleRepository.DeleteAsync(role);
+            await _roleRepository.Delete(role);
             return true;
         }
 
-        public async Task<bool> ActiveExistsRoleAsync(Guid id)
+        public async Task<bool> ActiveExistsRole(Guid id)
         {
-            var isExist = await _roleRepository.ActiveExistsAsync(id);
+            var isExist = await _roleRepository.ActiveExists(id);
 
             return isExist;
         }

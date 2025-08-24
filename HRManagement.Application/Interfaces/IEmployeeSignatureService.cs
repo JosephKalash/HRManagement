@@ -5,12 +5,12 @@ namespace HRManagement.Application.Interfaces
 {
     public interface IEmployeeSignatureService
     {
-        Task<EmployeeSignatureDto> CreateAsync(CreateEmployeeSignatureDto createDto, Stream? imageStream, string? fileName);
-        Task<EmployeeSignatureDto?> GetByIdAsync(Guid id);
-        Task<EmployeeSignatureDto?> GetByEmployeeIdAsync(Guid employeeId);
-        Task<PagedResult<EmployeeSignatureDto>> GetPagedAsync(int pageNumber, int pageSize);
-        Task<EmployeeSignatureDto> UpdateAsync(Guid id, UpdateEmployeeSignatureDto updateDto);
+        Task<EmployeeSignatureDto> Create(CreateEmployeeSignatureDto createDto, Stream? imageStream, string? fileName);
+        Task<EmployeeSignatureDto?> GetById(Guid id);
+        Task<EmployeeSignatureDto?> GetByEmployeeId(Guid employeeId);
+        Task<PagedResult<EmployeeSignatureDto>> GetPaged(int pageNumber, int pageSize);
+        Task<EmployeeSignatureDto> Update(Guid id, UpdateEmployeeSignatureDto updateDto);
         Task<EmployeeSignatureDto> UpdateSignatureImageAsync(Guid id, Stream imageStream, string fileName);
-        Task DeleteAsync(Guid id);
+        Task Delete(Guid id);
     }
 }

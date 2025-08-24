@@ -14,7 +14,7 @@ namespace HRManagement.Application.Services
         private readonly IOrgUnitRepository _orgUnitRepository = orgUnitRepository;
         private readonly IMapper _mapper = mapper;
 
-        public bool ValidateHierarchyAsync(OrgUnit unit)
+        public bool ValidateHierarchy(OrgUnit unit)
         {
             if (unit.Parent == null && unit.Type != OrgUnitType.LeaderOffice)
                 return false; // Only leader office can be root
@@ -53,7 +53,7 @@ namespace HRManagement.Application.Services
         public async Task<List<OrgUnit>> GetAllChildUnitsAsync(Guid unitId)
         {
             var children = new List<OrgUnit>();
-            var directChildren = await _orgUnitRepository.GetChildUnitsAsync(unitId);
+            var directChildren = await _orgUnitRepository.GetChildUnits(unitId);
 
             children.AddRange(directChildren);
 
@@ -89,37 +89,37 @@ namespace HRManagement.Application.Services
         };
         // Check if units are at same hierarchical level
         public bool AreSameHierarchyLevel(OrgUnitType type1, OrgUnitType type2) => sameLevel[type1].Contains(type2);
-        public async Task<OrgUnitDto?> GetByIdAsync(Guid id)
+        public async Task<OrgUnitDto?> GetById(Guid id)
         {
-            var orgUnit = await _orgUnitRepository.GetByIdAsync(id);
+            var orgUnit = await _orgUnitRepository.GetById(id);
             return orgUnit != null ? _mapper.Map<OrgUnitDto>(orgUnit) : null;
         }
 
-        public async Task<IEnumerable<OrgUnitDto>> GetAllAsync()
+        public async Task<IEnumerable<OrgUnitDto>> GetAll()
         {
-            var orgUnits = await _orgUnitRepository.GetAllAsync();
+            var orgUnits = await _orgUnitRepository.GetAll();
             return _mapper.Map<IEnumerable<OrgUnitDto>>(orgUnits);
         }
 
-        public async Task<IEnumerable<OrgUnitDto>> GetByParentIdAsync(Guid? parentId)
+        public async Task<IEnumerable<OrgUnitDto>> GetByParentId(Guid? parentId)
         {
-            var orgUnits = await _orgUnitRepository.GetByParentIdAsync(parentId);
+            var orgUnits = await _orgUnitRepository.GetByParentId(parentId);
             return _mapper.Map<IEnumerable<OrgUnitDto>>(orgUnits);
         }
 
-        public async Task<IEnumerable<OrgUnitDto>> GetByTypeAsync(OrgUnitType type)
+        public async Task<IEnumerable<OrgUnitDto>> GetByType(OrgUnitType type)
         {
-            var orgUnits = await _orgUnitRepository.GetByTypeAsync(type);
+            var orgUnits = await _orgUnitRepository.GetByType(type);
             return _mapper.Map<IEnumerable<OrgUnitDto>>(orgUnits);
         }
 
-        public async Task<IEnumerable<OrgUnitDto>> SearchByNameAsync(string searchTerm)
+        public async Task<IEnumerable<OrgUnitDto>> SearchByName(string searchTerm)
         {
-            var orgUnits = await _orgUnitRepository.SearchByNameAsync(searchTerm);
+            var orgUnits = await _orgUnitRepository.SearchByName(searchTerm);
             return _mapper.Map<IEnumerable<OrgUnitDto>>(orgUnits);
         }
 
-        public async Task<PagedResult<OrgUnitDto>> GetPagedAsync(int pageNumber, int pageSize)
+        public async Task<PagedResult<OrgUnitDto>> GetPaged(int pageNumber, int pageSize)
         {
             var query = _orgUnitRepository.AsQueryable();
             var paged = await query.ToPagedResultAsync(pageNumber, pageSize);
@@ -133,43 +133,43 @@ namespace HRManagement.Application.Services
             };
         }
 
-        public async Task<OrgUnitDto> CreateAsync(CreateOrgUnitDto dto)
+        public async Task<OrgUnitDto> Create(CreateOrgUnitDto dto)
         {
             var orgUnit = _mapper.Map<OrgUnit>(dto);
-            if (!ValidateHierarchyAsync(orgUnit))
+            if (!ValidateHierarchy(orgUnit))
                 throw new ArgumentException("Invalid hierarchy for the organization unit");
             orgUnit.HierarchyPath = GetHierarchyPath(orgUnit);
             var created = await _orgUnitRepository.AddAsync(orgUnit);
             return _mapper.Map<OrgUnitDto>(created);
         }
 
-        public async Task<OrgUnitDto> UpdateAsync(Guid id, UpdateOrgUnitDto dto)
+        public async Task<OrgUnitDto> Update(Guid id, UpdateOrgUnitDto dto)
         {
-            var orgUnit = await _orgUnitRepository.GetByIdAsync(id);
+            var orgUnit = await _orgUnitRepository.GetById(id);
             if (orgUnit == null)
                 throw new ArgumentException("OrgUnit not found");
 
             _mapper.Map(dto, orgUnit);
-            var updated = await _orgUnitRepository.UpdateAsync(orgUnit);
+            var updated = await _orgUnitRepository.Update(orgUnit);
             return _mapper.Map<OrgUnitDto>(updated);
         }
 
-        public async Task DeleteAsync(Guid id)
+        public async Task Delete(Guid id)
         {
-            var orgUnit = await _orgUnitRepository.GetByIdAsync(id);
+            var orgUnit = await _orgUnitRepository.GetById(id);
             if (orgUnit == null)
                 throw new ArgumentException("OrgUnit not found");
-            await _orgUnitRepository.DeleteAsync(orgUnit);
+            await _orgUnitRepository.Delete(orgUnit);
         }
 
-        public async Task<bool> ExistsAsync(Guid id)
+        public async Task<bool> Exists(Guid id)
         {
-            return await _orgUnitRepository.ActiveExistsAsync(id);
+            return await _orgUnitRepository.ActiveExists(id);
         }
 
-        public async Task<OrgUnitHierarchyDto> GetHierarchyAsync()
+        public async Task<OrgUnitHierarchyDto> GetHierarchy()
         {
-            var allOrgUnits = await _orgUnitRepository.GetAllWithChildrenAsync();
+            var allOrgUnits = await _orgUnitRepository.GetAllWithChildren();
             var leaderUnit = allOrgUnits.FirstOrDefault(o => o.ParentId == null);
             return _mapper.Map<OrgUnitHierarchyDto>(leaderUnit!);
         }

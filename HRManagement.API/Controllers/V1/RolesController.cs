@@ -24,19 +24,19 @@ namespace HRManagement.API.Controllers.V1
             _roleService = roleService;
         }
 
-        /// <summary>
-        /// Get all roles
-        /// </summary>
-        /// <returns>List of all roles</returns>
+
+
+
+
         [HttpGet]
         [OutputCache(PolicyName = "RolesPaged")]
         [ProducesResponseType(typeof(ApiResponse<PagedResult<RoleDto>>), 200)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<PagedResult<RoleDto>>>> GetRoles([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             try
             {
-                var pagedResult = await _roleService.GetPagedRolesAsync(pageNumber, pageSize);
+                var pagedResult = await _roleService.GetPagedRoles(pageNumber, pageSize);
                 return Ok(ApiResponse<PagedResult<RoleDto>>.SuccessResult(pagedResult, "Roles retrieved successfully"));
             }
             catch (Exception ex)
@@ -45,20 +45,20 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        /// <summary>
-        /// Get role by ID
-        /// </summary>
-        /// <param name="id">Role ID</param>
-        /// <returns>Role details</returns>
+
+
+
+
+
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(ApiResponse<RoleDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<RoleDto>>> GetRole(Guid id)
         {
             try
             {
-                var role = await _roleService.GetRoleByIdAsync(id);
+                var role = await _roleService.GetRoleById(id);
                 if (role == null)
                 {
                     return NotFound(ApiResponse<RoleDto>.ErrorResult($"Role with ID {id} not found"));
@@ -72,19 +72,19 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        /// <summary>
-        /// Get roles by level
-        /// </summary>
-        /// <param name="level">Role level</param>
-        /// <returns>List of roles at the specified level</returns>
+
+
+
+
+
         [HttpGet("level/{level}")]
         [ProducesResponseType(typeof(ApiResponse<PagedResult<RoleDto>>), 200)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<PagedResult<RoleDto>>>> GetRolesByLevel(RoleLevel level, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             try
             {
-                var pagedResult = await _roleService.GetPagedRolesByLevelAsync(level, pageNumber, pageSize);
+                var pagedResult = await _roleService.GetPagedRolesByLevel(level, pageNumber, pageSize);
                 return Ok(ApiResponse<PagedResult<RoleDto>>.SuccessResult(pagedResult, $"Roles at level {level} retrieved successfully"));
             }
             catch (Exception ex)
@@ -93,15 +93,15 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        /// <summary>
-        /// Create a new role
-        /// </summary>
-        /// <param name="createDto">Role creation data</param>
-        /// <returns>Created role</returns>
+
+
+
+
+
         [HttpPost]
         [ProducesResponseType(typeof(ApiResponse<RoleDto>), 201)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<RoleDto>>> CreateRole([FromBody] CreateRoleDto createDto)
         {
             try
@@ -115,7 +115,7 @@ namespace HRManagement.API.Controllers.V1
                     return BadRequest(ApiResponse<RoleDto>.ErrorResult("Validation failed", errors));
                 }
 
-                var createdRole = await _roleService.CreateRoleAsync(createDto);
+                var createdRole = await _roleService.Create(createDto);
                 return CreatedAtAction(nameof(GetRole), new { id = createdRole.Id },
                     ApiResponse<RoleDto>.SuccessResult(createdRole, "Role created successfully"));
             }
@@ -125,17 +125,17 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        /// <summary>
-        /// Update a role
-        /// </summary>
-        /// <param name="id">Role ID</param>
-        /// <param name="updateDto">Role update data</param>
-        /// <returns>Updated role</returns>
+
+
+
+
+
+
         [HttpPatch("{id}")]
         [ProducesResponseType(typeof(ApiResponse<RoleDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<RoleDto>>> UpdateRole(Guid id, [FromBody] UpdateRoleDto updateDto)
         {
             try
@@ -149,7 +149,7 @@ namespace HRManagement.API.Controllers.V1
                     return BadRequest(ApiResponse<RoleDto>.ErrorResult("Validation failed", errors));
                 }
 
-                var updatedRole = await _roleService.UpdateRoleAsync(id, updateDto);
+                var updatedRole = await _roleService.UpdateRole(id, updateDto);
                 if (updatedRole == null)
                 {
                     return NotFound(ApiResponse<RoleDto>.ErrorResult($"Role with ID {id} not found"));
@@ -163,20 +163,20 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        /// <summary>
-        /// Delete a role
-        /// </summary>
-        /// <param name="id">Role ID</param>
-        /// <returns>No content</returns>
+
+
+
+
+
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(ApiResponse), 204)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse>> DeleteRole(Guid id)
         {
             try
             {
-                var deleted = await _roleService.DeleteRoleAsync(id);
+                var deleted = await _roleService.DeleteRole(id);
                 if (!deleted)
                 {
                     return NotFound(ApiResponse.ErrorResult($"Role with ID {id} not found"));

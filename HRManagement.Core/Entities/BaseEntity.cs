@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace HRManagement.Core.Entities
 {
     public abstract class BaseEntity

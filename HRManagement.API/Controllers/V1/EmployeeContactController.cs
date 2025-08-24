@@ -17,15 +17,15 @@ namespace HRManagement.API.Controllers.V1
         private readonly IEmployeeContactService _employeeContactService = employeeContactService;
         private readonly IMapper _mapper = mapper;
 
-        // GET: api/EmployeeContact
+        
         [HttpGet]
         [ProducesResponseType(typeof(ApiResponse<PagedResult<EmployeeContactDto>>), 200)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<PagedResult<EmployeeContactDto>>>> GetAllEmployeeContacts([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             try
             {
-                var pagedResult = await _employeeContactService.GetPagedAsync(pageNumber, pageSize);
+                var pagedResult = await _employeeContactService.GetPaged(pageNumber, pageSize);
                 var dtos = _mapper.Map<List<EmployeeContactDto>>(pagedResult.Items);
                 return Ok(ApiResponse<PagedResult<EmployeeContactDto>>.SuccessResult(new PagedResult<EmployeeContactDto>
                 {
@@ -41,43 +41,43 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        // GET: api/EmployeeContact/5
+        
         [HttpGet("{id}")]
         public async Task<ActionResult<EmployeeContactDto>> GetEmployeeContactById(Guid id)
         {
-            var employeeContact = await _employeeContactService.GetByEmployeeIdAsync(id);
+            var employeeContact = await _employeeContactService.GetByEmployeeId(id);
             return Ok(employeeContact);
         }
 
-        // GET: api/EmployeeContact/employee/5
+        
         [HttpGet("employee/{employeeId}")]
         public async Task<ActionResult<EmployeeContactDto>> GetEmployeeContactByEmployeeId(Guid employeeId)
         {
-            var employeeContact = await _employeeContactService.GetByEmployeeIdAsync(employeeId);
+            var employeeContact = await _employeeContactService.GetByEmployeeId(employeeId);
             return Ok(employeeContact);
         }
 
-        // POST: api/EmployeeContact
+        
         [HttpPost]
         public async Task<ActionResult<EmployeeContactDto>> CreateEmployeeContact(CreateEmployeeContactDto createEmployeeContactDto)
         {
-            var employeeContact = await _employeeContactService.CreateAsync(createEmployeeContactDto);
+            var employeeContact = await _employeeContactService.Create(createEmployeeContactDto);
             return CreatedAtAction(nameof(GetEmployeeContactById), new { id = employeeContact.Id }, employeeContact);
         }
 
-        // PUT: api/EmployeeContact/5
+        
         [HttpPut("{id}")]
         public async Task<ActionResult<EmployeeContactDto>> UpdateEmployeeContact(Guid id, UpdateEmployeeContactDto updateDto)
         {
-            var contact = await _employeeContactService.UpdateAsync(id, updateDto);
+            var contact = await _employeeContactService.Update(id, updateDto);
             return Ok(contact);
         }
 
-        // DELETE: api/EmployeeContact/5
+        
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteEmployeeContact(Guid id)
         {
-            await _employeeContactService.DeleteAsync(id);
+            await _employeeContactService.Delete(id);
             return NoContent();
         }
     }

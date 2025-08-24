@@ -29,7 +29,7 @@ namespace HRManagement.API.Controllers.V1
         {
             try
             {
-                var pagedResult = await _employeeService.GetPagedAsync(pageNumber, pageSize);
+                var pagedResult = await _employeeService.GetPaged(pageNumber, pageSize);
                 return Ok(ApiResponse<PagedResult<EmployeeDto>>.SuccessResult(pagedResult, "Employees retrieved successfully"));
             }
             catch (InvalidOperationException ex)
@@ -62,7 +62,7 @@ namespace HRManagement.API.Controllers.V1
                     return Unauthorized(ApiResponse.ErrorResult("User is not authenticated"));
                 }
 
-                var summary = await _employeeService.GetCurrentEmployeeSummaryAsync(userId.Value);
+                var summary = await _employeeService.GetCurrentEmployeeSummary(userId.Value);
                 if (summary == null)
                 {
                     return NotFound(ApiResponse<CurrentEmployeeSummaryDto>.ErrorResult("Employee not found for current user"));
@@ -84,7 +84,7 @@ namespace HRManagement.API.Controllers.V1
         {
             try
             {
-                var employee = await _employeeService.GetByIdAsync(id);
+                var employee = await _employeeService.GetById(id);
                 if (employee == null)
                 {
                     return NotFound(ApiResponse<EmployeeDto>.ErrorResult($"Employee with ID {id} not found"));
@@ -114,7 +114,7 @@ namespace HRManagement.API.Controllers.V1
                 return StatusCode(400, ApiResponse<List<Guid>>.ErrorResult(ex.Message, [ex.Message]));
             }
         }
-        
+
         [HttpPost("short/list")]
         [ProducesResponseType(typeof(ApiResponse<List<ShortEmployeeDto>>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
@@ -122,7 +122,7 @@ namespace HRManagement.API.Controllers.V1
         {
             try
             {
-                var employee = await _employeeService.GetByIdsShortAsync(ids);
+                var employee = await _employeeService.GetByIdsShort(ids);
                 return Ok(ApiResponse<List<ShortEmployeeDto>>.SuccessResult(employee, "Employee retrieved successfully"));
             }
             catch (InvalidOperationException ex)
@@ -194,7 +194,7 @@ namespace HRManagement.API.Controllers.V1
         {
             try
             {
-                var employees = await _employeeService.GetActiveEmployeesAsync();
+                var employees = await _employeeService.GetActiveEmployees();
                 return Ok(ApiResponse<IEnumerable<EmployeeDto>>.SuccessResult(employees, "Active employees retrieved successfully"));
             }
             catch (InvalidOperationException ex)
@@ -218,7 +218,7 @@ namespace HRManagement.API.Controllers.V1
         {
             try
             {
-                var employees = await _employeeService.SearchEmployeesAsync(searchTerm);
+                var employees = await _employeeService.SearchEmployees(searchTerm);
                 return Ok(ApiResponse<IEnumerable<EmployeeDto>>.SuccessResult(employees, $"Search results for '{searchTerm}' retrieved successfully"));
             }
             catch (InvalidOperationException ex)
@@ -244,7 +244,7 @@ namespace HRManagement.API.Controllers.V1
                     return BadRequest(ApiResponse<EmployeeDto>.ErrorResult("Validation failed", errors));
                 }
 
-                var employee = await _employeeService.CreateAsync(createDto);
+                var employee = await _employeeService.Create(createDto);
                 return CreatedAtAction(nameof(GetEmployee), new { id = employee.Id },
                     ApiResponse<EmployeeDto>.SuccessResult(employee, "Employee created successfully"));
             }
@@ -280,7 +280,7 @@ namespace HRManagement.API.Controllers.V1
                     return BadRequest(ApiResponse<EmployeeDto>.ErrorResult("Validation failed", errors));
                 }
 
-                var employee = await _employeeService.UpdateAsync(id, updateDto);
+                var employee = await _employeeService.Update(id, updateDto);
                 return Ok(ApiResponse<EmployeeDto>.SuccessResult(employee, "Employee updated successfully"));
             }
             catch (ArgumentException ex)
@@ -301,7 +301,7 @@ namespace HRManagement.API.Controllers.V1
         {
             try
             {
-                await _employeeService.DeleteAsync(id);
+                await _employeeService.Delete(id);
                 return NoContent();
             }
             catch (ArgumentException ex)
@@ -326,7 +326,7 @@ namespace HRManagement.API.Controllers.V1
                     return BadRequest(ApiResponse.ErrorResult("No file uploaded"));
 
                 using var stream = file.OpenReadStream();
-                var filePath = await _employeeService.UploadProfileImageAsync(employeeId, stream, file.FileName);
+                var filePath = await _employeeService.UploadProfileImage(employeeId, stream, file.FileName);
 
                 return Ok(ApiResponse<object>.SuccessResult(new { filePath }, "Image uploaded successfully"));
             }
@@ -348,7 +348,7 @@ namespace HRManagement.API.Controllers.V1
         {
             try
             {
-                var employee = await _employeeService.GetProfileByEmployeeIdAsync(employeeId);
+                var employee = await _employeeService.GetProfileByEmployeeId(employeeId);
                 if (employee == null || string.IsNullOrEmpty(employee.ImagePath))
                     return NotFound(ApiResponse.ErrorResult("Profile image not found"));
 
@@ -389,7 +389,7 @@ namespace HRManagement.API.Controllers.V1
         {
             try
             {
-                await _employeeService.DeleteProfileImageAsync(employeeId);
+                await _employeeService.DeleteProfileImage(employeeId);
                 return Ok(ApiResponse.SuccessResult("Image deleted successfully"));
             }
             catch (ArgumentException ex)
@@ -419,7 +419,7 @@ namespace HRManagement.API.Controllers.V1
         {
             try
             {
-                var employee = await _employeeService.GetComprehensiveEmployeeByIdAsync(id);
+                var employee = await _employeeService.GetComprehensiveEmployeeById(id);
                 if (employee == null)
                 {
                     return NotFound(ApiResponse<ComprehensiveEmployeeDto>.ErrorResult($"Employee with ID {id} not found"));
@@ -448,13 +448,13 @@ namespace HRManagement.API.Controllers.V1
         {
             try
             {
-                var employeeExists = await _employeeService.ExistsAsync(employeeId);
+                var employeeExists = await _employeeService.Exists(employeeId);
                 if (!employeeExists)
                 {
                     return NotFound(ApiResponse<List<EmployeeJobSummaryDto>>.ErrorResult($"Employee with ID {employeeId} not found"));
                 }
 
-                var jobSummaries = await _employeeService.GetEmployeeJobSummaryAsync(employeeId);
+                var jobSummaries = await _employeeService.GetEmployeeJobSummary(employeeId);
                 return Ok(ApiResponse<List<EmployeeJobSummaryDto>>.SuccessResult(jobSummaries, "Employee job summary retrieved successfully"));
             }
             catch (Exception ex)
@@ -478,7 +478,7 @@ namespace HRManagement.API.Controllers.V1
         {
             try
             {
-                var employees = await _employeeService.GetEmployeeByRoleIdAsync(roleId);
+                var employees = await _employeeService.GetEmployeeByRoleId(roleId);
                 return Ok(ApiResponse<IEnumerable<EmployeeDto>>.SuccessResult(employees, "Employees with the specified role retrieved successfully"));
             }
             catch (Exception ex)

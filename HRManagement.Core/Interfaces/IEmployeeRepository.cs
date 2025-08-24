@@ -4,10 +4,10 @@ namespace HRManagement.Core.Interfaces
 {
     public interface IEmployeeRepository : IRepository<Employee>
     {
-        Task<Employee?> GetByMilitaryNumberAsync(int militaryNumber);
-        Task<Employee?> GetByIdNumberAsync(string idNumber);
-        Task<IEnumerable<Employee>> GetActiveEmployeesAsync();
-        Task<IEnumerable<Employee>> SearchEmployeesAsync(string searchTerm);
-        Task<Employee?> GetEmployeeWithAllDetailsAsync(Guid id);
+        Task<Employee?> GetByMilitaryNumber(int militaryNumber);
+        Task<Employee?> GetByIdNumber(string idNumber);
+        Task<IEnumerable<Employee>> GetActiveEmployees();
+        Task<IEnumerable<Employee>> SearchEmployees(string searchTerm);
+        Task<Employee?> GetEmployeeWithAllDetails(Guid id);
     }
-} 
+}

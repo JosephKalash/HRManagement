@@ -28,7 +28,7 @@ namespace HRManagement.API.Controllers.V1
         {
             try
             {
-                var pagedResult = await _orgUnitService.GetPagedAsync(pageNumber, pageSize);
+                var pagedResult = await _orgUnitService.GetPaged(pageNumber, pageSize);
                 return Ok(ApiResponse<PagedResult<OrgUnitDto>>.SuccessResult(pagedResult, "Org units retrieved successfully"));
             }
             catch (InvalidOperationException ex)
@@ -45,7 +45,7 @@ namespace HRManagement.API.Controllers.V1
         {
             try
             {
-                var orgUnit = await _orgUnitService.GetByIdAsync(id);
+                var orgUnit = await _orgUnitService.GetById(id);
                 if (orgUnit == null)
                 {
                     return NotFound(ApiResponse<OrgUnitDto>.ErrorResult($"OrgUnit with ID {id} not found"));
@@ -65,7 +65,7 @@ namespace HRManagement.API.Controllers.V1
         {
             try
             {
-                var orgUnits = await _orgUnitService.GetByParentIdAsync(parentId);
+                var orgUnits = await _orgUnitService.GetByParentId(parentId);
                 return Ok(ApiResponse<IEnumerable<OrgUnitDto>>.SuccessResult(orgUnits, "Org units by parent retrieved successfully"));
             }
             catch (InvalidOperationException ex)
@@ -81,7 +81,7 @@ namespace HRManagement.API.Controllers.V1
         {
             try
             {
-                var orgUnits = await _orgUnitService.GetByTypeAsync(type);
+                var orgUnits = await _orgUnitService.GetByType(type);
                 return Ok(ApiResponse<IEnumerable<OrgUnitDto>>.SuccessResult(orgUnits, "Org units by type retrieved successfully"));
             }
             catch (InvalidOperationException ex)
@@ -97,7 +97,7 @@ namespace HRManagement.API.Controllers.V1
         {
             try
             {
-                var orgUnits = await _orgUnitService.SearchByNameAsync(searchTerm);
+                var orgUnits = await _orgUnitService.SearchByName(searchTerm);
                 return Ok(ApiResponse<IEnumerable<OrgUnitDto>>.SuccessResult(orgUnits, $"Search results for '{searchTerm}' retrieved successfully"));
             }
             catch (InvalidOperationException ex)
@@ -119,7 +119,7 @@ namespace HRManagement.API.Controllers.V1
                     var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
                     return BadRequest(ApiResponse<OrgUnitDto>.ErrorResult("Validation failed", errors));
                 }
-                var orgUnit = await _orgUnitService.CreateAsync(dto);
+                var orgUnit = await _orgUnitService.Create(dto);
                 return CreatedAtAction(nameof(GetOrgUnit), new { id = orgUnit.Id }, ApiResponse<OrgUnitDto>.SuccessResult(orgUnit, "Org unit created successfully"));
             }
             catch (ArgumentException ex)
@@ -146,7 +146,7 @@ namespace HRManagement.API.Controllers.V1
                     var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
                     return BadRequest(ApiResponse<OrgUnitDto>.ErrorResult("Validation failed", errors));
                 }
-                var orgUnit = await _orgUnitService.UpdateAsync(id, dto);
+                var orgUnit = await _orgUnitService.Update(id, dto);
                 return Ok(ApiResponse<OrgUnitDto>.SuccessResult(orgUnit, "Org unit updated successfully"));
             }
             catch (ArgumentException ex)
@@ -167,7 +167,7 @@ namespace HRManagement.API.Controllers.V1
         {
             try
             {
-                await _orgUnitService.DeleteAsync(id);
+                await _orgUnitService.Delete(id);
                 return NoContent();
             }
             catch (ArgumentException ex)
@@ -188,7 +188,7 @@ namespace HRManagement.API.Controllers.V1
         {
             try
             {
-                var hierarchy = await _orgUnitService.GetHierarchyAsync();
+                var hierarchy = await _orgUnitService.GetHierarchy();
                 return Ok(ApiResponse<OrgUnitHierarchyDto>.SuccessResult(hierarchy, "Organization hierarchy retrieved successfully"));
             }
             catch (InvalidOperationException ex)

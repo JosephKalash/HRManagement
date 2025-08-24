@@ -1,9 +1,9 @@
+using AutoMapper;
 using HRManagement.Application.DTOs;
 using HRManagement.Application.Interfaces;
 using HRManagement.Core.Entities;
 using HRManagement.Core.Models;
 using Microsoft.AspNetCore.Mvc;
-using AutoMapper;
 
 namespace HRManagement.API.Controllers.V1
 {
@@ -16,10 +16,10 @@ namespace HRManagement.API.Controllers.V1
         private readonly IEmployeeAssignmentService _employeeAssignmentService = employeeAssignmentService;
         private readonly IMapper _mapper = mapper;
 
-        /// <summary>
-        /// Get all employee assignments
-        /// </summary>
-        /// <returns>List of all employee assignments</returns>
+        
+        
+        
+        
         [HttpGet]
         [ProducesResponseType(typeof(ApiResponse<PagedResult<EmployeeAssignmentDto>>), 200)]
 
@@ -27,7 +27,7 @@ namespace HRManagement.API.Controllers.V1
         {
             try
             {
-                var pagedResult = await _employeeAssignmentService.GetPagedAsync(pageNumber, pageSize);
+                var pagedResult = await _employeeAssignmentService.GetPaged(pageNumber, pageSize);
                 var dtos = _mapper.Map<List<EmployeeAssignmentDto>>(pagedResult.Items);
                 return Ok(ApiResponse<PagedResult<EmployeeAssignmentDto>>.SuccessResult(new PagedResult<EmployeeAssignmentDto>
                 {
@@ -43,11 +43,11 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        /// <summary>
-        /// Get employee assignment by ID
-        /// </summary>
-        /// <param name="id">Employee Assignment ID</param>
-        /// <returns>Employee assignment details</returns>
+        
+        
+        
+        
+        
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(ApiResponse<EmployeeAssignmentDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
@@ -56,7 +56,7 @@ namespace HRManagement.API.Controllers.V1
         {
             try
             {
-                var assignment = await _employeeAssignmentService.GetByIdAsync(id);
+                var assignment = await _employeeAssignmentService.GetById(id);
                 if (assignment == null)
                 {
                     return NotFound(ApiResponse<EmployeeAssignmentDto>.ErrorResult($"Employee assignment with ID {id} not found"));
@@ -70,11 +70,11 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        /// <summary>
-        /// Get employee assignments by employee ID
-        /// </summary>
-        /// <param name="employeeId">Employee ID</param>
-        /// <returns>Employee assignment details</returns>
+        
+        
+        
+        
+        
         [HttpGet("employee/{employeeId}")]
         [ProducesResponseType(typeof(ApiResponse<IEnumerable<EmployeeAssignmentDto>>), 200)]
 
@@ -82,7 +82,7 @@ namespace HRManagement.API.Controllers.V1
         {
             try
             {
-                var assignments = await _employeeAssignmentService.GetByEmployeeIdAsync(employeeId);
+                var assignments = await _employeeAssignmentService.GetByEmployeeId(employeeId);
                 return Ok(ApiResponse<IEnumerable<EmployeeAssignmentDto>>.SuccessResult(assignments, "Employee assignments retrieved successfully"));
             }
             catch (InvalidOperationException ex)
@@ -91,11 +91,11 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        /// <summary>
-        /// Get active employee assignment by employee ID
-        /// </summary>
-        /// <param name="employeeId">Employee ID</param>
-        /// <returns>Active employee assignment details</returns>
+        
+        
+        
+        
+        
         [HttpGet("employee/{employeeId}/active")]
         [ProducesResponseType(typeof(ApiResponse<EmployeeAssignmentDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
@@ -104,7 +104,7 @@ namespace HRManagement.API.Controllers.V1
         {
             try
             {
-                var assignment = await _employeeAssignmentService.GetActiveByEmployeeIdAsync(employeeId);
+                var assignment = await _employeeAssignmentService.GetActiveByEmployeeId(employeeId);
                 if (assignment == null)
                 {
                     return NotFound(ApiResponse<EmployeeAssignmentDto>.ErrorResult($"Active employee assignment for employee ID {employeeId} not found"));
@@ -118,11 +118,11 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        /// <summary>
-        /// Create a new employee assignment
-        /// </summary>
-        /// <param name="createDto">Employee assignment creation data</param>
-        /// <returns>Created employee assignment</returns>
+        
+        
+        
+        
+        
         [HttpPost]
         [ProducesResponseType(typeof(ApiResponse<EmployeeAssignmentDto>), 201)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
@@ -140,7 +140,7 @@ namespace HRManagement.API.Controllers.V1
                     return BadRequest(ApiResponse<EmployeeAssignmentDto>.ErrorResult("Validation failed", errors));
                 }
 
-                var assignment = await _employeeAssignmentService.CreateAsync(createDto);
+                var assignment = await _employeeAssignmentService.Create(createDto);
                 return CreatedAtAction(nameof(GetEmployeeAssignment), new { id = assignment.Id },
                     ApiResponse<EmployeeAssignmentDto>.SuccessResult(assignment, "Employee assignment created successfully"));
             }
@@ -154,12 +154,12 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        /// <summary>
-        /// Update an employee assignment
-        /// </summary>
-        /// <param name="id">Employee Assignment ID</param>
-        /// <param name="updateDto">Employee assignment update data</param>
-        /// <returns>Updated employee assignment</returns>
+        
+        
+        
+        
+        
+        
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(ApiResponse<EmployeeAssignmentDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
@@ -178,7 +178,7 @@ namespace HRManagement.API.Controllers.V1
                     return BadRequest(ApiResponse<EmployeeAssignmentDto>.ErrorResult("Validation failed", errors));
                 }
 
-                var assignment = await _employeeAssignmentService.UpdateAsync(id, updateDto);
+                var assignment = await _employeeAssignmentService.Update(id, updateDto);
                 return Ok(ApiResponse<EmployeeAssignmentDto>.SuccessResult(assignment, "Employee assignment updated successfully"));
             }
             catch (ArgumentException ex)
@@ -191,11 +191,11 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        /// <summary>
-        /// Delete an employee assignment
-        /// </summary>
-        /// <param name="id">Employee Assignment ID</param>
-        /// <returns>No content</returns>
+        
+        
+        
+        
+        
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(ApiResponse), 204)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
@@ -204,7 +204,7 @@ namespace HRManagement.API.Controllers.V1
         {
             try
             {
-                await _employeeAssignmentService.DeleteAsync(id);
+                await _employeeAssignmentService.Delete(id);
                 return NoContent();
             }
             catch (ArgumentException ex)

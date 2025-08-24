@@ -22,18 +22,18 @@ namespace HRManagement.API.Controllers.V1
             _mapper = mapper;
         }
 
-        /// <summary>
-        /// Get all employee service infos
-        /// </summary>
-        /// <returns>List of all employee service infos</returns>
+        
+        
+        
+        
         [HttpGet]
         [ProducesResponseType(typeof(ApiResponse<PagedResult<EmployeeServiceInfoDto>>), 200)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<PagedResult<EmployeeServiceInfoDto>>>> GetEmployeeServiceInfos([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             try
             {
-                var pagedResult = await _employeeServiceInfoService.GetPagedAsync(pageNumber, pageSize);
+                var pagedResult = await _employeeServiceInfoService.GetPaged(pageNumber, pageSize);
                 var dtos = _mapper.Map<List<EmployeeServiceInfoDto>>(pagedResult.Items);
                 return Ok(ApiResponse<PagedResult<EmployeeServiceInfoDto>>.SuccessResult(new PagedResult<EmployeeServiceInfoDto>
                 {
@@ -49,20 +49,20 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        /// <summary>
-        /// Get employee service info by ID
-        /// </summary>
-        /// <param name="id">Employee Service Info ID</param>
-        /// <returns>Employee service info details</returns>
+        
+        
+        
+        
+        
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(ApiResponse<EmployeeServiceInfoDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<EmployeeServiceInfoDto>>> GetEmployeeServiceInfo(Guid id)
         {
             try
             {
-                var serviceInfo = await _employeeServiceInfoService.GetByIdAsync(id);
+                var serviceInfo = await _employeeServiceInfoService.GetById(id);
                 if (serviceInfo == null)
                 {
                     return NotFound(ApiResponse<EmployeeServiceInfoDto>.ErrorResult($"Employee service info with ID {id} not found"));
@@ -76,19 +76,19 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        /// <summary>
-        /// Get employee service infos by employee ID
-        /// </summary>
-        /// <param name="employeeId">Employee ID</param>
-        /// <returns>Employee service info details</returns>
+        
+        
+        
+        
+        
         [HttpGet("employee/{employeeId}")]
         [ProducesResponseType(typeof(ApiResponse<PagedResult<EmployeeServiceInfoDto>>), 200)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<PagedResult<EmployeeServiceInfoDto>>>> GetEmployeeServiceInfosByEmployeeId(Guid employeeId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             try
             {
-                var pagedResult = await _employeeServiceInfoService.GetPagedByEmployeeIdAsync(employeeId, pageNumber, pageSize);
+                var pagedResult = await _employeeServiceInfoService.GetPagedByEmployeeId(employeeId, pageNumber, pageSize);
                 var dtos = _mapper.Map<List<EmployeeServiceInfoDto>>(pagedResult.Items);
                 return Ok(ApiResponse<PagedResult<EmployeeServiceInfoDto>>.SuccessResult(new PagedResult<EmployeeServiceInfoDto>
                 {
@@ -104,20 +104,20 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        /// <summary>
-        /// Get active employee service info by employee ID
-        /// </summary>
-        /// <param name="employeeId">Employee ID</param>
-        /// <returns>Active employee service info details</returns>
+        
+        
+        
+        
+        
         [HttpGet("employee/{employeeId}/active")]
         [ProducesResponseType(typeof(ApiResponse<EmployeeServiceInfoDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<EmployeeServiceInfoDto>>> GetActiveEmployeeServiceInfoByEmployeeId(Guid employeeId)
         {
             try
             {
-                var serviceInfo = await _employeeServiceInfoService.GetActiveByEmployeeIdAsync(employeeId);
+                var serviceInfo = await _employeeServiceInfoService.GetActiveByEmployeeId(employeeId);
                 if (serviceInfo == null)
                 {
                     return NotFound(ApiResponse<EmployeeServiceInfoDto>.ErrorResult($"Active employee service info for employee ID {employeeId} not found"));
@@ -131,15 +131,15 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        /// <summary>
-        /// Create a new employee service info
-        /// </summary>
-        /// <param name="createDto">Employee service info creation data</param>
-        /// <returns>Created employee service info</returns>
+        
+        
+        
+        
+        
         [HttpPost]
         [ProducesResponseType(typeof(ApiResponse<EmployeeServiceInfoDto>), 201)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<EmployeeServiceInfoDto>>> CreateEmployeeServiceInfo(CreateEmployeeServiceInfoDto createDto)
         {
             try
@@ -153,13 +153,13 @@ namespace HRManagement.API.Controllers.V1
                     return BadRequest(ApiResponse<EmployeeServiceInfoDto>.ErrorResult("Validation failed", errors));
                 }
 
-                var service = await _employeeServiceInfoService.GetActiveByEmployeeIdAsync(createDto.EmployeeId);
+                var service = await _employeeServiceInfoService.GetActiveByEmployeeId(createDto.EmployeeId);
                 if (service != null)
                 {
                     return BadRequest(ApiResponse<EmployeeServiceInfoDto>.ErrorResult($"Employee has already an active service"));
                 }
 
-                var serviceInfo = await _employeeServiceInfoService.CreateAsync(createDto);
+                var serviceInfo = await _employeeServiceInfoService.Create(createDto);
                 return CreatedAtAction(nameof(GetEmployeeServiceInfo), new { id = serviceInfo.Id },
                     ApiResponse<EmployeeServiceInfoDto>.SuccessResult(serviceInfo, "Employee service info created successfully"));
             }
@@ -173,17 +173,17 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        /// <summary>
-        /// Update an employee service info
-        /// </summary>
-        /// <param name="id">Employee Service Info ID</param>
-        /// <param name="updateDto">Employee service info update data</param>
-        /// <returns>Updated employee service info</returns>
+        
+        
+        
+        
+        
+        
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(ApiResponse<EmployeeServiceInfoDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<EmployeeServiceInfoDto>>> UpdateEmployeeServiceInfo(Guid id, UpdateEmployeeServiceInfoDto updateDto)
         {
             try
@@ -197,7 +197,7 @@ namespace HRManagement.API.Controllers.V1
                     return BadRequest(ApiResponse<EmployeeServiceInfoDto>.ErrorResult("Validation failed", errors));
                 }
 
-                var serviceInfo = await _employeeServiceInfoService.UpdateAsync(id, updateDto);
+                var serviceInfo = await _employeeServiceInfoService.Update(id, updateDto);
                 return Ok(ApiResponse<EmployeeServiceInfoDto>.SuccessResult(serviceInfo, "Employee service info updated successfully"));
             }
             catch (ArgumentException ex)
@@ -210,20 +210,20 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        /// <summary>
-        /// Delete an employee service info
-        /// </summary>
-        /// <param name="id">Employee Service Info ID</param>
-        /// <returns>No content</returns>
+        
+        
+        
+        
+        
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(ApiResponse), 204)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse>> DeleteEmployeeServiceInfo(Guid id)
         {
             try
             {
-                await _employeeServiceInfoService.DeleteAsync(id);
+                await _employeeServiceInfoService.Delete(id);
                 return NoContent();
             }
             catch (ArgumentException ex)

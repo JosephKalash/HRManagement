@@ -8,14 +8,14 @@ namespace HRManagement.Application.Interfaces
 {
     public interface IRoleService
     {
-        Task<IEnumerable<RoleDto>> GetAllRolesAsync();
-        Task<RoleDto?> GetRoleByIdAsync(Guid id);
-        Task<IEnumerable<RoleDto>> GetRolesByLevelAsync(RoleLevel level);
-        Task<RoleDto> CreateRoleAsync(CreateRoleDto createDto);
-        Task<RoleDto?> UpdateRoleAsync(Guid id, UpdateRoleDto updateDto);
-        Task<bool> DeleteRoleAsync(Guid id);
-        Task<bool> ActiveExistsRoleAsync(Guid id);
-        Task<PagedResult<RoleDto>> GetPagedRolesAsync(int pageNumber, int pageSize);
-        Task<PagedResult<RoleDto>> GetPagedRolesByLevelAsync(RoleLevel level, int pageNumber, int pageSize);
+        Task<IEnumerable<RoleDto>> GetAllRoles();
+        Task<RoleDto?> GetRoleById(Guid id);
+        Task<IEnumerable<RoleDto>> GetRolesByLevel(RoleLevel level);
+        Task<RoleDto> Create(CreateRoleDto createDto);
+        Task<RoleDto?> UpdateRole(Guid id, UpdateRoleDto updateDto);
+        Task<bool> DeleteRole(Guid id);
+        Task<bool> ActiveExistsRole(Guid id);
+        Task<PagedResult<RoleDto>> GetPagedRoles(int pageNumber, int pageSize);
+        Task<PagedResult<RoleDto>> GetPagedRolesByLevel(RoleLevel level, int pageNumber, int pageSize);
     }
 }

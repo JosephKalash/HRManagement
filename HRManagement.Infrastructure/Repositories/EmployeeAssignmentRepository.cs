@@ -7,7 +7,7 @@ namespace HRManagement.Infrastructure.Repositories
 {
     public class EmployeeAssignmentRepository(HRDbContext context) : Repository<EmployeeAssignment>(context), IEmployeeAssignmentRepository
     {
-        public async Task<List<EmployeeAssignment>> GetByEmployeeIdAsync(Guid employeeId)
+        public async Task<List<EmployeeAssignment>> GetByEmployeeId(Guid employeeId)
         {
             return await _context.EmployeeAssignments
                 .Include(ea => ea.Employee)
@@ -17,7 +17,7 @@ namespace HRManagement.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<EmployeeAssignment?> GetActiveByEmployeeIdAsync(Guid employeeId)
+        public async Task<EmployeeAssignment?> GetActiveByEmployeeId(Guid employeeId)
         {
             return await _context.EmployeeAssignments
                 .Include(ea => ea.Employee)
@@ -36,7 +36,7 @@ namespace HRManagement.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<List<EmployeeAssignment>> GetByUnitIdAsync(Guid unitId)
+        public async Task<List<EmployeeAssignment>> GetByUnitId(Guid unitId)
         {
             return await _dbSet
                 .Include(ea => ea.Employee)

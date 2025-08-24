@@ -10,12 +10,12 @@ namespace HRManagement.Infrastructure.Repositories
         protected readonly HRDbContext _context = context;
         protected readonly DbSet<T> _dbSet = context.Set<T>();
 
-        public virtual async Task<T?> GetByIdAsync(Guid id)
+        public virtual async Task<T?> GetById(Guid id)
         {
             return await _dbSet.FirstOrDefaultAsync(e => e.Id == id && !e.IsDeleted);
         }
 
-        public virtual async Task<IEnumerable<T>> GetAllAsync()
+        public virtual async Task<IEnumerable<T>> GetAll()
         {
             return await _dbSet.ToListAsync();
         }
@@ -27,20 +27,20 @@ namespace HRManagement.Infrastructure.Repositories
             return entity;
         }
 
-        public virtual async Task<T> UpdateAsync(T entity)
+        public virtual async Task<T> Update(T entity)
         {
             _dbSet.Update(entity);
             await _context.SaveChangesAsync();
             return entity;
         }
 
-        public virtual async Task DeleteAsync(T entity)
+        public virtual async Task Delete(T entity)
         {
             _dbSet.Remove(entity);
             await _context.SaveChangesAsync();
         }
 
-        public virtual async Task<bool> ActiveExistsAsync(Guid id)
+        public virtual async Task<bool> ActiveExists(Guid id)
         {
             return await _dbSet.AnyAsync(e => e.Id == id && !e.IsDeleted);
         }

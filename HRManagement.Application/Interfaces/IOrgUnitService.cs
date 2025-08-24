@@ -8,18 +8,18 @@ namespace HRManagement.Application.Interfaces
     public interface IOrgUnitService
     {
         public bool AreSameHierarchyLevel(OrgUnitType type1, OrgUnitType type2);
-        public bool ValidateHierarchyAsync(OrgUnit unit);
+        public bool ValidateHierarchy(OrgUnit unit);
         public int CalculateHierarchyLevel(OrgUnitType unitType);
-        public Task<OrgUnitDto?> GetByIdAsync(Guid id);
-        public Task<IEnumerable<OrgUnitDto>> GetAllAsync();
-        public Task<IEnumerable<OrgUnitDto>> GetByParentIdAsync(Guid? parentId);
-        public Task<IEnumerable<OrgUnitDto>> GetByTypeAsync(OrgUnitType type);
-        public Task<IEnumerable<OrgUnitDto>> SearchByNameAsync(string searchTerm);
-        public Task<OrgUnitDto> CreateAsync(CreateOrgUnitDto dto);
-        public Task<OrgUnitDto> UpdateAsync(Guid id, UpdateOrgUnitDto dto);
-        public Task DeleteAsync(Guid id);
-        public Task<bool> ExistsAsync(Guid id);
-        public Task<PagedResult<OrgUnitDto>> GetPagedAsync(int pageNumber, int pageSize);
-        Task<OrgUnitHierarchyDto> GetHierarchyAsync();
+        public Task<OrgUnitDto?> GetById(Guid id);
+        public Task<IEnumerable<OrgUnitDto>> GetAll();
+        public Task<IEnumerable<OrgUnitDto>> GetByParentId(Guid? parentId);
+        public Task<IEnumerable<OrgUnitDto>> GetByType(OrgUnitType type);
+        public Task<IEnumerable<OrgUnitDto>> SearchByName(string searchTerm);
+        public Task<OrgUnitDto> Create(CreateOrgUnitDto dto);
+        public Task<OrgUnitDto> Update(Guid id, UpdateOrgUnitDto dto);
+        public Task Delete(Guid id);
+        public Task<bool> Exists(Guid id);
+        public Task<PagedResult<OrgUnitDto>> GetPaged(int pageNumber, int pageSize);
+        Task<OrgUnitHierarchyDto> GetHierarchy();
     }
 }

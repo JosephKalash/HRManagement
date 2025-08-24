@@ -14,7 +14,7 @@ namespace HRManagement.Infrastructure.Repositories
         {
         }
 
-        public async Task<IEnumerable<Role>> GetByLevelAsync(RoleLevel level)
+        public async Task<IEnumerable<Role>> GetByLevel(RoleLevel level)
         {
             return await _context.Roles
                 .Where(r => r.Level == level)

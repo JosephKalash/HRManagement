@@ -4,8 +4,8 @@ namespace HRManagement.Core.Interfaces
 {
     public interface IEmployeeServiceInfoRepository : IRepository<EmployeeServiceInfo>
     {
-        Task<IEnumerable<EmployeeServiceInfo>> GetByEmployeeIdAsync(Guid employeeId);
-        Task<EmployeeServiceInfo?> GetActiveByEmployeeIdAsync(Guid employeeId);
-        Task<IEnumerable<EmployeeServiceInfo>> GetByRoleIdAsync(Guid roleId);
+        Task<IEnumerable<EmployeeServiceInfo>> GetByEmployeeId(Guid employeeId);
+        Task<EmployeeServiceInfo?> GetActiveByEmployeeId(Guid employeeId);
+        Task<IEnumerable<EmployeeServiceInfo>> GetByRoleId(Guid roleId);
     }
-} 
+}

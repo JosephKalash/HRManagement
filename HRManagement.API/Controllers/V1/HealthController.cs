@@ -9,11 +9,11 @@ namespace HRManagement.API.Controllers.V1
     [Produces("application/json")]
     public class HealthController : ControllerBase
     {
-        /// <summary>
-        /// Get API health status
-        /// </summary>
-        /// <returns>API health information</returns>
-        /// <response code="200">API is healthy</response>
+        
+        
+        
+        
+        
         [HttpGet]
         [ProducesResponseType(typeof(ApiResponse<object>), 200)]
         public ActionResult<ApiResponse<object>> GetHealth()

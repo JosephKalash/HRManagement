@@ -14,31 +14,31 @@ namespace HRManagement.Application.Services
         private readonly IEmployeeProfileRepository _employeeProfileRepository = employeeProfileRepository;
         private readonly IMapper _mapper = mapper;
 
-        public async Task<EmployeeProfileDto?> GetByIdAsync(Guid id)
+        public async Task<EmployeeProfileDto?> GetById(Guid id)
         {
-            var profile = await _employeeProfileRepository.GetByIdAsync(id);
+            var profile = await _employeeProfileRepository.GetById(id);
             return profile != null ? _mapper.Map<EmployeeProfileDto>(profile) : null;
         }
 
-        public async Task<EmployeeProfileDto?> GetByEmployeeIdAsync(Guid employeeId)
+        public async Task<EmployeeProfileDto?> GetByEmployeeId(Guid employeeId)
         {
-            var profile = await _employeeProfileRepository.GetByEmployeeIdAsync(employeeId);
+            var profile = await _employeeProfileRepository.GetByEmployeeId(employeeId);
             return profile != null ? _mapper.Map<EmployeeProfileDto>(profile) : null;
         }
 
-        public async Task<IEnumerable<EmployeeProfileDto>> GetAllAsync()
+        public async Task<IEnumerable<EmployeeProfileDto>> GetAll()
         {
-            var profiles = await _employeeProfileRepository.GetAllAsync();
+            var profiles = await _employeeProfileRepository.GetAll();
             return _mapper.Map<IEnumerable<EmployeeProfileDto>>(profiles);
         }
 
-        public async Task<EmployeeProfileDto> CreateAsync(CreateEmployeeProfileDto createDto, Stream? imageStream, string? imageName)
+        public async Task<EmployeeProfileDto> Create(CreateEmployeeProfileDto createDto, Stream? imageStream, string? imageName)
         {
             var profile = _mapper.Map<EmployeeProfile>(createDto);
 
             if (imageStream != null && imageStream.Length > 0)
             {
-                var (savedRelativePath, _) = await _imageService.SaveImageAsync(imageStream, "profiles", imageName!);
+                var (savedRelativePath, _) = await _imageService.SaveImage(imageStream, "profiles", imageName!);
                 if (!string.IsNullOrEmpty(savedRelativePath))
                 {
                     profile.ImagePath = '/' + savedRelativePath;
@@ -50,36 +50,36 @@ namespace HRManagement.Application.Services
         }
 
 
-        public async Task<EmployeeProfileDto> UpdateAsync(Guid id, UpdateEmployeeProfileDto updateDto, Stream? stream, string? fileName = null)
+        public async Task<EmployeeProfileDto> Update(Guid id, UpdateEmployeeProfileDto updateDto, Stream? stream, string? fileName = null)
         {
-            var profile = await _employeeProfileRepository.GetByIdAsync(id) ?? throw new ArgumentException("Employee profile not found");
+            var profile = await _employeeProfileRepository.GetById(id) ?? throw new ArgumentException("Employee profile not found");
             _mapper.Map(updateDto, profile);
 
             if (stream != null && stream.Length > 0)
             {
-                var (savedRelativePath, _) = await _imageService.SaveImageAsync(stream, "profiles", fileName!);
+                var (savedRelativePath, _) = await _imageService.SaveImage(stream, "profiles", fileName!);
                 if (!string.IsNullOrEmpty(savedRelativePath))
                 {
                     profile.ImagePath = '/' + savedRelativePath;
                 }
             }
 
-            var updatedProfile = await _employeeProfileRepository.UpdateAsync(profile);
+            var updatedProfile = await _employeeProfileRepository.Update(profile);
             return _mapper.Map<EmployeeProfileDto>(updatedProfile);
         }
 
-        public async Task DeleteAsync(Guid id)
+        public async Task Delete(Guid id)
         {
-            var profile = await _employeeProfileRepository.GetByIdAsync(id) ?? throw new ArgumentException("Employee profile not found");
-            await _employeeProfileRepository.DeleteAsync(profile);
+            var profile = await _employeeProfileRepository.GetById(id) ?? throw new ArgumentException("Employee profile not found");
+            await _employeeProfileRepository.Delete(profile);
         }
 
-        public async Task<bool> ExistsAsync(Guid id)
+        public async Task<bool> Exists(Guid id)
         {
-            return await _employeeProfileRepository.ActiveExistsAsync(id);
+            return await _employeeProfileRepository.ActiveExists(id);
         }
 
-        public async Task<PagedResult<EmployeeProfileDto>> GetPagedAsync(int pageNumber, int pageSize)
+        public async Task<PagedResult<EmployeeProfileDto>> GetPaged(int pageNumber, int pageSize)
         {
             var query = _employeeProfileRepository.AsQueryable();
             var paged = await query.ToPagedResultAsync(pageNumber, pageSize);
@@ -93,9 +93,9 @@ namespace HRManagement.Application.Services
             };
         }
 
-        public async Task UpdateEmployeeImageAsync(Guid employeeId, string imagePath)
+        public async Task UpdateEmployeeImage(Guid employeeId, string imagePath)
         {
-            await _employeeProfileRepository.UpdateEmployeeImageAsync(employeeId, imagePath);
+            await _employeeProfileRepository.UpdateEmployeeImage(employeeId, imagePath);
         }
     }
 }

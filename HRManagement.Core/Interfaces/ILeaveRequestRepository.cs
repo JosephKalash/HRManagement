@@ -4,9 +4,9 @@ namespace HRManagement.Core.Interfaces
 {
     public interface ILeaveRequestRepository : IRepository<LeaveRequest>
     {
-        Task<IEnumerable<LeaveRequest>> GetByEmployeeIdAsync(Guid employeeId);
-        Task<IEnumerable<LeaveRequest>> GetByStatusAsync(LeaveStatus status);
-        Task<IEnumerable<LeaveRequest>> GetPendingRequestsAsync();
-        Task<IEnumerable<LeaveRequest>> GetByDateRangeAsync(DateTime startDate, DateTime endDate);
+        Task<IEnumerable<LeaveRequest>> GetByEmployeeId(Guid employeeId);
+        Task<IEnumerable<LeaveRequest>> GetByStatus(LeaveStatus status);
+        Task<IEnumerable<LeaveRequest>> GetPendingRequests();
+        Task<IEnumerable<LeaveRequest>> GetByDateRange(DateTime startDate, DateTime endDate);
     }
-} 
+}

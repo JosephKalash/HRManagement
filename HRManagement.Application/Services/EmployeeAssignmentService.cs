@@ -13,57 +13,57 @@ namespace HRManagement.Application.Services
         private readonly IEmployeeAssignmentRepository _employeeAssignmentRepository = employeeAssignmentRepository;
         private readonly IMapper _mapper = mapper;
 
-        public async Task<EmployeeAssignmentDto?> GetByIdAsync(Guid id)
+        public async Task<EmployeeAssignmentDto?> GetById(Guid id)
         {
-            var assignment = await _employeeAssignmentRepository.GetByIdAsync(id);
+            var assignment = await _employeeAssignmentRepository.GetById(id);
             return assignment != null ? _mapper.Map<EmployeeAssignmentDto>(assignment) : null;
         }
 
-        public async Task<IEnumerable<EmployeeAssignmentDto>> GetAllAsync()
+        public async Task<IEnumerable<EmployeeAssignmentDto>> GetAll()
         {
-            var assignments = await _employeeAssignmentRepository.GetAllAsync();
+            var assignments = await _employeeAssignmentRepository.GetAll();
             return _mapper.Map<IEnumerable<EmployeeAssignmentDto>>(assignments);
         }
 
-        public async Task<IEnumerable<EmployeeAssignmentDto>> GetByEmployeeIdAsync(Guid employeeId)
+        public async Task<IEnumerable<EmployeeAssignmentDto>> GetByEmployeeId(Guid employeeId)
         {
-            var assignments = await _employeeAssignmentRepository.GetByEmployeeIdAsync(employeeId);
+            var assignments = await _employeeAssignmentRepository.GetByEmployeeId(employeeId);
             return _mapper.Map<IEnumerable<EmployeeAssignmentDto>>(assignments);
         }
 
-        public async Task<EmployeeAssignmentDto?> GetActiveByEmployeeIdAsync(Guid employeeId)
+        public async Task<EmployeeAssignmentDto?> GetActiveByEmployeeId(Guid employeeId)
         {
-            var assignment = await _employeeAssignmentRepository.GetActiveByEmployeeIdAsync(employeeId);
+            var assignment = await _employeeAssignmentRepository.GetActiveByEmployeeId(employeeId);
             return assignment != null ? _mapper.Map<EmployeeAssignmentDto>(assignment) : null;
         }
 
-        public async Task<EmployeeAssignmentDto> CreateAsync(CreateEmployeeAssignmentDto createDto)
+        public async Task<EmployeeAssignmentDto> Create(CreateEmployeeAssignmentDto createDto)
         {
             var assignment = _mapper.Map<EmployeeAssignment>(createDto);
             var createdAssignment = await _employeeAssignmentRepository.AddAsync(assignment);
             return _mapper.Map<EmployeeAssignmentDto>(createdAssignment);
         }
 
-        public async Task<EmployeeAssignmentDto> UpdateAsync(Guid id, UpdateEmployeeAssignmentDto updateDto)
+        public async Task<EmployeeAssignmentDto> Update(Guid id, UpdateEmployeeAssignmentDto updateDto)
         {
-            var assignment = await _employeeAssignmentRepository.GetByIdAsync(id) ?? throw new ArgumentException("Employee assignment not found");
+            var assignment = await _employeeAssignmentRepository.GetById(id) ?? throw new ArgumentException("Employee assignment not found");
             _mapper.Map(updateDto, assignment);
-            var updatedAssignment = await _employeeAssignmentRepository.UpdateAsync(assignment);
+            var updatedAssignment = await _employeeAssignmentRepository.Update(assignment);
             return _mapper.Map<EmployeeAssignmentDto>(updatedAssignment);
         }
 
-        public async Task DeleteAsync(Guid id)
+        public async Task Delete(Guid id)
         {
-            var assignment = await _employeeAssignmentRepository.GetByIdAsync(id) ?? throw new ArgumentException("Employee assignment not found");
-            await _employeeAssignmentRepository.DeleteAsync(assignment);
+            var assignment = await _employeeAssignmentRepository.GetById(id) ?? throw new ArgumentException("Employee assignment not found");
+            await _employeeAssignmentRepository.Delete(assignment);
         }
 
-        public async Task<bool> ExistsAsync(Guid id)
+        public async Task<bool> Exists(Guid id)
         {
-            return await _employeeAssignmentRepository.ActiveExistsAsync(id);
+            return await _employeeAssignmentRepository.ActiveExists(id);
         }
 
-        public async Task<PagedResult<EmployeeAssignmentDto>> GetPagedAsync(int pageNumber, int pageSize)
+        public async Task<PagedResult<EmployeeAssignmentDto>> GetPaged(int pageNumber, int pageSize)
         {
             var query = _employeeAssignmentRepository.AsQueryable();
             var paged = await query.ToPagedResultAsync(pageNumber, pageSize);
@@ -77,9 +77,9 @@ namespace HRManagement.Application.Services
             };
         }
 
-        public async Task<List<EmployeeAssignmentDto>> GetByUnitIdAsync(Guid unitId)
+        public async Task<List<EmployeeAssignmentDto>> GetByUnitId(Guid unitId)
         {
-            var assignments = await _employeeAssignmentRepository.GetByUnitIdAsync(unitId);
+            var assignments = await _employeeAssignmentRepository.GetByUnitId(unitId);
             return _mapper.Map<List<EmployeeAssignmentDto>>(assignments);
         }
     }

@@ -4,12 +4,12 @@ namespace HRManagement.Core.Interfaces
 {
     public interface IRepository<T> where T : BaseEntity
     {
-        Task<T?> GetByIdAsync(Guid id);
-        Task<IEnumerable<T>> GetAllAsync();
+        Task<T?> GetById(Guid id);
+        Task<IEnumerable<T>> GetAll();
         Task<T> AddAsync(T entity);
-        Task<T> UpdateAsync(T entity);
-        Task DeleteAsync(T entity);
-        Task<bool> ActiveExistsAsync(Guid id);
+        Task<T> Update(T entity);
+        Task Delete(T entity);
+        Task<bool> ActiveExists(Guid id);
         IQueryable<T> AsQueryable();
     }
 }

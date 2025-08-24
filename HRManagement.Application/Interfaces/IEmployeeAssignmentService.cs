@@ -6,15 +6,15 @@ namespace HRManagement.Application.Interfaces
 {
     public interface IEmployeeAssignmentService
     {
-        Task<EmployeeAssignmentDto?> GetByIdAsync(Guid id);
-        Task<IEnumerable<EmployeeAssignmentDto>> GetAllAsync();
-        Task<IEnumerable<EmployeeAssignmentDto>> GetByEmployeeIdAsync(Guid employeeId);
-        Task<EmployeeAssignmentDto?> GetActiveByEmployeeIdAsync(Guid employeeId);
-        Task<EmployeeAssignmentDto> CreateAsync(CreateEmployeeAssignmentDto createDto);
-        Task<EmployeeAssignmentDto> UpdateAsync(Guid id, UpdateEmployeeAssignmentDto updateDto);
-        Task<List<EmployeeAssignmentDto>> GetByUnitIdAsync(Guid unitId);
-        Task DeleteAsync(Guid id);
-        Task<bool> ExistsAsync(Guid id);
-        Task<PagedResult<EmployeeAssignmentDto>> GetPagedAsync(int pageNumber, int pageSize);
+        Task<EmployeeAssignmentDto?> GetById(Guid id);
+        Task<IEnumerable<EmployeeAssignmentDto>> GetAll();
+        Task<IEnumerable<EmployeeAssignmentDto>> GetByEmployeeId(Guid employeeId);
+        Task<EmployeeAssignmentDto?> GetActiveByEmployeeId(Guid employeeId);
+        Task<EmployeeAssignmentDto> Create(CreateEmployeeAssignmentDto createDto);
+        Task<EmployeeAssignmentDto> Update(Guid id, UpdateEmployeeAssignmentDto updateDto);
+        Task<List<EmployeeAssignmentDto>> GetByUnitId(Guid unitId);
+        Task Delete(Guid id);
+        Task<bool> Exists(Guid id);
+        Task<PagedResult<EmployeeAssignmentDto>> GetPaged(int pageNumber, int pageSize);
     }
-} 
+}

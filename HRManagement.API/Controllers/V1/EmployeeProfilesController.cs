@@ -20,18 +20,18 @@ namespace HRManagement.API.Controllers.V1
         private readonly IEmployeeProfileService _employeeProfileService = employeeProfileService;
         private readonly IMapper _mapper = mapper;
 
-        /// <summary>
-        /// Get all employee profiles
-        /// </summary>
-        /// <returns>List of all employee profiles</returns>
+        
+        
+        
+        
         [HttpGet]
         [ProducesResponseType(typeof(ApiResponse<PagedResult<EmployeeProfileDto>>), 200)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<PagedResult<EmployeeProfileDto>>>> GetEmployeeProfiles([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             try
             {
-                var pagedResult = await _employeeProfileService.GetPagedAsync(pageNumber, pageSize);
+                var pagedResult = await _employeeProfileService.GetPaged(pageNumber, pageSize);
                 var baseUrl = $"{Request.Scheme}://{Request.Host}";
                 var dtos = pagedResult.Items.Select(profile =>
                 {
@@ -52,20 +52,20 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        /// <summary>
-        /// Get employee profile by ID
-        /// </summary>
-        /// <param name="id">Employee Profile ID</param>
-        /// <returns>Employee profile details</returns>
+        
+        
+        
+        
+        
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(ApiResponse<EmployeeProfileDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<EmployeeProfileDto>>> GetEmployeeProfile(Guid id)
         {
             try
             {
-                var profile = await _employeeProfileService.GetByIdAsync(id);
+                var profile = await _employeeProfileService.GetById(id);
                 if (profile == null)
                 {
                     return NotFound(ApiResponse<EmployeeProfileDto>.ErrorResult($"Employee profile with ID {id} not found"));
@@ -79,20 +79,20 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        /// <summary>
-        /// Get employee profile by employee ID
-        /// </summary>
-        /// <param name="employeeId">Employee ID</param>
-        /// <returns>Employee profile details</returns>
+        
+        
+        
+        
+        
         [HttpGet("employee/{employeeId}")]
         [ProducesResponseType(typeof(ApiResponse<EmployeeProfileDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<EmployeeProfileDto>>> GetEmployeeProfileByEmployeeId(Guid employeeId)
         {
             try
             {
-                var profile = await _employeeProfileService.GetByEmployeeIdAsync(employeeId);
+                var profile = await _employeeProfileService.GetByEmployeeId(employeeId);
                 if (profile == null)
                 {
                     return NotFound(ApiResponse<EmployeeProfileDto>.ErrorResult($"Employee profile for employee ID {employeeId} not found"));
@@ -106,17 +106,17 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        /// <summary>
-        /// Create a new employee profile with optional image upload (multipart/form-data)
-        /// </summary>
-        /// <param name="profile">JSON string of CreateEmployeeProfileDto</param>
-        /// <param name="image">Optional image file</param>
-        /// <returns>Created employee profile</returns>
+        
+        
+        
+        
+        
+        
         [HttpPost]
         [Consumes("multipart/form-data")]
         [ProducesResponseType(typeof(ApiResponse<EmployeeProfileDto>), 201)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<EmployeeProfileDto>>> CreateEmployeeProfile([FromForm] CreateEmployeeProfileRequest profile)
         {
             try
@@ -137,7 +137,7 @@ namespace HRManagement.API.Controllers.V1
 
 
                 using var stream = profile.Image?.OpenReadStream();
-                var createdProfile = await _employeeProfileService.CreateAsync(createDto, stream, profile.Image?.FileName);
+                var createdProfile = await _employeeProfileService.Create(createDto, stream, profile.Image?.FileName);
 
 
                 return CreatedAtAction(nameof(GetEmployeeProfile), new { id = createdProfile.Id },
@@ -153,17 +153,17 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        /// <summary>
-        /// Update an employee profile
-        /// </summary>
-        /// <param name="id">Employee Profile ID</param>
-        /// <param name="updateDto">Employee profile update data</param>
-        /// <returns>Updated employee profile</returns>
+        
+        
+        
+        
+        
+        
         [HttpPatch("{id}")]
         [ProducesResponseType(typeof(ApiResponse<EmployeeProfileDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse<EmployeeProfileDto>>> UpdateEmployeeProfile(Guid id, [FromForm] UpdateEmployeeProfileRequest updateRequest)
         {
             try
@@ -182,7 +182,7 @@ namespace HRManagement.API.Controllers.V1
                     return BadRequest(ApiResponse<EmployeeProfileDto>.ErrorResult("Invalid profile data"));
                 }
                 using var stream = updateRequest.Image?.OpenReadStream();
-                var profile = await _employeeProfileService.UpdateAsync(id, updateDto, stream, updateRequest.Image?.FileName);
+                var profile = await _employeeProfileService.Update(id, updateDto, stream, updateRequest.Image?.FileName);
                 return Ok(ApiResponse<EmployeeProfileDto>.SuccessResult(profile, "Employee profile updated successfully"));
             }
             catch (ArgumentException ex)
@@ -195,20 +195,20 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        /// <summary>
-        /// Delete an employee profile
-        /// </summary>
-        /// <param name="id">Employee Profile ID</param>
-        /// <returns>No content</returns>
+        
+        
+        
+        
+        
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(ApiResponse), 204)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+
         public async Task<ActionResult<ApiResponse>> DeleteEmployeeProfile(Guid id)
         {
             try
             {
-                await _employeeProfileService.DeleteAsync(id);
+                await _employeeProfileService.Delete(id);
                 return NoContent();
             }
             catch (ArgumentException ex)

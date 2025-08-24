@@ -9,7 +9,7 @@ namespace HRManagement.Infrastructure.Services
         private readonly IEnumerable<string> _allowedExtensions = [".jpg", ".jpeg", ".png", ".gif"];
         private const long MaxFileSize = 10 * 1024 * 1024; // 10MB - consistent with global FormOptions limit
 
-        public async Task<(string filePath, string fileName)> SaveImageAsync(Stream file, string folder, string originalFileName)
+        public async Task<(string filePath, string fileName)> SaveImage(Stream file, string folder, string originalFileName)
         {
             if (file == null || file.Length == 0)
                 throw new ArgumentException("File cannot be null");
