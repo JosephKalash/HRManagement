@@ -8,7 +8,10 @@ namespace HRManagement.Core.Entities
     {
         [Required]
         public Guid EmployeeId { get; set; }
-        public Employee Employee { get; set; } = null!;
+        public Gender Gender { get; set; } = Gender.Male;
+
+        [Required]
+        public DateTime DateOfBirth { get; set; }
 
         public int? Height { get; set; }
 
@@ -51,5 +54,7 @@ namespace HRManagement.Core.Entities
 
         [StringLength(500)]
         public string? ImagePath { get; set; } = string.Empty; // Store the file path of the uploaded image
+
+        public Employee Employee { get; set; } = null!;
     }
 }

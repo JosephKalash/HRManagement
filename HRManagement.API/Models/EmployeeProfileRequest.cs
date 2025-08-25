@@ -17,6 +17,10 @@ namespace HRManagement.API.Models
 
         [StringLength(50)]
         public string? SkinColor { get; set; }
+        public Gender? Gender { get; set; }
+
+        [Required]
+        public DateTime? DateOfBirth { get; set; }
 
         [StringLength(50)]
         public string? HairColor { get; set; }
@@ -56,6 +60,9 @@ namespace HRManagement.API.Models
         public IFormFile? Image { get; set; }
         public int? Height { get; set; }
         public BloodGroup? BloodGroup { get; set; }
+        public Gender? Gender { get; set; }
+
+        public DateTime? DateOfBirth { get; set; }
 
         [StringLength(50)]
         public string? SkinColor { get; set; }

@@ -16,7 +16,6 @@ namespace HRManagement.Infrastructure.Data
         public DbSet<EmployeeAssignment> EmployeeAssignments { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<OrgUnit> OrgUnits { get; set; }
-        public DbSet<LeaveRequest> LeaveRequests { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -31,7 +30,6 @@ namespace HRManagement.Infrastructure.Data
             modelBuilder.Entity<EmployeeAssignment>().HasQueryFilter(e => !e.IsDeleted);
             modelBuilder.Entity<Role>().HasQueryFilter(e => !e.IsDeleted);
             modelBuilder.Entity<OrgUnit>().HasQueryFilter(e => !e.IsDeleted);
-            modelBuilder.Entity<LeaveRequest>().HasQueryFilter(e => !e.IsDeleted);
 
             // Employee configuration
             modelBuilder.Entity<Employee>(entity =>
@@ -164,16 +162,6 @@ namespace HRManagement.Infrastructure.Data
             });
 
             // LeaveRequest configuration
-            modelBuilder.Entity<LeaveRequest>(entity =>
-            {
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.Reason).HasMaxLength(500);
-                entity.Property(e => e.ManagerComments).HasMaxLength(500);
-                // entity.HasOne(e => e.Employee)
-                //     .WithMany(e => e.LeaveRequests)
-                //     .HasForeignKey(e => e.EmployeeId)
-                //     .OnDelete(DeleteBehavior.Cascade);
-            });
 
         }
 

@@ -115,7 +115,6 @@ public static class ProgramConfigExtensions
         builder.Services.AddScoped<IEmployeeServiceInfoRepository, EmployeeServiceInfoRepository>();
         builder.Services.AddScoped<IEmployeeAssignmentRepository, EmployeeAssignmentRepository>();
         builder.Services.AddScoped<IRoleRepository, RoleRepository>();
-        builder.Services.AddScoped<ILeaveRequestRepository, LeaveRequestRepository>();
         builder.Services.AddScoped<IOrgUnitRepository, OrgUnitRepository>();
         builder.Services.AddScoped<IEmployeeContactRepository, EmployeeContactRepository>();
         builder.Services.AddScoped<IEmployeeSignatureRepository, EmployeeSignatureRepository>();

@@ -14,6 +14,8 @@ namespace HRManagement.Application.DTOs
         public string? HairColor { get; set; }
         public string? EyeColor { get; set; }
         public string? DisabilityType { get; set; }
+        public Gender? Gender { get; set; }
+        public DateTime? DateOfBirth { get; set; }
         public string? DistinctiveSigns { get; set; }
         public string CurrentNationality { get; set; } = string.Empty;
         public Religions Religion { get; set; }
@@ -33,7 +35,10 @@ namespace HRManagement.Application.DTOs
         public Guid EmployeeId { get; set; }
 
         public int? Height { get; set; }
+        public Gender? Gender { get; set; }
 
+        [Required]
+        public DateTime? DateOfBirth { get; set; }
         public BloodGroup? BloodGroup { get; set; }
 
         [StringLength(50)]
@@ -74,6 +79,9 @@ namespace HRManagement.Application.DTOs
     public class UpdateEmployeeProfileDto
     {
         public int? Height { get; set; }
+        public Gender? Gender { get; set; }
+
+        public DateTime? DateOfBirth { get; set; }
         public BloodGroup? BloodGroup { get; set; }
 
         [StringLength(50)]

@@ -21,7 +21,6 @@ namespace HRManagement.Application.Mapping
                 .ForMember(dest => dest.ServiceInfos, opt => opt.Ignore())
                 .ForMember(dest => dest.Assignments, opt => opt.Ignore())
                 .ReverseMap();
-            // .ForMember(dest => dest.LeaveRequests, opt => opt.Ignore());
 
             CreateMap<UpdateEmployeeDto, Employee>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
@@ -30,7 +29,6 @@ namespace HRManagement.Application.Mapping
                 .ForMember(dest => dest.Profile, opt => opt.Ignore())
                 .ForMember(dest => dest.ServiceInfos, opt => opt.Ignore())
                 .ForMember(dest => dest.Assignments, opt => opt.Ignore())
-                // .ForMember(dest => dest.LeaveRequests, opt => opt.Ignore())
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
             // EmployeeProfile mappings
@@ -131,18 +129,6 @@ namespace HRManagement.Application.Mapping
                 .ForMember(dest => dest.EmployeeAssignments, opt => opt.Ignore())
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
-            // LeaveRequest mappings
-            CreateMap<LeaveRequest, LeaveRequestDto>()
-                .ReverseMap();
-
-            CreateMap<CreateLeaveRequestDto, LeaveRequest>()
-                .ForMember(dest => dest.Id, opt => opt.Ignore())
-                .ForMember(dest => dest.Employee, opt => opt.Ignore());
-
-            CreateMap<UpdateLeaveRequestDto, LeaveRequest>()
-                .ForMember(dest => dest.Id, opt => opt.Ignore())
-                .ForMember(dest => dest.Employee, opt => opt.Ignore())
-                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
             // EmployeeJobSummaryDto mappings
             CreateMap<EmployeeServiceInfo, EmployeeJobSummaryDto>()

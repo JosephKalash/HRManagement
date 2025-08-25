@@ -4,7 +4,7 @@ using HRManagement.Core.Enums;
 namespace HRManagement.Core.Entities
 {
 
-    public class Employee : BaseEntity
+    public class Employee : BaseEntity, IActivable
     {
         [Required]
         public int MilitaryNumber { get; set; }
@@ -31,12 +31,8 @@ namespace HRManagement.Core.Entities
         [StringLength(100)]
         public string EnglishLastName { get; set; } = string.Empty;
 
-        public Gender Gender { get; set; }
 
         public MilitaryRank Rank { get; set; }
-
-        [Required]
-        public DateTime DateOfBirth { get; set; }
 
         [Required]
         [StringLength(50)]

@@ -22,8 +22,6 @@ namespace HRManagement.Application.DTOs
         public string EnglishFirstName { get; set; } = string.Empty;
         public string? EnglishMiddleName { get; set; }
         public string EnglishLastName { get; set; } = string.Empty;
-        public Gender Gender { get; set; }
-        public DateTime DateOfBirth { get; set; }
         public string IdNumber { get; set; } = string.Empty;
         public bool IsActive { get; set; }
         public DateTime CreatedAt { get; set; }
@@ -57,10 +55,6 @@ namespace HRManagement.Application.DTOs
         [StringLength(100)]
         public string EnglishLastName { get; set; } = string.Empty;
 
-        public Gender Gender { get; set; }
-
-        [Required]
-        public DateTime DateOfBirth { get; set; }
 
         [Required]
         public MilitaryRank Rank { get; set; }
@@ -91,10 +85,6 @@ namespace HRManagement.Application.DTOs
 
         [StringLength(100)]
         public string? EnglishLastName { get; set; }
-
-        public Gender? Gender { get; set; }
-
-        public DateTime? DateOfBirth { get; set; }
 
         [StringLength(50)]
         public string? IdNumber { get; set; }
