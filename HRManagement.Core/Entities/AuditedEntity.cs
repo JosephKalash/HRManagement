@@ -1,4 +1,5 @@
 
+
 namespace HRManagement.Core.Entities
 {
 
