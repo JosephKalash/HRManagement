@@ -1,8 +1,7 @@
 namespace HRManagement.Core.Entities;
 
-public interface ISoftDeletable
+public interface IAuditSoftDelete
 {
-    public bool IsDeleted { get; set; }
     public DateTime? DeletedAt { get; set; }
     public Guid? DeletedBy { get; set; }
 }

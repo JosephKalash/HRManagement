@@ -3,8 +3,7 @@ using HRManagement.Core.Enums;
 
 namespace HRManagement.Core.Entities
 {
-
-    public class OrgUnit : BaseEntity
+    public class OrgUnit : BaseEntity, IActivable
     {
         public OrgUnitType Type { get; set; }
         public int Level => (int)Type;
@@ -19,13 +18,14 @@ namespace HRManagement.Core.Entities
 
         public Guid? ParentId { get; set; }
         public OrgUnit? Parent { get; set; }
-        public ICollection<OrgUnit> Children { get; set; } = [];
 
         public Guid? ManagerId { get; set; }
         public Employee? Manager { get; set; }
 
+        public ICollection<OrgUnit> Children { get; set; } = [];
         // Navigation properties for relationships
         public virtual ICollection<EmployeeServiceInfo> EmployeeServiceInfos { get; set; } = [];
         public virtual ICollection<EmployeeAssignment> EmployeeAssignments { get; set; } = [];
+        public bool IsActive { get; set; } = true;
     }
 }

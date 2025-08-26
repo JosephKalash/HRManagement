@@ -3,7 +3,7 @@ using HRManagement.Core.Enums;
 
 namespace HRManagement.Core.Entities
 {
-    public class EmployeeServiceInfo : BaseEntity
+    public class EmployeeServiceInfo : BaseEntity, IActivable
     {
         [Required]
         public Guid EmployeeId { get; set; }

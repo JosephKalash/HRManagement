@@ -4,7 +4,7 @@ using HRManagement.Core.Enums;
 namespace HRManagement.Core.Entities
 {
 
-    public class Employee : BaseEntity, IActivable
+    public class Employee : AuditedEntity, IActivable, IAuditSoftDelete
     {
         [Required]
         public int MilitaryNumber { get; set; }
@@ -46,6 +46,8 @@ namespace HRManagement.Core.Entities
         public virtual EmployeeSignature? Signature { get; set; }
         public virtual ICollection<EmployeeServiceInfo> ServiceInfos { get; set; } = new List<EmployeeServiceInfo>();
         public virtual ICollection<EmployeeAssignment> Assignments { get; set; } = new List<EmployeeAssignment>();
+        public DateTime? DeletedAt { get; set; }
+        public Guid? DeletedBy { get; set; }
         // public virtual ICollection<LeaveRequest> LeaveRequests { get; set; } = new List<LeaveRequest>();
     }
 }

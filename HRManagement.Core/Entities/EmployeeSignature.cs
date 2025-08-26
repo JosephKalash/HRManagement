@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace HRManagement.Core.Entities
 {
-    public class EmployeeSignature : BaseEntity
+    public class EmployeeSignature : BaseEntity, IActivable
     {
         [Required]
         public Guid EmployeeId { get; set; }
@@ -20,5 +20,6 @@ namespace HRManagement.Core.Entities
 
         // Navigation property
         public virtual Employee Employee { get; set; } = null!;
+        public bool IsActive { get; set; } = true;
     }
 }

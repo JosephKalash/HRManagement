@@ -142,6 +142,9 @@ namespace HRManagement.Infrastructure.Data
             {
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Name).IsRequired().HasMaxLength(200);
+                entity.Property(e => e.OldListId).IsRequired().HasMaxLength(50);
+
+                entity.HasIndex(e=>e.OldListId).IsUnique();
             });
 
             // OrgUnit configuration

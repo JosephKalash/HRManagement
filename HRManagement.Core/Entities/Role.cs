@@ -1,19 +1,19 @@
 using System.ComponentModel.DataAnnotations;
-using HRManagement.Core.Enums;
 
 namespace HRManagement.Core.Entities
 {
-    public class Role : AuditedEntity, IActivable
+    public class Role : BaseEntity, IActivable
     {
         [Required]
         [StringLength(100)]
         public required string Name { get; set; }
 
-        [StringLength(20)]
-        public string? Code { get; set; }
         public required string OldListId { get; set; } // from old system
 
-        [StringLength(500)]
+        // [StringLength(20)]
+        // public string? Code { get; set; }
+
+        [StringLength(300)]
         public string? Description { get; set; }
 
         public bool IsActive { get; set; } = true;
