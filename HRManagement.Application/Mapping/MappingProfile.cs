@@ -117,7 +117,7 @@ namespace HRManagement.Application.Mapping
 
             // Role mappings
             CreateMap<Role, RoleDto>()
-                .ForMember(dest => dest.LevelNumber, opt => opt.MapFrom(src => (int)src.Level))
+                // .ForMember(dest => dest.LevelNumber, opt => opt.MapFrom(src => (int)src.Level))
                 .ReverseMap();
 
             CreateMap<CreateRoleDto, Role>()

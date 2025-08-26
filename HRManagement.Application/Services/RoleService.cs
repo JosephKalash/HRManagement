@@ -35,8 +35,8 @@ namespace HRManagement.Application.Services
 
         public async Task<PagedResult<RoleDto>> GetPagedRolesByLevel(RoleLevel level, int pageNumber, int pageSize)
         {
-            var query = _roleRepository.AsQueryable()
-                .Where(r => r.Level == level);
+            var query = _roleRepository.AsQueryable();
+                // .Where(r => r.Level == level);
             var paged = await query.ToPagedResultAsync(pageNumber, pageSize);
             var dtoList = _mapper.Map<List<RoleDto>>(paged.Items);
             return new PagedResult<RoleDto>

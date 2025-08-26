@@ -3,31 +3,21 @@ using HRManagement.Core.Enums;
 
 namespace HRManagement.Core.Entities
 {
-    public class Role : BaseEntity
+    public class Role : AuditedEntity, IActivable
     {
         [Required]
         [StringLength(100)]
-        public string Name { get; set; } = string.Empty;
+        public required string Name { get; set; }
 
-        [StringLength(50)]
-        public string Code { get; set; } = string.Empty; // For system identification (e.g., "ADMIN", "HR_MANAGER")
+        [StringLength(20)]
+        public string? Code { get; set; }
+        public required string OldListId { get; set; } // from old system
 
         [StringLength(500)]
         public string? Description { get; set; }
 
         public bool IsActive { get; set; } = true;
-        public RoleLevel Level { get; set; } = RoleLevel.Employee; // Default to EntryLevel
-        public bool IsSystemRole { get; set; } = false; // Cannot be deleted/modified
-
-        // Hierarchy (optional - if roles have hierarchy)
-        // public Guid? ParentRoleId { get; set; }
-        // public Role? ParentRole { get; set; }
-        // public ICollection<Role> ChildRoles { get; set; } = [];
-
-        // public virtual ICollection<RolePermission> RolePermissions { get; set; } = new List<RolePermission>();
-
-        public string? CreatedBy { get; set; }
-        public string? UpdatedBy { get; set; }
+        // public RoleLevel Level { get; set; } = RoleLevel.Employee; // Default to EntryLevel
 
         // Navigation properties
         public virtual ICollection<EmployeeServiceInfo> EmployeeServiceInfos { get; set; } = new List<EmployeeServiceInfo>();
