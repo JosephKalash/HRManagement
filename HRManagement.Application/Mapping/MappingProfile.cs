@@ -164,6 +164,30 @@ namespace HRManagement.Application.Mapping
                 .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => DateTime.UtcNow))
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
+            // OrgUnitProfile mappings
+            CreateMap<OrgUnitProfile, OrgUnitProfileDto>()
+                .ReverseMap();
+
+            CreateMap<CreateOrgUnitProfileDto, OrgUnitProfile>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.OrgUnit, opt => opt.Ignore());
+
+            CreateMap<UpdateOrgUnitProfileDto, OrgUnitProfile>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.OrgUnit, opt => opt.Ignore())
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            // Rank mappings
+            CreateMap<Rank, RankDto>()
+                .ReverseMap();
+
+            CreateMap<CreateRankDto, Rank>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore());
+
+            CreateMap<UpdateRankDto, Rank>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
             // ComprehensiveEmployeeDto mapping
             CreateMap<Employee, ComprehensiveEmployeeDto>()
                 .ForMember(dest => dest.Profile, opt => opt.MapFrom(src => src.Profile))

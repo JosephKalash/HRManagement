@@ -31,23 +31,24 @@ namespace HRManagement.Core.Entities
         [StringLength(100)]
         public string EnglishLastName { get; set; } = string.Empty;
 
-
-        public MilitaryRank Rank { get; set; }
+        [Required]
+        public long RankId { get; set; }
 
         [Required]
         [StringLength(50)]
         public string IdNumber { get; set; } = string.Empty;
 
         public bool IsActive { get; set; } = true;
+        public DateTime? DeletedAt { get; set; }
+        public long? DeletedBy { get; set; }
 
         // Navigation properties
         public virtual EmployeeProfile? Profile { get; set; }
+        public virtual Rank? Rank { get; set; }
         public virtual EmployeeContact? Contact { get; set; }
         public virtual EmployeeSignature? Signature { get; set; }
         public virtual ICollection<EmployeeServiceInfo> ServiceInfos { get; set; } = new List<EmployeeServiceInfo>();
         public virtual ICollection<EmployeeAssignment> Assignments { get; set; } = new List<EmployeeAssignment>();
-        public DateTime? DeletedAt { get; set; }
-        public long? DeletedBy { get; set; }
         // public virtual ICollection<LeaveRequest> LeaveRequests { get; set; } = new List<LeaveRequest>();
     }
 }

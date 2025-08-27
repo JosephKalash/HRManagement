@@ -17,6 +17,8 @@ namespace HRManagement.Infrastructure.Data
         public DbSet<EmployeeAssignment> EmployeeAssignments { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<OrgUnit> OrgUnits { get; set; }
+        public DbSet<Rank> Ranks { get; set; }
+        public DbSet<OrgUnitProfile> OrgUnitProfiles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -24,12 +26,14 @@ namespace HRManagement.Infrastructure.Data
 
             // Global query filters to exclude soft-deleted records
             modelBuilder.Entity<Employee>().HasQueryFilter(e => !e.IsDeleted);
+            modelBuilder.Entity<Rank>().HasQueryFilter(e => !e.IsDeleted);
             modelBuilder.Entity<EmployeeProfile>().HasQueryFilter(e => !e.IsDeleted);
             modelBuilder.Entity<EmployeeContact>().HasQueryFilter(e => !e.IsDeleted);
             modelBuilder.Entity<EmployeeSignature>().HasQueryFilter(e => !e.IsDeleted);
             modelBuilder.Entity<EmployeeServiceInfo>().HasQueryFilter(e => !e.IsDeleted);
             modelBuilder.Entity<EmployeeAssignment>().HasQueryFilter(e => !e.IsDeleted);
             modelBuilder.Entity<Role>().HasQueryFilter(e => !e.IsDeleted);
+            modelBuilder.Entity<OrgUnitProfile>().HasQueryFilter(e => !e.IsDeleted);
             modelBuilder.Entity<OrgUnit>().HasQueryFilter(e => !e.IsDeleted);
 
 
@@ -50,6 +54,11 @@ namespace HRManagement.Infrastructure.Data
                 entity.Property(e => e.EnglishLastName).IsRequired().HasMaxLength(100);
                 entity.Property(e => e.IdNumber).IsRequired().HasMaxLength(50);
                 entity.HasIndex(e => e.IdNumber).IsUnique();
+
+                entity.HasOne(e => e.Rank)
+                    .WithMany(r => r.Employees)
+                    .HasForeignKey(e => e.RankId)
+                    .OnDelete(DeleteBehavior.NoAction);
             });
 
             // EmployeeProfile configuration
@@ -105,7 +114,7 @@ namespace HRManagement.Infrastructure.Data
                     .HasForeignKey(e => e.EmployeeId)
                     .OnDelete(DeleteBehavior.Cascade);
                 entity.HasOne(e => e.BelongingUnit)
-                    .WithMany()
+                    .WithMany(ou => ou.EmployeeServiceInfos)
                     .HasForeignKey(e => e.BelongingUnitId)
                     .OnDelete(DeleteBehavior.Restrict);
                 entity.HasOne(e => e.JobRole)
@@ -142,22 +151,27 @@ namespace HRManagement.Infrastructure.Data
                     .OnDelete(DeleteBehavior.Restrict);
             });
 
+            modelBuilder.Entity<Rank>(entity =>
+            {
+
+                entity.Property(e => e.Name).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.Order).IsRequired();
+
+                entity.HasIndex(e => e.Order).IsUnique();
+            });
             // Role configuration
             modelBuilder.Entity<Role>(entity =>
             {
-
                 entity.Property(e => e.Name).IsRequired().HasMaxLength(200);
-                entity.Property(e => e.OldListId).IsRequired().HasMaxLength(50);
-
-                entity.HasIndex(e => e.OldListId).IsUnique();
             });
 
             // OrgUnit configuration
             modelBuilder.Entity<OrgUnit>(entity =>
             {
-
                 entity.Property(o => o.OfficialName).IsRequired().HasMaxLength(200);
-                entity.Property(o => o.Description);
+                entity.Property(e => e.Level).IsRequired();
+                entity.Property(e => e.Type).IsRequired();
+                entity.HasIndex(e => e.Level);
                 entity.HasOne(o => o.Parent)
                       .WithMany(o => o.Children)
                       .HasForeignKey(o => o.ParentId)
@@ -166,12 +180,18 @@ namespace HRManagement.Infrastructure.Data
                       .WithMany()
                       .HasForeignKey(o => o.ManagerId)
                       .OnDelete(DeleteBehavior.Restrict);
+                entity.HasIndex(e => e.Level);
+                entity.HasIndex(e => e.Type);
             });
 
-            // LeaveRequest configuration
-
+            modelBuilder.Entity<OrgUnitProfile>(entity =>
+            {
+                entity.HasOne(e => e.OrgUnit)
+                    .WithOne(e => e.Profile)
+                    .HasForeignKey<OrgUnitProfile>(e => e.OrgUnitId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
         }
-
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             var utcNow = DateTime.UtcNow;

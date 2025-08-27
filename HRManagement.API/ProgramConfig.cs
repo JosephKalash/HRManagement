@@ -115,7 +115,9 @@ public static class ProgramConfigExtensions
         builder.Services.AddScoped<IEmployeeServiceInfoRepository, EmployeeServiceInfoRepository>();
         builder.Services.AddScoped<IEmployeeAssignmentRepository, EmployeeAssignmentRepository>();
         builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+        builder.Services.AddScoped<IRankRepository, RankRepository>();
         builder.Services.AddScoped<IOrgUnitRepository, OrgUnitRepository>();
+        builder.Services.AddScoped<IOrgUnitProfileRepository, OrgUnitProfileRepository>();
         builder.Services.AddScoped<IEmployeeContactRepository, EmployeeContactRepository>();
         builder.Services.AddScoped<IEmployeeSignatureRepository, EmployeeSignatureRepository>();
         return builder;
@@ -129,8 +131,10 @@ public static class ProgramConfigExtensions
         builder.Services.AddScoped<IEmployeeServiceInfoService, EmployeeServiceInfoService>();
         builder.Services.AddScoped<IEmployeeAssignmentService, EmployeeAssignmentService>();
         builder.Services.AddScoped<IOrgUnitService, OrgUnitService>();
+        builder.Services.AddScoped<IOrgUnitProfileService, OrgUnitProfileService>();
         builder.Services.AddScoped<IImageService, ImageService>();
         builder.Services.AddScoped<IRoleService, RoleService>();
+        builder.Services.AddScoped<IRankService, RankService>();
         builder.Services.AddScoped<IEmployeeSignatureService, EmployeeSignatureService>();
 
         // Add AutoMapper
