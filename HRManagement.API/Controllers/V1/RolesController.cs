@@ -54,7 +54,7 @@ namespace HRManagement.API.Controllers.V1
         [ProducesResponseType(typeof(ApiResponse<RoleDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
 
-        public async Task<ActionResult<ApiResponse<RoleDto>>> GetRole(Guid id)
+        public async Task<ActionResult<ApiResponse<RoleDto>>> GetRole(long id)
         {
             try
             {
@@ -90,6 +90,27 @@ namespace HRManagement.API.Controllers.V1
             catch (Exception ex)
             {
                 return StatusCode(500, ApiResponse<PagedResult<RoleDto>>.ErrorResult("An error occurred while retrieving roles by level", new List<string> { ex.Message }));
+            }
+        }
+        [HttpGet("external/{guid}")]
+        [ProducesResponseType(typeof(ApiResponse<RoleDto>), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 404)]
+
+        public async Task<ActionResult<ApiResponse<RoleDto>>> GetRoleByGuid(Guid guid)
+        {
+            try
+            {
+                var role = await _roleService.GetRoleByGuid(guid);
+                if (role == null)
+                {
+                    return NotFound(ApiResponse<RoleDto>.ErrorResult($"Role not found"));
+                }
+
+                return Ok(ApiResponse<RoleDto>.SuccessResult(role, "Role retrieved successfully"));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<RoleDto>.ErrorResult("An error occurred while retrieving the role", new List<string> { ex.Message }));
             }
         }
 
@@ -136,7 +157,7 @@ namespace HRManagement.API.Controllers.V1
         [ProducesResponseType(typeof(ApiResponse), 400)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
 
-        public async Task<ActionResult<ApiResponse<RoleDto>>> UpdateRole(Guid id, [FromBody] UpdateRoleDto updateDto)
+        public async Task<ActionResult<ApiResponse<RoleDto>>> UpdateRole(long id, [FromBody] UpdateRoleDto updateDto)
         {
             try
             {
@@ -172,7 +193,7 @@ namespace HRManagement.API.Controllers.V1
         [ProducesResponseType(typeof(ApiResponse), 204)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
 
-        public async Task<ActionResult<ApiResponse>> DeleteRole(Guid id)
+        public async Task<ActionResult<ApiResponse>> DeleteRole(long id)
         {
             try
             {

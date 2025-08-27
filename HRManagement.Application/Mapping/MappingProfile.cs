@@ -133,12 +133,12 @@ namespace HRManagement.Application.Mapping
             // EmployeeJobSummaryDto mappings
             CreateMap<EmployeeServiceInfo, EmployeeJobSummaryDto>()
                 .ForMember(dest => dest.UnitId, opt => opt.MapFrom(src => src.BelongingUnitId))
-                .ForMember(dest => dest.UnitName, opt => opt.MapFrom(src => src.BelongingUnit.Name))
+                .ForMember(dest => dest.UnitName, opt => opt.MapFrom(src => src.BelongingUnit.OfficialName))
                 .ForMember(dest => dest.JobRoleName, opt => opt.MapFrom(src => src.JobRole.Name));
 
             CreateMap<EmployeeAssignment, EmployeeJobSummaryDto>()
                 .ForMember(dest => dest.UnitId, opt => opt.MapFrom(src => src.AssignedUnitId))
-                .ForMember(dest => dest.UnitName, opt => opt.MapFrom(src => src.AssignedUnit.Name))
+                .ForMember(dest => dest.UnitName, opt => opt.MapFrom(src => src.AssignedUnit.OfficialName))
                 .ForMember(dest => dest.JobRoleName, opt => opt.MapFrom(src => src.JobRole.Name))
                 .ForMember(dest => dest.EffectiveDate, opt => opt.MapFrom(src => src.AssignmentDate))
                 .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => true)); // Assuming assignments are always active for job details

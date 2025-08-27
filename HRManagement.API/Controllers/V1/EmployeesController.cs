@@ -34,7 +34,7 @@ namespace HRManagement.API.Controllers.V1
             }
             catch (InvalidOperationException ex)
             {
-                return StatusCode(400, ApiResponse<List<Guid>>.ErrorResult(ex.Message, [ex.Message]));
+                return StatusCode(400, ApiResponse<List<long>>.ErrorResult(ex.Message, [ex.Message]));
             }
         }
 
@@ -72,7 +72,7 @@ namespace HRManagement.API.Controllers.V1
             }
             catch (InvalidOperationException ex)
             {
-                return StatusCode(400, ApiResponse<List<Guid>>.ErrorResult(ex.Message, [ex.Message]));
+                return StatusCode(400, ApiResponse<List<long>>.ErrorResult(ex.Message, [ex.Message]));
             }
         }
 
@@ -80,7 +80,7 @@ namespace HRManagement.API.Controllers.V1
         [OutputCache(PolicyName = "EmployeeById")]
         [ProducesResponseType(typeof(ApiResponse<EmployeeDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
-        public async Task<ActionResult<ApiResponse<EmployeeDto>>> GetEmployee(Guid id)
+        public async Task<ActionResult<ApiResponse<EmployeeDto>>> GetEmployee(long id)
         {
             try
             {
@@ -94,7 +94,7 @@ namespace HRManagement.API.Controllers.V1
             }
             catch (InvalidOperationException ex)
             {
-                return StatusCode(400, ApiResponse<List<Guid>>.ErrorResult(ex.Message, [ex.Message]));
+                return StatusCode(400, ApiResponse<List<long>>.ErrorResult(ex.Message, [ex.Message]));
             }
         }
 
@@ -102,7 +102,7 @@ namespace HRManagement.API.Controllers.V1
         [OutputCache(PolicyName = "ShortEmployeeById")]
         [ProducesResponseType(typeof(ApiResponse<ShortEmployeeDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
-        public async Task<ActionResult<ApiResponse<ShortEmployeeDto>>> GetShortEmployee(Guid id)
+        public async Task<ActionResult<ApiResponse<ShortEmployeeDto>>> GetShortEmployee(long id)
         {
             try
             {
@@ -111,23 +111,23 @@ namespace HRManagement.API.Controllers.V1
             }
             catch (InvalidOperationException ex)
             {
-                return StatusCode(400, ApiResponse<List<Guid>>.ErrorResult(ex.Message, [ex.Message]));
+                return StatusCode(400, ApiResponse<List<long>>.ErrorResult(ex.Message, [ex.Message]));
             }
         }
 
         [HttpPost("short/list")]
         [ProducesResponseType(typeof(ApiResponse<List<ShortEmployeeDto>>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
-        public async Task<ActionResult<ApiResponse<List<ShortEmployeeDto>>>> GetShortEmployee(List<Guid> ids)
+        public async Task<ActionResult<ApiResponse<List<ShortEmployeeDto>>>> GetShortEmployee(List<Guid> guids)
         {
             try
             {
-                var employee = await _employeeService.GetByIdsShort(ids);
+                var employee = await _employeeService.GetByIdsShort(guids);
                 return Ok(ApiResponse<List<ShortEmployeeDto>>.SuccessResult(employee, "Employee retrieved successfully"));
             }
             catch (InvalidOperationException ex)
             {
-                return StatusCode(400, ApiResponse<List<Guid>>.ErrorResult(ex.Message, [ex.Message]));
+                return StatusCode(400, ApiResponse<List<long>>.ErrorResult(ex.Message, [ex.Message]));
             }
         }
 
@@ -144,7 +144,7 @@ namespace HRManagement.API.Controllers.V1
             }
             catch (InvalidOperationException ex)
             {
-                return StatusCode(400, ApiResponse<List<Guid>>.ErrorResult(ex.Message, [ex.Message]));
+                return StatusCode(400, ApiResponse<List<long>>.ErrorResult(ex.Message, [ex.Message]));
             }
         }
 
@@ -160,11 +160,11 @@ namespace HRManagement.API.Controllers.V1
             }
             catch (InvalidOperationException ex)
             {
-                return StatusCode(400, ApiResponse<List<Guid>>.ErrorResult(ex.Message, [ex.Message]));
+                return StatusCode(400, ApiResponse<List<long>>.ErrorResult(ex.Message, [ex.Message]));
             }
         }
 
-        [HttpGet("role-ids/{employeeId}")]
+        [HttpGet("/external/role-ids/{employeeId}")]
         [OutputCache(PolicyName = "EmployeeRoleIds")]
         [ProducesResponseType(typeof(ApiResponse<List<Guid>>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
@@ -172,7 +172,7 @@ namespace HRManagement.API.Controllers.V1
         {
             try
             {
-                var ids = await _employeeService.GetEmployeeRoleIds(employeeId);
+                var ids = await _employeeService.GetEmployeeRoleGuids(employeeId);
                 return Ok(ApiResponse<List<Guid>>.SuccessResult(ids, "Employee roles ids retrieved successfully"));
             }
             catch (InvalidOperationException ex)
@@ -199,7 +199,7 @@ namespace HRManagement.API.Controllers.V1
             }
             catch (InvalidOperationException ex)
             {
-                return StatusCode(400, ApiResponse<List<Guid>>.ErrorResult(ex.Message, [ex.Message]));
+                return StatusCode(400, ApiResponse<List<long>>.ErrorResult(ex.Message, [ex.Message]));
             }
         }
 
@@ -223,7 +223,7 @@ namespace HRManagement.API.Controllers.V1
             }
             catch (InvalidOperationException ex)
             {
-                return StatusCode(400, ApiResponse<List<Guid>>.ErrorResult(ex.Message, [ex.Message]));
+                return StatusCode(400, ApiResponse<List<long>>.ErrorResult(ex.Message, [ex.Message]));
             }
         }
 
@@ -254,7 +254,7 @@ namespace HRManagement.API.Controllers.V1
             }
             catch (InvalidOperationException ex)
             {
-                return StatusCode(400, ApiResponse<List<Guid>>.ErrorResult(ex.Message, [ex.Message]));
+                return StatusCode(400, ApiResponse<List<long>>.ErrorResult(ex.Message, [ex.Message]));
             }
         }
 
@@ -267,7 +267,7 @@ namespace HRManagement.API.Controllers.V1
         [ProducesResponseType(typeof(ApiResponse), 400)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
 
-        public async Task<ActionResult<ApiResponse<EmployeeDto>>> UpdateEmployee(Guid id, UpdateEmployeeDto updateDto)
+        public async Task<ActionResult<ApiResponse<EmployeeDto>>> UpdateEmployee(long id, UpdateEmployeeDto updateDto)
         {
             try
             {
@@ -289,7 +289,7 @@ namespace HRManagement.API.Controllers.V1
             }
             catch (InvalidOperationException ex)
             {
-                return StatusCode(400, ApiResponse<List<Guid>>.ErrorResult(ex.Message, [ex.Message]));
+                return StatusCode(400, ApiResponse<List<long>>.ErrorResult(ex.Message, [ex.Message]));
             }
         }
 
@@ -297,7 +297,7 @@ namespace HRManagement.API.Controllers.V1
         [ProducesResponseType(typeof(ApiResponse), 204)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
 
-        public async Task<ActionResult<ApiResponse>> DeleteEmployee(Guid id)
+        public async Task<ActionResult<ApiResponse>> DeleteEmployee(long id)
         {
             try
             {
@@ -318,7 +318,7 @@ namespace HRManagement.API.Controllers.V1
         [ProducesResponseType(typeof(ApiResponse<object>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
 
-        public async Task<ActionResult<ApiResponse<object>>> UploadProfileImage(Guid employeeId, IFormFile file)
+        public async Task<ActionResult<ApiResponse<object>>> UploadProfileImage(long employeeId, IFormFile file)
         {
             try
             {
@@ -344,7 +344,7 @@ namespace HRManagement.API.Controllers.V1
         [ProducesResponseType(typeof(FileContentResult), 200)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
 
-        public async Task<IActionResult> GetProfileImage(Guid employeeId)
+        public async Task<IActionResult> GetProfileImage(long employeeId)
         {
             try
             {
@@ -385,7 +385,7 @@ namespace HRManagement.API.Controllers.V1
         [ProducesResponseType(typeof(ApiResponse), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
 
-        public async Task<ActionResult<ApiResponse>> DeleteProfileImage(Guid employeeId)
+        public async Task<ActionResult<ApiResponse>> DeleteProfileImage(long employeeId)
         {
             try
             {
@@ -415,7 +415,7 @@ namespace HRManagement.API.Controllers.V1
         [ProducesResponseType(typeof(ApiResponse<ComprehensiveEmployeeDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
 
-        public async Task<ActionResult<ApiResponse<ComprehensiveEmployeeDto>>> GetComprehensiveEmployeeDetails(Guid id)
+        public async Task<ActionResult<ApiResponse<ComprehensiveEmployeeDto>>> GetComprehensiveEmployeeDetails(long id)
         {
             try
             {
@@ -444,7 +444,7 @@ namespace HRManagement.API.Controllers.V1
         [OutputCache(PolicyName = "EmployeeJobSummary")]
         [ProducesResponseType(typeof(ApiResponse<List<EmployeeJobSummaryDto>>), 200)]
 
-        public async Task<ActionResult<ApiResponse<List<EmployeeJobSummaryDto>>>> GetEmployeeJobSummary(Guid employeeId)
+        public async Task<ActionResult<ApiResponse<List<EmployeeJobSummaryDto>>>> GetEmployeeJobSummary(long employeeId)
         {
             try
             {
@@ -474,7 +474,7 @@ namespace HRManagement.API.Controllers.V1
         [OutputCache(PolicyName = "EmployeesByRole")]
         [ProducesResponseType(typeof(ApiResponse<IEnumerable<EmployeeDto>>), 200)]
 
-        public async Task<ActionResult<ApiResponse<IEnumerable<EmployeeDto>>>> GetEmployeesByRoleId(Guid roleId)
+        public async Task<ActionResult<ApiResponse<IEnumerable<EmployeeDto>>>> GetEmployeesByRoleId(long roleId)
         {
             try
             {

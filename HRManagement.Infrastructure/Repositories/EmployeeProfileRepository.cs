@@ -7,14 +7,14 @@ namespace HRManagement.Infrastructure.Repositories
 {
     public class EmployeeProfileRepository(HRDbContext context) : Repository<EmployeeProfile>(context), IEmployeeProfileRepository
     {
-        public async Task<EmployeeProfile?> GetByEmployeeId(Guid employeeId)
+        public async Task<EmployeeProfile?> GetByEmployeeId(long employeeId)
         {
             return await _context.EmployeeProfiles
                 .Include(ep => ep.Employee)
                 .FirstOrDefaultAsync(ep => ep.EmployeeId == employeeId);
         }
 
-        public async Task UpdateEmployeeImage(Guid employeeId, string imagePath)
+        public async Task UpdateEmployeeImage(long employeeId, string imagePath)
         {
             var employeeProfile = await _dbSet.FirstOrDefaultAsync(e => e.EmployeeId == employeeId);
             if (employeeProfile == null)
@@ -26,7 +26,7 @@ namespace HRManagement.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<string?> GetEmployeeImagePath(Guid employeeId)
+        public async Task<string?> GetEmployeeImagePath(long employeeId)
         {
             return await _dbSet
                 .Where(e => e.EmployeeId == employeeId)

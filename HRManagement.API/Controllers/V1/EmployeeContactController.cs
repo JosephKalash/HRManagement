@@ -17,7 +17,7 @@ namespace HRManagement.API.Controllers.V1
         private readonly IEmployeeContactService _employeeContactService = employeeContactService;
         private readonly IMapper _mapper = mapper;
 
-        
+
         [HttpGet]
         [ProducesResponseType(typeof(ApiResponse<PagedResult<EmployeeContactDto>>), 200)]
 
@@ -41,23 +41,23 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        
+
         [HttpGet("{id}")]
-        public async Task<ActionResult<EmployeeContactDto>> GetEmployeeContactById(Guid id)
+        public async Task<ActionResult<EmployeeContactDto>> GetEmployeeContactById(long id)
         {
             var employeeContact = await _employeeContactService.GetByEmployeeId(id);
             return Ok(employeeContact);
         }
 
-        
+
         [HttpGet("employee/{employeeId}")]
-        public async Task<ActionResult<EmployeeContactDto>> GetEmployeeContactByEmployeeId(Guid employeeId)
+        public async Task<ActionResult<EmployeeContactDto>> GetEmployeeContactByEmployeeId(long employeeId)
         {
             var employeeContact = await _employeeContactService.GetByEmployeeId(employeeId);
             return Ok(employeeContact);
         }
 
-        
+
         [HttpPost]
         public async Task<ActionResult<EmployeeContactDto>> CreateEmployeeContact(CreateEmployeeContactDto createEmployeeContactDto)
         {
@@ -65,17 +65,17 @@ namespace HRManagement.API.Controllers.V1
             return CreatedAtAction(nameof(GetEmployeeContactById), new { id = employeeContact.Id }, employeeContact);
         }
 
-        
+
         [HttpPut("{id}")]
-        public async Task<ActionResult<EmployeeContactDto>> UpdateEmployeeContact(Guid id, UpdateEmployeeContactDto updateDto)
+        public async Task<ActionResult<EmployeeContactDto>> UpdateEmployeeContact(long id, UpdateEmployeeContactDto updateDto)
         {
             var contact = await _employeeContactService.Update(id, updateDto);
             return Ok(contact);
         }
 
-        
+
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteEmployeeContact(Guid id)
+        public async Task<ActionResult> DeleteEmployeeContact(long id)
         {
             await _employeeContactService.Delete(id);
             return NoContent();

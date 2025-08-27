@@ -13,7 +13,7 @@ namespace HRManagement.Application.Services
         private readonly IEmployeeServiceInfoRepository _employeeServiceInfoRepository = employeeServiceInfoRepository;
         private readonly IMapper _mapper = mapper;
 
-        public async Task<EmployeeServiceInfoDto?> GetById(Guid id)
+        public async Task<EmployeeServiceInfoDto?> GetById(long id)
         {
             var serviceInfo = await _employeeServiceInfoRepository.GetById(id);
             return serviceInfo != null ? _mapper.Map<EmployeeServiceInfoDto>(serviceInfo) : null;
@@ -25,13 +25,13 @@ namespace HRManagement.Application.Services
             return _mapper.Map<IEnumerable<EmployeeServiceInfoDto>>(serviceInfos);
         }
 
-        public async Task<IEnumerable<EmployeeServiceInfoDto>> GetByEmployeeId(Guid employeeId)
+        public async Task<IEnumerable<EmployeeServiceInfoDto>> GetByEmployeeId(long employeeId)
         {
             var serviceInfos = await _employeeServiceInfoRepository.GetByEmployeeId(employeeId);
             return _mapper.Map<IEnumerable<EmployeeServiceInfoDto>>(serviceInfos);
         }
 
-        public async Task<EmployeeServiceInfoDto?> GetActiveByEmployeeId(Guid employeeId)
+        public async Task<EmployeeServiceInfoDto?> GetActiveByEmployeeId(long employeeId)
         {
             var serviceInfo = await _employeeServiceInfoRepository.GetActiveByEmployeeId(employeeId);
             return serviceInfo != null ? _mapper.Map<EmployeeServiceInfoDto>(serviceInfo) : null;
@@ -44,7 +44,7 @@ namespace HRManagement.Application.Services
             return _mapper.Map<EmployeeServiceInfoDto>(createdServiceInfo);
         }
 
-        public async Task<EmployeeServiceInfoDto> Update(Guid id, UpdateEmployeeServiceInfoDto updateDto)
+        public async Task<EmployeeServiceInfoDto> Update(long id, UpdateEmployeeServiceInfoDto updateDto)
         {
             var serviceInfo = await _employeeServiceInfoRepository.GetById(id);
             if (serviceInfo == null)
@@ -55,7 +55,7 @@ namespace HRManagement.Application.Services
             return _mapper.Map<EmployeeServiceInfoDto>(updatedServiceInfo);
         }
 
-        public async Task Delete(Guid id)
+        public async Task Delete(long id)
         {
             var serviceInfo = await _employeeServiceInfoRepository.GetById(id);
             if (serviceInfo == null)
@@ -64,7 +64,7 @@ namespace HRManagement.Application.Services
             await _employeeServiceInfoRepository.Delete(serviceInfo);
         }
 
-        public async Task<bool> ActiveExists(Guid id)
+        public async Task<bool> ActiveExists(long id)
         {
             return await _employeeServiceInfoRepository.ActiveExists(id);
         }
@@ -83,7 +83,7 @@ namespace HRManagement.Application.Services
             };
         }
 
-        public async Task<PagedResult<EmployeeServiceInfoDto>> GetPagedByEmployeeId(Guid employeeId, int pageNumber, int pageSize)
+        public async Task<PagedResult<EmployeeServiceInfoDto>> GetPagedByEmployeeId(long employeeId, int pageNumber, int pageSize)
         {
             var query = _employeeServiceInfoRepository.AsQueryable()
                 .Where(esi => esi.EmployeeId == employeeId);

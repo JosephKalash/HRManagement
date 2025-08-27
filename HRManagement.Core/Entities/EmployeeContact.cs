@@ -4,8 +4,8 @@ namespace HRManagement.Core.Entities
 {
     public class EmployeeContact : BaseEntity
     {
-        public Guid EmployeeId { get; set; }
-        
+        public long EmployeeId { get; set; }
+
         [EmailAddress]
         public string? Email { get; set; }
 
@@ -18,7 +18,7 @@ namespace HRManagement.Core.Entities
         public required string PhoneNumber { get; set; }
         [Phone]
         public string? SecondPhoneNumber { get; set; }
-        
+
         [StringLength(300)]
         public string? Address { get; set; }
 

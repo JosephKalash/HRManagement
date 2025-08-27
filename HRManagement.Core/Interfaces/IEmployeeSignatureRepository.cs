@@ -4,7 +4,7 @@ namespace HRManagement.Core.Interfaces
 {
     public interface IEmployeeSignatureRepository : IRepository<EmployeeSignature>
     {
-        Task<EmployeeSignature?> GetByEmployeeId(Guid employeeId);
-        Task<bool> ExistsByEmployeeId(Guid employeeId);
+        Task<EmployeeSignature?> GetByEmployeeId(long employeeId);
+        Task<bool> ExistsByEmployeeId(long employeeId);
     }
 }

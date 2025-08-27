@@ -6,26 +6,26 @@ namespace HRManagement.Application.Interfaces
 {
     public interface IEmployeeService
     {
-        Task<EmployeeDto?> GetById(Guid id);
-        Task<ShortEmployeeDto> GetByIdShort(Guid id);
-        Task<List<ShortEmployeeDto>> GetByIdsShort(List<Guid> ids);
+        Task<EmployeeDto?> GetById(long id);
+        Task<ShortEmployeeDto> GetByIdShort(long id);
+        Task<List<ShortEmployeeDto>> GetByIdsShort(List<Guid> guids); // external
         Task<ShortEmployeeDto> GetByMilitaryShort(int militaryNumber);
         Task<List<ShortEmployeeDto>> GetByMilitariesShortList(List<int> militaryNumbers);
-        Task<EmployeeProfile?> GetProfileByEmployeeId(Guid id);
+        Task<EmployeeProfile?> GetProfileByEmployeeId(long id);
         Task<IEnumerable<EmployeeDto>> GetAll();
         Task<IEnumerable<EmployeeDto>> GetActiveEmployees();
         Task<IEnumerable<EmployeeDto>> SearchEmployees(string searchTerm);
         Task<EmployeeDto> Create(CreateEmployeeDto createDto);
-        Task<EmployeeDto> Update(Guid id, UpdateEmployeeDto updateDto);
-        Task Delete(Guid id);
-        Task<bool> Exists(Guid id);
+        Task<EmployeeDto> Update(long id, UpdateEmployeeDto updateDto);
+        Task Delete(long id);
+        Task<bool> Exists(long id);
         Task<PagedResult<EmployeeDto>> GetPaged(int pageNumber, int pageSize);
-        Task<string> UploadProfileImage(Guid employeeId, Stream imageStream, string OriginalFileName);
-        Task DeleteProfileImage(Guid employeeId);
-        Task<ComprehensiveEmployeeDto?> GetComprehensiveEmployeeById(Guid id);
-        Task<List<EmployeeJobSummaryDto>> GetEmployeeJobSummary(Guid employeeId);
-        Task<CurrentEmployeeSummaryDto?> GetCurrentEmployeeSummary(Guid userId);
-        Task<List<EmployeeDto>> GetEmployeeByRoleId(Guid roleId);
-        Task<List<Guid>> GetEmployeeRoleIds(Guid employeeId);
+        Task<string> UploadProfileImage(long employeeId, Stream imageStream, string OriginalFileName);
+        Task DeleteProfileImage(long employeeId);
+        Task<ComprehensiveEmployeeDto?> GetComprehensiveEmployeeById(long id);
+        Task<List<EmployeeJobSummaryDto>> GetEmployeeJobSummary(long employeeId);
+        Task<CurrentEmployeeSummaryDto?> GetCurrentEmployeeSummary(long userId);
+        Task<List<EmployeeDto>> GetEmployeeByRoleId(long roleId);
+        Task<List<Guid>> GetEmployeeRoleGuids(Guid employeeId); // external
     }
 }

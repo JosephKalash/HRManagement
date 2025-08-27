@@ -5,7 +5,7 @@ namespace HRManagement.Application.DTOs
     public class CreateEmployeeSignatureDto
     {
         [Required]
-        public Guid EmployeeId { get; set; }
+        public long EmployeeId { get; set; }
 
         [Required]
         [StringLength(100)]

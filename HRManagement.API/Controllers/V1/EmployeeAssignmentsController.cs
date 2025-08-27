@@ -16,10 +16,10 @@ namespace HRManagement.API.Controllers.V1
         private readonly IEmployeeAssignmentService _employeeAssignmentService = employeeAssignmentService;
         private readonly IMapper _mapper = mapper;
 
-        
-        
-        
-        
+
+
+
+
         [HttpGet]
         [ProducesResponseType(typeof(ApiResponse<PagedResult<EmployeeAssignmentDto>>), 200)]
 
@@ -43,16 +43,16 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        
-        
-        
-        
-        
+
+
+
+
+
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(ApiResponse<EmployeeAssignmentDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
 
-        public async Task<ActionResult<ApiResponse<EmployeeAssignmentDto>>> GetEmployeeAssignment(Guid id)
+        public async Task<ActionResult<ApiResponse<EmployeeAssignmentDto>>> GetEmployeeAssignment(long id)
         {
             try
             {
@@ -70,15 +70,15 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        
-        
-        
-        
-        
+
+
+
+
+
         [HttpGet("employee/{employeeId}")]
         [ProducesResponseType(typeof(ApiResponse<IEnumerable<EmployeeAssignmentDto>>), 200)]
 
-        public async Task<ActionResult<ApiResponse<IEnumerable<EmployeeAssignmentDto>>>> GetEmployeeAssignmentsByEmployeeId(Guid employeeId)
+        public async Task<ActionResult<ApiResponse<IEnumerable<EmployeeAssignmentDto>>>> GetEmployeeAssignmentsByEmployeeId(long employeeId)
         {
             try
             {
@@ -91,16 +91,16 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        
-        
-        
-        
-        
+
+
+
+
+
         [HttpGet("employee/{employeeId}/active")]
         [ProducesResponseType(typeof(ApiResponse<EmployeeAssignmentDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
 
-        public async Task<ActionResult<ApiResponse<EmployeeAssignmentDto>>> GetActiveEmployeeAssignmentByEmployeeId(Guid employeeId)
+        public async Task<ActionResult<ApiResponse<EmployeeAssignmentDto>>> GetActiveEmployeeAssignmentByEmployeeId(long employeeId)
         {
             try
             {
@@ -118,11 +118,11 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        
-        
-        
-        
-        
+
+
+
+
+
         [HttpPost]
         [ProducesResponseType(typeof(ApiResponse<EmployeeAssignmentDto>), 201)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
@@ -154,18 +154,18 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(ApiResponse<EmployeeAssignmentDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
 
-        public async Task<ActionResult<ApiResponse<EmployeeAssignmentDto>>> UpdateEmployeeAssignment(Guid id, UpdateEmployeeAssignmentDto updateDto)
+        public async Task<ActionResult<ApiResponse<EmployeeAssignmentDto>>> UpdateEmployeeAssignment(long id, UpdateEmployeeAssignmentDto updateDto)
         {
             try
             {
@@ -191,16 +191,16 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        
-        
-        
-        
-        
+
+
+
+
+
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(ApiResponse), 204)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
 
-        public async Task<ActionResult<ApiResponse>> DeleteEmployeeAssignment(Guid id)
+        public async Task<ActionResult<ApiResponse>> DeleteEmployeeAssignment(long id)
         {
             try
             {

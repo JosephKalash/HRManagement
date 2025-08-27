@@ -5,7 +5,7 @@ namespace HRManagement.API.Models
     public class CreateEmployeeSignatureRequest
     {
         [Required]
-        public Guid EmployeeId { get; set; }
+        public long EmployeeId { get; set; }
 
         [Required]
         [StringLength(100)]

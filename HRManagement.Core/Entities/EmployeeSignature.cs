@@ -5,7 +5,7 @@ namespace HRManagement.Core.Entities
     public class EmployeeSignature : BaseEntity, IActivable
     {
         [Required]
-        public Guid EmployeeId { get; set; }
+        public long EmployeeId { get; set; }
 
         [Required]
         [StringLength(100)]

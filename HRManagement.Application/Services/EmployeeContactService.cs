@@ -14,13 +14,13 @@ namespace HRManagement.Application.Services
         private readonly IEmployeeContactRepository _employeeContactRepository = employeeContactRepository;
         private readonly IMapper _mapper = mapper;
 
-        public async Task<EmployeeContactDto?> GetById(Guid id)
+        public async Task<EmployeeContactDto?> GetById(long id)
         {
             var contact = await _employeeContactRepository.GetById(id);
             return contact != null ? _mapper.Map<EmployeeContactDto>(contact) : null;
         }
 
-        public async Task<EmployeeContactDto?> GetByEmployeeId(Guid employeeId)
+        public async Task<EmployeeContactDto?> GetByEmployeeId(long employeeId)
         {
             var contact = await _employeeContactRepository.GetEmployeeContactByEmployeeId(employeeId);
             return contact != null ? _mapper.Map<EmployeeContactDto>(contact) : null;
@@ -39,7 +39,7 @@ namespace HRManagement.Application.Services
             return _mapper.Map<EmployeeContactDto>(createdContact);
         }
 
-        public async Task<EmployeeContactDto> Update(Guid id, UpdateEmployeeContactDto updateDto)
+        public async Task<EmployeeContactDto> Update(long id, UpdateEmployeeContactDto updateDto)
         {
             var contact = await _employeeContactRepository.GetById(id);
             if (contact == null)
@@ -50,7 +50,7 @@ namespace HRManagement.Application.Services
             return _mapper.Map<EmployeeContactDto>(updatedContact);
         }
 
-        public async Task Delete(Guid id)
+        public async Task Delete(long id)
         {
             var contact = await _employeeContactRepository.GetById(id);
             if (contact == null)
@@ -59,7 +59,7 @@ namespace HRManagement.Application.Services
             await _employeeContactRepository.Delete(contact);
         }
 
-        public async Task<bool> Exists(Guid id)
+        public async Task<bool> Exists(long id)
         {
             return await _employeeContactRepository.ActiveExists(id);
         }

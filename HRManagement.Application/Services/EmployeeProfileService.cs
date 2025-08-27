@@ -14,13 +14,13 @@ namespace HRManagement.Application.Services
         private readonly IEmployeeProfileRepository _employeeProfileRepository = employeeProfileRepository;
         private readonly IMapper _mapper = mapper;
 
-        public async Task<EmployeeProfileDto?> GetById(Guid id)
+        public async Task<EmployeeProfileDto?> GetById(long id)
         {
             var profile = await _employeeProfileRepository.GetById(id);
             return profile != null ? _mapper.Map<EmployeeProfileDto>(profile) : null;
         }
 
-        public async Task<EmployeeProfileDto?> GetByEmployeeId(Guid employeeId)
+        public async Task<EmployeeProfileDto?> GetByEmployeeId(long employeeId)
         {
             var profile = await _employeeProfileRepository.GetByEmployeeId(employeeId);
             return profile != null ? _mapper.Map<EmployeeProfileDto>(profile) : null;
@@ -50,7 +50,7 @@ namespace HRManagement.Application.Services
         }
 
 
-        public async Task<EmployeeProfileDto> Update(Guid id, UpdateEmployeeProfileDto updateDto, Stream? stream, string? fileName = null)
+        public async Task<EmployeeProfileDto> Update(long id, UpdateEmployeeProfileDto updateDto, Stream? stream, string? fileName = null)
         {
             var profile = await _employeeProfileRepository.GetById(id) ?? throw new ArgumentException("Employee profile not found");
             _mapper.Map(updateDto, profile);
@@ -68,13 +68,13 @@ namespace HRManagement.Application.Services
             return _mapper.Map<EmployeeProfileDto>(updatedProfile);
         }
 
-        public async Task Delete(Guid id)
+        public async Task Delete(long id)
         {
             var profile = await _employeeProfileRepository.GetById(id) ?? throw new ArgumentException("Employee profile not found");
             await _employeeProfileRepository.Delete(profile);
         }
 
-        public async Task<bool> Exists(Guid id)
+        public async Task<bool> Exists(long id)
         {
             return await _employeeProfileRepository.ActiveExists(id);
         }
@@ -93,7 +93,7 @@ namespace HRManagement.Application.Services
             };
         }
 
-        public async Task UpdateEmployeeImage(Guid employeeId, string imagePath)
+        public async Task UpdateEmployeeImage(long employeeId, string imagePath)
         {
             await _employeeProfileRepository.UpdateEmployeeImage(employeeId, imagePath);
         }

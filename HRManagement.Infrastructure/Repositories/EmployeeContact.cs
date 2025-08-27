@@ -7,7 +7,7 @@ namespace HRManagement.Infrastructure.Repositories
 {
     public class EmployeeContactRepository(HRDbContext context) : Repository<EmployeeContact>(context), IEmployeeContactRepository
     {
-        public async Task<EmployeeContact?> GetEmployeeContactByEmployeeId(Guid employeeId)
+        public async Task<EmployeeContact?> GetEmployeeContactByEmployeeId(long employeeId)
         {
             return await _context.EmployeeContacts
                 .Include(ep => ep.Employee)

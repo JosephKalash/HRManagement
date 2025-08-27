@@ -36,7 +36,7 @@ namespace HRManagement.Application.Services
         public async Task<PagedResult<RoleDto>> GetPagedRolesByLevel(RoleLevel level, int pageNumber, int pageSize)
         {
             var query = _roleRepository.AsQueryable();
-                // .Where(r => r.Level == level);
+            // .Where(r => r.Level == level);
             var paged = await query.ToPagedResultAsync(pageNumber, pageSize);
             var dtoList = _mapper.Map<List<RoleDto>>(paged.Items);
             return new PagedResult<RoleDto>
@@ -48,7 +48,7 @@ namespace HRManagement.Application.Services
             };
         }
 
-        public async Task<RoleDto?> GetRoleById(Guid id)
+        public async Task<RoleDto?> GetRoleById(long id)
         {
             var role = await _roleRepository.GetById(id);
             return role != null ? _mapper.Map<RoleDto>(role) : null;
@@ -67,7 +67,7 @@ namespace HRManagement.Application.Services
             return _mapper.Map<RoleDto>(createdRole);
         }
 
-        public async Task<RoleDto?> UpdateRole(Guid id, UpdateRoleDto updateDto)
+        public async Task<RoleDto?> UpdateRole(long id, UpdateRoleDto updateDto)
         {
             var existingRole = await _roleRepository.GetById(id);
             if (existingRole == null) return null;
@@ -77,7 +77,7 @@ namespace HRManagement.Application.Services
             return _mapper.Map<RoleDto>(updatedRole);
         }
 
-        public async Task<bool> DeleteRole(Guid id)
+        public async Task<bool> DeleteRole(long id)
         {
             var role = await _roleRepository.GetById(id);
             if (role == null) return false;
@@ -86,11 +86,17 @@ namespace HRManagement.Application.Services
             return true;
         }
 
-        public async Task<bool> ActiveExistsRole(Guid id)
+        public async Task<bool> ActiveExistsRole(long id)
         {
             var isExist = await _roleRepository.ActiveExists(id);
 
             return isExist;
+        }
+
+        public async Task<RoleDto?> GetRoleByGuid(Guid id)
+        {
+            var role = await _roleRepository.GetByGuid(id);
+            return role != null ? _mapper.Map<RoleDto>(role) : null;
         }
     }
 }

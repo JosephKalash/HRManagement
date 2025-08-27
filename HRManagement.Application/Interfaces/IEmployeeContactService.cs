@@ -6,13 +6,13 @@ namespace HRManagement.Application.Interfaces
 {
     public interface IEmployeeContactService
     {
-        Task<EmployeeContactDto?> GetById(Guid id);
-        Task<EmployeeContactDto?> GetByEmployeeId(Guid employeeId);
+        Task<EmployeeContactDto?> GetById(long id);
+        Task<EmployeeContactDto?> GetByEmployeeId(long employeeId);
         Task<IEnumerable<EmployeeContactDto>> GetAll();
         Task<EmployeeContactDto> Create(CreateEmployeeContactDto createDto);
-        Task<EmployeeContactDto> Update(Guid id, UpdateEmployeeContactDto updateDto);
-        Task Delete(Guid id);
-        Task<bool> Exists(Guid id);
+        Task<EmployeeContactDto> Update(long id, UpdateEmployeeContactDto updateDto);
+        Task Delete(long id);
+        Task<bool> Exists(long id);
         Task<PagedResult<EmployeeContactDto>> GetPaged(int pageNumber, int pageSize);
     }
 }

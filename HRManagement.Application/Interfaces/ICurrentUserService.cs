@@ -2,7 +2,7 @@ namespace HRManagement.Application.Interfaces
 {
     public interface ICurrentUserService
     {
-        Guid? UserId { get; }
+        long? UserId { get; }
         string? UserName { get; }
     }
 }

@@ -47,7 +47,7 @@ namespace HRManagement.Core.Entities
         public virtual ICollection<EmployeeServiceInfo> ServiceInfos { get; set; } = new List<EmployeeServiceInfo>();
         public virtual ICollection<EmployeeAssignment> Assignments { get; set; } = new List<EmployeeAssignment>();
         public DateTime? DeletedAt { get; set; }
-        public Guid? DeletedBy { get; set; }
+        public long? DeletedBy { get; set; }
         // public virtual ICollection<LeaveRequest> LeaveRequests { get; set; } = new List<LeaveRequest>();
     }
 }

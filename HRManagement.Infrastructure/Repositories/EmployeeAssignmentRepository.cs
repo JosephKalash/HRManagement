@@ -7,7 +7,7 @@ namespace HRManagement.Infrastructure.Repositories
 {
     public class EmployeeAssignmentRepository(HRDbContext context) : Repository<EmployeeAssignment>(context), IEmployeeAssignmentRepository
     {
-        public async Task<List<EmployeeAssignment>> GetByEmployeeId(Guid employeeId)
+        public async Task<List<EmployeeAssignment>> GetByEmployeeId(long employeeId)
         {
             return await _context.EmployeeAssignments
                 .Include(ea => ea.Employee)
@@ -17,7 +17,7 @@ namespace HRManagement.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<EmployeeAssignment?> GetActiveByEmployeeId(Guid employeeId)
+        public async Task<EmployeeAssignment?> GetActiveByEmployeeId(long employeeId)
         {
             return await _context.EmployeeAssignments
                 .Include(ea => ea.Employee)
@@ -26,7 +26,7 @@ namespace HRManagement.Infrastructure.Repositories
                 .FirstOrDefaultAsync(ea => ea.EmployeeId == employeeId && ea.IsActive);
         }
 
-        public async Task<List<EmployeeAssignment>> GetByRoleIdAsync(Guid roleId)
+        public async Task<List<EmployeeAssignment>> GetByRoleId(long roleId)
         {
             return await _context.EmployeeAssignments
                 .Include(ea => ea.Employee)
@@ -36,7 +36,7 @@ namespace HRManagement.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<List<EmployeeAssignment>> GetByUnitId(Guid unitId)
+        public async Task<List<EmployeeAssignment>> GetByUnitId(long unitId)
         {
             return await _dbSet
                 .Include(ea => ea.Employee)

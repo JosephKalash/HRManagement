@@ -3,7 +3,7 @@ namespace HRManagement.Core.Entities
 
     public abstract class AuditedEntity : BaseEntity
     {
-        public Guid? CreatedBy { get; set; }
-        public Guid? UpdatedBy { get; set; }
+        public long? CreatedBy { get; set; }
+        public long? UpdatedBy { get; set; }
     }
 }

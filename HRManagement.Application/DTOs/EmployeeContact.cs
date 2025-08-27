@@ -4,8 +4,8 @@ namespace HRManagement.Application.DTOs
 {
     public class EmployeeContactDto
     {
-        public Guid Id { get; set; }
-        public Guid EmployeeId { get; set; }
+        public long Id { get; set; }
+        public long EmployeeId { get; set; }
         public string? Email { get; set; }
         public string? MobileNumber { get; set; }
         public string? SecondMobileNumber { get; set; }
@@ -13,7 +13,7 @@ namespace HRManagement.Application.DTOs
     }
     public class CreateEmployeeContactDto
     {
-        public Guid EmployeeId { get; set; }
+        public long EmployeeId { get; set; }
         [EmailAddress]
         public string? Email { get; set; }
         [Required]

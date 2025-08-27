@@ -8,7 +8,7 @@ namespace HRManagement.Core.Entities
         [StringLength(100)]
         public required string Name { get; set; }
 
-        public required string OldListId { get; set; } // from old system
+        public long? OldListId { get; set; } // from old system
 
         // [StringLength(20)]
         // public string? Code { get; set; }

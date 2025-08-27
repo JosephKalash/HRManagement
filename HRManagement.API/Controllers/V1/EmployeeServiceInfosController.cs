@@ -22,10 +22,10 @@ namespace HRManagement.API.Controllers.V1
             _mapper = mapper;
         }
 
-        
-        
-        
-        
+
+
+
+
         [HttpGet]
         [ProducesResponseType(typeof(ApiResponse<PagedResult<EmployeeServiceInfoDto>>), 200)]
 
@@ -49,16 +49,16 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        
-        
-        
-        
-        
+
+
+
+
+
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(ApiResponse<EmployeeServiceInfoDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
 
-        public async Task<ActionResult<ApiResponse<EmployeeServiceInfoDto>>> GetEmployeeServiceInfo(Guid id)
+        public async Task<ActionResult<ApiResponse<EmployeeServiceInfoDto>>> GetEmployeeServiceInfo(long id)
         {
             try
             {
@@ -76,15 +76,15 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        
-        
-        
-        
-        
+
+
+
+
+
         [HttpGet("employee/{employeeId}")]
         [ProducesResponseType(typeof(ApiResponse<PagedResult<EmployeeServiceInfoDto>>), 200)]
 
-        public async Task<ActionResult<ApiResponse<PagedResult<EmployeeServiceInfoDto>>>> GetEmployeeServiceInfosByEmployeeId(Guid employeeId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        public async Task<ActionResult<ApiResponse<PagedResult<EmployeeServiceInfoDto>>>> GetEmployeeServiceInfosByEmployeeId(long employeeId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             try
             {
@@ -104,16 +104,16 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        
-        
-        
-        
-        
+
+
+
+
+
         [HttpGet("employee/{employeeId}/active")]
         [ProducesResponseType(typeof(ApiResponse<EmployeeServiceInfoDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
 
-        public async Task<ActionResult<ApiResponse<EmployeeServiceInfoDto>>> GetActiveEmployeeServiceInfoByEmployeeId(Guid employeeId)
+        public async Task<ActionResult<ApiResponse<EmployeeServiceInfoDto>>> GetActiveEmployeeServiceInfoByEmployeeId(long employeeId)
         {
             try
             {
@@ -131,11 +131,11 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        
-        
-        
-        
-        
+
+
+
+
+
         [HttpPost]
         [ProducesResponseType(typeof(ApiResponse<EmployeeServiceInfoDto>), 201)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
@@ -173,18 +173,18 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(ApiResponse<EmployeeServiceInfoDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
 
-        public async Task<ActionResult<ApiResponse<EmployeeServiceInfoDto>>> UpdateEmployeeServiceInfo(Guid id, UpdateEmployeeServiceInfoDto updateDto)
+        public async Task<ActionResult<ApiResponse<EmployeeServiceInfoDto>>> UpdateEmployeeServiceInfo(long id, UpdateEmployeeServiceInfoDto updateDto)
         {
             try
             {
@@ -210,16 +210,16 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        
-        
-        
-        
-        
+
+
+
+
+
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(ApiResponse), 204)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
 
-        public async Task<ActionResult<ApiResponse>> DeleteEmployeeServiceInfo(Guid id)
+        public async Task<ActionResult<ApiResponse>> DeleteEmployeeServiceInfo(long id)
         {
             try
             {

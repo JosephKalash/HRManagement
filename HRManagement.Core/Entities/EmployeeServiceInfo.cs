@@ -6,17 +6,17 @@ namespace HRManagement.Core.Entities
     public class EmployeeServiceInfo : BaseEntity, IActivable
     {
         [Required]
-        public Guid EmployeeId { get; set; }
+        public long EmployeeId { get; set; }
         public Employee Employee { get; set; } = null!;
 
         [Required]
-        public Guid BelongingUnitId { get; set; }
+        public long BelongingUnitId { get; set; }
         public OrgUnit BelongingUnit { get; set; } = null!;
 
         public Ownership Ownership { get; set; }
 
         [Required]
-        public Guid JobRoleId { get; set; }
+        public long JobRoleId { get; set; }
         public Role JobRole { get; set; } = null!;
 
         public DateTime? HiringDate { get; set; }

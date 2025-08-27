@@ -8,7 +8,7 @@ namespace HRManagement.Infrastructure.Repositories
 {
     public class OrgUnitRepository(HRDbContext context) : Repository<OrgUnit>(context), IOrgUnitRepository
     {
-        public Task<List<OrgUnit>> GetByParentId(Guid? parentId)
+        public Task<List<OrgUnit>> GetByParentId(long? parentId)
         {
             return _dbSet.Where(o => o.ParentId == parentId).ToListAsync();
         }
@@ -20,7 +20,7 @@ namespace HRManagement.Infrastructure.Repositories
 
         public Task<List<OrgUnit>> SearchByName(string searchTerm)
         {
-            return _dbSet.Where(o => o.Name.Contains(searchTerm)).ToListAsync();
+            return _dbSet.Where(o => o.OfficialName.Contains(searchTerm)).ToListAsync();
         }
 
         public Task<List<OrgUnit>> GetAllWithChildren()
@@ -28,7 +28,7 @@ namespace HRManagement.Infrastructure.Repositories
             return _dbSet.Include(o => o.Children).ToListAsync();
         }
 
-        public Task<List<OrgUnit>> GetChildUnits(Guid unitId)
+        public Task<List<OrgUnit>> GetChildUnits(long unitId)
         {
             return _dbSet
                     .Where(ou => ou.ParentId == unitId)

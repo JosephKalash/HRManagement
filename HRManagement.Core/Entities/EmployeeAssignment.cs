@@ -6,18 +6,18 @@ namespace HRManagement.Core.Entities
     public class EmployeeAssignment : BaseEntity, IActivable
     {
         [Required]
-        public Guid EmployeeId { get; set; }
+        public long EmployeeId { get; set; }
         public virtual Employee Employee { get; set; } = null!;
 
         public bool IsActive { get; set; } = true;
 
         [Required]
-        public Guid AssignedUnitId { get; set; }
+        public long AssignedUnitId { get; set; }
         public OrgUnit AssignedUnit { get; set; } = null!;
 
 
         [Required]
-        public Guid JobRoleId { get; set; }
+        public long JobRoleId { get; set; }
         public Role JobRole { get; set; } = null!;
 
         [Required]
@@ -40,8 +40,8 @@ namespace HRManagement.Core.Entities
         public string? Description { get; set; }
         public string? Name { get; set; }
 
-        public Guid? CreatedBy { get; set; }
-        public Guid? UpdatedBy { get; set; }
+        public long? CreatedBy { get; set; }
+        public long? UpdatedBy { get; set; }
         public virtual Employee? CreatedByUser { get; set; }
         public virtual Employee? UpdatedByUser { get; set; }
     }

@@ -6,8 +6,8 @@ namespace HRManagement.Application.DTOs
 {
     public class EmployeeProfileDto
     {
-        public Guid Id { get; set; }
-        public Guid EmployeeId { get; set; }
+        public long Id { get; set; }
+        public long EmployeeId { get; set; }
         public int? Height { get; set; }
         public BloodGroup? BloodGroup { get; set; }
         public string? SkinColor { get; set; }
@@ -32,7 +32,7 @@ namespace HRManagement.Application.DTOs
     public class CreateEmployeeProfileDto
     {
         [Required]
-        public Guid EmployeeId { get; set; }
+        public long EmployeeId { get; set; }
 
         public int? Height { get; set; }
         public Gender? Gender { get; set; }

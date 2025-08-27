@@ -16,15 +16,13 @@ namespace HRManagement.Application.Services
 
         public bool ValidateHierarchy(OrgUnit unit)
         {
-            if (unit.Parent == null && unit.Type != OrgUnitType.LeaderOffice)
+            if (unit.Parent == null && unit.Type != OrgUnitType.GeneralManagement)
                 return false; // Only leader office can be root
 
             if (unit.Parent != null)
             {
                 var validTransitions = new Dictionary<OrgUnitType, List<OrgUnitType>>
                 {
-                    [OrgUnitType.LeaderOffice] = [OrgUnitType.ViceLeaderOffice, OrgUnitType.GeneralManagement],
-                    [OrgUnitType.ViceLeaderOffice] = [OrgUnitType.GeneralManagement, OrgUnitType.Department],
                     [OrgUnitType.GeneralManagement] = [OrgUnitType.Department],
                     [OrgUnitType.Department] = [OrgUnitType.Section, OrgUnitType.Branch],
                     [OrgUnitType.Section] = [],
@@ -43,14 +41,14 @@ namespace HRManagement.Application.Services
 
             while (current != null)
             {
-                path = string.Join(current.Name, path);
+                path = string.Join(current.OfficialName, path);
                 current = current.Parent;
             }
 
             return path;
         }
 
-        public async Task<List<OrgUnit>> GetAllChildUnitsAsync(Guid unitId)
+        public async Task<List<OrgUnit>> GetAllChildUnitsAsync(long unitId)
         {
             var children = new List<OrgUnit>();
             var directChildren = await _orgUnitRepository.GetChildUnits(unitId);
@@ -69,8 +67,6 @@ namespace HRManagement.Application.Services
         {
             return unitType switch
             {
-                OrgUnitType.LeaderOffice => 0,
-                OrgUnitType.ViceLeaderOffice => 1,
                 OrgUnitType.GeneralManagement => 2,
                 OrgUnitType.Department => 3,
                 OrgUnitType.Section => 4,
@@ -80,8 +76,6 @@ namespace HRManagement.Application.Services
         }
         static readonly Dictionary<OrgUnitType, List<OrgUnitType>> sameLevel = new()
         {
-            [OrgUnitType.LeaderOffice] = [OrgUnitType.LeaderOffice],
-            [OrgUnitType.ViceLeaderOffice] = [OrgUnitType.ViceLeaderOffice],
             [OrgUnitType.GeneralManagement] = [OrgUnitType.GeneralManagement],
             [OrgUnitType.Department] = [OrgUnitType.Department],
             [OrgUnitType.Section] = [OrgUnitType.Section, OrgUnitType.Branch],
@@ -89,7 +83,7 @@ namespace HRManagement.Application.Services
         };
         // Check if units are at same hierarchical level
         public bool AreSameHierarchyLevel(OrgUnitType type1, OrgUnitType type2) => sameLevel[type1].Contains(type2);
-        public async Task<OrgUnitDto?> GetById(Guid id)
+        public async Task<OrgUnitDto?> GetById(long id)
         {
             var orgUnit = await _orgUnitRepository.GetById(id);
             return orgUnit != null ? _mapper.Map<OrgUnitDto>(orgUnit) : null;
@@ -101,7 +95,7 @@ namespace HRManagement.Application.Services
             return _mapper.Map<IEnumerable<OrgUnitDto>>(orgUnits);
         }
 
-        public async Task<IEnumerable<OrgUnitDto>> GetByParentId(Guid? parentId)
+        public async Task<IEnumerable<OrgUnitDto>> GetByParentId(long? parentId)
         {
             var orgUnits = await _orgUnitRepository.GetByParentId(parentId);
             return _mapper.Map<IEnumerable<OrgUnitDto>>(orgUnits);
@@ -143,7 +137,7 @@ namespace HRManagement.Application.Services
             return _mapper.Map<OrgUnitDto>(created);
         }
 
-        public async Task<OrgUnitDto> Update(Guid id, UpdateOrgUnitDto dto)
+        public async Task<OrgUnitDto> Update(long id, UpdateOrgUnitDto dto)
         {
             var orgUnit = await _orgUnitRepository.GetById(id);
             if (orgUnit == null)
@@ -154,7 +148,7 @@ namespace HRManagement.Application.Services
             return _mapper.Map<OrgUnitDto>(updated);
         }
 
-        public async Task Delete(Guid id)
+        public async Task Delete(long id)
         {
             var orgUnit = await _orgUnitRepository.GetById(id);
             if (orgUnit == null)
@@ -162,7 +156,7 @@ namespace HRManagement.Application.Services
             await _orgUnitRepository.Delete(orgUnit);
         }
 
-        public async Task<bool> Exists(Guid id)
+        public async Task<bool> Exists(long id)
         {
             return await _orgUnitRepository.ActiveExists(id);
         }
@@ -172,6 +166,12 @@ namespace HRManagement.Application.Services
             var allOrgUnits = await _orgUnitRepository.GetAllWithChildren();
             var leaderUnit = allOrgUnits.FirstOrDefault(o => o.ParentId == null);
             return _mapper.Map<OrgUnitHierarchyDto>(leaderUnit!);
+        }
+
+        public async Task<OrgUnitDto?> GetByGuid(Guid guid)
+        {
+            var orgUnit = await _orgUnitRepository.GetByGuid(guid);
+            return orgUnit != null ? _mapper.Map<OrgUnitDto>(orgUnit) : null;
         }
     }
 }

@@ -6,14 +6,14 @@ namespace HRManagement.Application.Interfaces
 {
     public interface IEmployeeProfileService
     {
-        Task<EmployeeProfileDto?> GetById(Guid id);
-        Task<EmployeeProfileDto?> GetByEmployeeId(Guid employeeId);
+        Task<EmployeeProfileDto?> GetById(long id);
+        Task<EmployeeProfileDto?> GetByEmployeeId(long employeeId);
         Task<IEnumerable<EmployeeProfileDto>> GetAll();
         Task<EmployeeProfileDto> Create(CreateEmployeeProfileDto createDto, Stream? stream, string? fileName);
-        Task<EmployeeProfileDto> Update(Guid id, UpdateEmployeeProfileDto updateDto, Stream? stream, string? fileName = null);
-        Task Delete(Guid id);
-        Task<bool> Exists(Guid id);
+        Task<EmployeeProfileDto> Update(long id, UpdateEmployeeProfileDto updateDto, Stream? stream, string? fileName = null);
+        Task Delete(long id);
+        Task<bool> Exists(long id);
         Task<PagedResult<EmployeeProfileDto>> GetPaged(int pageNumber, int pageSize);
-        Task UpdateEmployeeImage(Guid employeeId, string imagePath);
+        Task UpdateEmployeeImage(long employeeId, string imagePath);
     }
 }

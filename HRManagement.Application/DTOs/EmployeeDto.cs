@@ -5,7 +5,7 @@ namespace HRManagement.Application.DTOs
 {
     public class ShortEmployeeDto
     {
-        public Guid Id { get; set; }
+        public long Id { get; set; }
         public int MilitaryNumber { get; set; }
         public string ArabicName { get; set; } = string.Empty;
         public MilitaryRank Rank { get; set; }
@@ -13,7 +13,7 @@ namespace HRManagement.Application.DTOs
     }
     public class EmployeeDto
     {
-        public Guid Id { get; set; }
+        public long Id { get; set; }
         public int MilitaryNumber { get; set; }
         public string ArabicFirstName { get; set; } = string.Empty;
         public string? ArabicMiddleName { get; set; }

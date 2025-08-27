@@ -54,13 +54,13 @@ namespace HRManagement.Application.Services
             return _mapper.Map<EmployeeSignatureDto>(createdSignature);
         }
 
-        public async Task<EmployeeSignatureDto?> GetById(Guid id)
+        public async Task<EmployeeSignatureDto?> GetById(long id)
         {
             var signature = await _signatureRepository.GetById(id);
             return _mapper.Map<EmployeeSignatureDto>(signature);
         }
 
-        public async Task<EmployeeSignatureDto?> GetByEmployeeId(Guid employeeId)
+        public async Task<EmployeeSignatureDto?> GetByEmployeeId(long employeeId)
         {
             var signature = await _signatureRepository.GetByEmployeeId(employeeId);
             return _mapper.Map<EmployeeSignatureDto>(signature);
@@ -81,7 +81,7 @@ namespace HRManagement.Application.Services
             };
         }
 
-        public async Task<EmployeeSignatureDto> Update(Guid id, UpdateEmployeeSignatureDto updateDto)
+        public async Task<EmployeeSignatureDto> Update(long id, UpdateEmployeeSignatureDto updateDto)
         {
             var signature = await _signatureRepository.GetById(id);
             if (signature == null)
@@ -95,7 +95,7 @@ namespace HRManagement.Application.Services
             return _mapper.Map<EmployeeSignatureDto>(updatedSignature);
         }
 
-        public async Task<EmployeeSignatureDto> UpdateSignatureImageAsync(Guid id, Stream imageStream, string fileName)
+        public async Task<EmployeeSignatureDto> UpdateSignatureImageAsync(long id, Stream imageStream, string fileName)
         {
             var signature = await _signatureRepository.GetById(id);
             if (signature == null)
@@ -116,7 +116,7 @@ namespace HRManagement.Application.Services
             return _mapper.Map<EmployeeSignatureDto>(updatedSignature);
         }
 
-        public async Task Delete(Guid id)
+        public async Task Delete(long id)
         {
             var signature = await _signatureRepository.GetById(id);
             if (signature == null)

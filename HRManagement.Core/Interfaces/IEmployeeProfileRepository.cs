@@ -4,8 +4,8 @@ namespace HRManagement.Core.Interfaces
 {
     public interface IEmployeeProfileRepository : IRepository<EmployeeProfile>
     {
-        Task<EmployeeProfile?> GetByEmployeeId(Guid employeeId);
-        Task UpdateEmployeeImage(Guid employeeId, string imagePath);
-        Task<string?> GetEmployeeImagePath(Guid employeeId);
+        Task<EmployeeProfile?> GetByEmployeeId(long employeeId);
+        Task UpdateEmployeeImage(long employeeId, string imagePath);
+        Task<string?> GetEmployeeImagePath(long employeeId);
     }
 }

@@ -16,6 +16,7 @@ namespace HRManagement.Application.Services
         IEmployeeProfileRepository employeeProfileRepository,
         IEmployeeServiceInfoRepository employeeServiceInfoRepository,
         IEmployeeAssignmentRepository employeeAssignmentRepository,
+        IRoleRepository roleRepo,
         IMapper mapper) : IEmployeeService
     {
         private readonly IEmployeeRepository _employeeRepository = employeeRepository;
@@ -24,8 +25,9 @@ namespace HRManagement.Application.Services
         private readonly IMapper _mapper = mapper;
         private readonly IEmployeeServiceInfoRepository _employeeServiceInfoRepository = employeeServiceInfoRepository;
         private readonly IEmployeeAssignmentRepository _employeeAssignmentRepository = employeeAssignmentRepository;
+        private readonly IRoleRepository _roleRepo = roleRepo;
 
-        public async Task<EmployeeDto?> GetById(Guid id)
+        public async Task<EmployeeDto?> GetById(long id)
         {
             var employee = await _employeeRepository.GetById(id);
             return employee != null ? _mapper.Map<EmployeeDto>(employee) : null;
@@ -72,7 +74,7 @@ namespace HRManagement.Application.Services
             return _mapper.Map<EmployeeDto>(createdEmployee);
         }
 
-        public async Task<EmployeeDto> Update(Guid id, UpdateEmployeeDto updateDto)
+        public async Task<EmployeeDto> Update(long id, UpdateEmployeeDto updateDto)
         {
             var employee = await _employeeRepository.GetById(id);
             if (employee == null)
@@ -83,7 +85,7 @@ namespace HRManagement.Application.Services
             return _mapper.Map<EmployeeDto>(updatedEmployee);
         }
 
-        public async Task Delete(Guid id)
+        public async Task Delete(long id)
         {
             var employee = await _employeeRepository.GetById(id);
             if (employee == null)
@@ -92,12 +94,12 @@ namespace HRManagement.Application.Services
             await _employeeRepository.Delete(employee);
         }
 
-        public async Task<bool> Exists(Guid id)
+        public async Task<bool> Exists(long id)
         {
             return await _employeeRepository.ActiveExists(id);
         }
 
-        public async Task<string> UploadProfileImage(Guid employeeId, Stream imageStream, string fileName)
+        public async Task<string> UploadProfileImage(long employeeId, Stream imageStream, string fileName)
         {
 
             var employeeProfile = await _employeeProfileRepository.GetByEmployeeId(employeeId) ?? throw new ArgumentException("Employee not found");
@@ -118,7 +120,7 @@ namespace HRManagement.Application.Services
             return filePath;
         }
 
-        public async Task DeleteProfileImage(Guid employeeId)
+        public async Task DeleteProfileImage(long employeeId)
         {
             var empProfile = await _employeeProfileRepository.GetByEmployeeId(employeeId);
             if (empProfile == null)
@@ -132,7 +134,7 @@ namespace HRManagement.Application.Services
             }
         }
 
-        public async Task<EmployeeProfile?> GetProfileByEmployeeId(Guid id)
+        public async Task<EmployeeProfile?> GetProfileByEmployeeId(long id)
         {
             var empProfile = await _employeeProfileRepository.GetByEmployeeId(id);
             if (empProfile == null)
@@ -141,7 +143,7 @@ namespace HRManagement.Application.Services
             return empProfile;
         }
 
-        public async Task<ComprehensiveEmployeeDto?> GetComprehensiveEmployeeById(Guid id)
+        public async Task<ComprehensiveEmployeeDto?> GetComprehensiveEmployeeById(long id)
         {
             var employee = await _employeeRepository.GetEmployeeWithAllDetails(id);
             if (employee == null)
@@ -151,7 +153,7 @@ namespace HRManagement.Application.Services
             return _mapper.Map<ComprehensiveEmployeeDto>(employee);
         }
 
-        public async Task<List<EmployeeJobSummaryDto>> GetEmployeeJobSummary(Guid employeeId)
+        public async Task<List<EmployeeJobSummaryDto>> GetEmployeeJobSummary(long employeeId)
         {
             var jobSummaries = new List<EmployeeJobSummaryDto>();
 
@@ -170,7 +172,7 @@ namespace HRManagement.Application.Services
             return jobSummaries;
         }
 
-        public async Task<CurrentEmployeeSummaryDto?> GetCurrentEmployeeSummary(Guid userId)
+        public async Task<CurrentEmployeeSummaryDto?> GetCurrentEmployeeSummary(long userId)
         {
             // Match current user id to an employee record
             var employee = await _employeeRepository.GetById(userId);
@@ -195,7 +197,7 @@ namespace HRManagement.Application.Services
             };
         }
 
-        public async Task<IEnumerable<EmployeeDto>> GetEmployeeByRoleIdAsync(Guid roleId)
+        public async Task<List<EmployeeDto>> GetEmployeeByRoleId(long roleId)
         {
             var employees = new HashSet<Employee>();
 
@@ -210,7 +212,7 @@ namespace HRManagement.Application.Services
             }
 
             // Get employees from assignments
-            var assignmentEmployees = await _employeeAssignmentRepository.GetByRoleIdAsync(roleId);
+            var assignmentEmployees = await _employeeAssignmentRepository.GetByRoleId(roleId);
             foreach (var assignment in assignmentEmployees)
             {
                 if (assignment.Employee != null)
@@ -220,10 +222,10 @@ namespace HRManagement.Application.Services
             }
 
             // Map to DTOs and return
-            return _mapper.Map<IEnumerable<EmployeeDto>>(employees);
+            return _mapper.Map<List<EmployeeDto>>(employees);
         }
 
-        public async Task<ShortEmployeeDto> GetByIdShort(Guid id)
+        public async Task<ShortEmployeeDto> GetByIdShort(long id)
         {
             ShortEmployeeDto shortEmployee = (await GetShortEmployeeBy(e => e.Id == id)).First();
             return shortEmployee;
@@ -248,9 +250,9 @@ namespace HRManagement.Application.Services
             return [shortEmployee];
         }
 
-        public async Task<List<ShortEmployeeDto>> GetByIdsShort(List<Guid> ids)
+        public async Task<List<ShortEmployeeDto>> GetByIdsShort(List<Guid> guids) //external
         {
-            List<ShortEmployeeDto> shortEmployees = await GetShortEmployeeBy(e => ids.Contains(e.Id));
+            List<ShortEmployeeDto> shortEmployees = await GetShortEmployeeBy(e => guids.Contains(e.Guid));
             return shortEmployees;
         }
 
@@ -266,16 +268,13 @@ namespace HRManagement.Application.Services
             return shortEmployees;
         }
 
-        Task<List<EmployeeDto>> IEmployeeService.GetEmployeeByRoleId(Guid roleId)
+        public async Task<List<Guid>> GetEmployeeRoleGuids(Guid employeeGuid) //external 
         {
-            throw new NotImplementedException();
-        }
-
-        public async Task<List<Guid>> GetEmployeeRoleIds(Guid employeeId)
-        {
-            var jobs = await GetEmployeeJobSummary(employeeId);
+            var emp = await _employeeRepository.GetByGuid(employeeGuid) ?? throw new ArgumentException("Employee not found");
+            var jobs = await GetEmployeeJobSummary(emp.Id);
             var roleIds = jobs.Select(j => j.JobRoleId).Distinct().ToList();
-            return roleIds;
+            var guids = await _roleRepo.GetGuidsByIds(roleIds);
+            return guids;
         }
     }
 }

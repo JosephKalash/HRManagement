@@ -7,7 +7,7 @@ namespace HRManagement.Core.Entities
     public class EmployeeProfile : BaseEntity
     {
         [Required]
-        public Guid EmployeeId { get; set; }
+        public long EmployeeId { get; set; }
         public Gender Gender { get; set; } = Gender.Male;
 
         [Required]

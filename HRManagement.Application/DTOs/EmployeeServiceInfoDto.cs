@@ -5,11 +5,11 @@ namespace HRManagement.Application.DTOs
 {
     public class EmployeeServiceInfoDto
     {
-        public Guid Id { get; set; }
-        public Guid EmployeeId { get; set; }
-        public Guid BelongingUnitId { get; set; }
+        public long Id { get; set; }
+        public long EmployeeId { get; set; }
+        public long BelongingUnitId { get; set; }
         public Ownership Ownership { get; set; }
-        public Guid JobRoleId { get; set; }
+        public long JobRoleId { get; set; }
         public DateTime? HiringDate { get; set; }
         public int? GrantingAuthority { get; set; }
         public DateTime? LastPromotion { get; set; }
@@ -31,17 +31,17 @@ namespace HRManagement.Application.DTOs
     public class CreateEmployeeServiceInfoDto
     {
         [Required]
-        public Guid EmployeeId { get; set; }
+        public long EmployeeId { get; set; }
 
         [Required]
-        public Guid BelongingUnitId { get; set; }
+        public long BelongingUnitId { get; set; }
 
 
         [Required]
         public Ownership Ownership { get; set; }
 
         [Required]
-        public Guid JobRoleId { get; set; }
+        public long JobRoleId { get; set; }
 
         public DateTime? HiringDate { get; set; }
         public int? GrantingAuthority { get; set; }
@@ -66,9 +66,9 @@ namespace HRManagement.Application.DTOs
 
     public class UpdateEmployeeServiceInfoDto
     {
-        public Guid? BelongingUnitId { get; set; }
+        public long? BelongingUnitId { get; set; }
         public Ownership? Ownership { get; set; }
-        public Guid? JobRoleId { get; set; }
+        public long? JobRoleId { get; set; }
         public DateTime? HiringDate { get; set; }
         public int? GrantingAuthority { get; set; }
         public DateTime? LastPromotion { get; set; }

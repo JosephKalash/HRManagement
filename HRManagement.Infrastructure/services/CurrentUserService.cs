@@ -8,7 +8,7 @@ namespace HRManagement.Infrastructure.Services
     {
         private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
-        public Guid? UserId
+        public long? UserId
         {
             get
             {
@@ -16,7 +16,7 @@ namespace HRManagement.Infrastructure.Services
                 var idClaim = user?.FindFirst(ClaimTypes.NameIdentifier)?.Value
                               ?? user?.FindFirst("sub")?.Value
                               ?? user?.FindFirst("uid")?.Value;
-                if (Guid.TryParse(idClaim, out var id))
+                if (long.TryParse(idClaim, out var id))
                 {
                     return id;
                 }

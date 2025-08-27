@@ -8,6 +8,6 @@ namespace HRManagement.Core.Interfaces
         Task<Employee?> GetByIdNumber(string idNumber);
         Task<IEnumerable<Employee>> GetActiveEmployees();
         Task<IEnumerable<Employee>> SearchEmployees(string searchTerm);
-        Task<Employee?> GetEmployeeWithAllDetails(Guid id);
+        Task<Employee?> GetEmployeeWithAllDetails(long id);
     }
 }

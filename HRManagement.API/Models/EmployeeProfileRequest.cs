@@ -9,7 +9,7 @@ namespace HRManagement.API.Models
     public class CreateEmployeeProfileRequest
     {
         [Required]
-        public Guid EmployeeId { get; set; }
+        public long EmployeeId { get; set; }
 
         public int? Height { get; set; }
 

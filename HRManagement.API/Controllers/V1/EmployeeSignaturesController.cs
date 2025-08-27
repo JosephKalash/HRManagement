@@ -16,10 +16,10 @@ namespace HRManagement.API.Controllers.V1
         private readonly IEmployeeSignatureService _employeeSignatureService = employeeSignatureService;
         private readonly IMapper _mapper = mapper;
 
-        
-        
-        
-        
+
+
+
+
         [HttpGet]
         [ProducesResponseType(typeof(ApiResponse<PagedResult<EmployeeSignatureDto>>), 200)]
 
@@ -49,16 +49,16 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        
-        
-        
-        
-        
+
+
+
+
+
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(ApiResponse<EmployeeSignatureDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
 
-        public async Task<ActionResult<ApiResponse<EmployeeSignatureDto>>> GetEmployeeSignature(Guid id)
+        public async Task<ActionResult<ApiResponse<EmployeeSignatureDto>>> GetEmployeeSignature(long id)
         {
             try
             {
@@ -82,16 +82,16 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        
-        
-        
-        
-        
+
+
+
+
+
         [HttpGet("employee/{employeeId}")]
         [ProducesResponseType(typeof(ApiResponse<EmployeeSignatureDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
 
-        public async Task<ActionResult<ApiResponse<EmployeeSignatureDto>>> GetEmployeeSignatureByEmployeeId(Guid employeeId)
+        public async Task<ActionResult<ApiResponse<EmployeeSignatureDto>>> GetEmployeeSignatureByEmployeeId(long employeeId)
         {
             try
             {
@@ -115,12 +115,12 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
         [HttpPost]
         [Consumes("multipart/form-data")]
         [ProducesResponseType(typeof(ApiResponse<EmployeeSignatureDto>), 201)]
@@ -156,18 +156,18 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
         [HttpPatch("{id}")]
         [ProducesResponseType(typeof(ApiResponse<EmployeeSignatureDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
 
-        public async Task<ActionResult<ApiResponse<EmployeeSignatureDto>>> UpdateEmployeeSignature(Guid id, UpdateEmployeeSignatureDto updateDto)
+        public async Task<ActionResult<ApiResponse<EmployeeSignatureDto>>> UpdateEmployeeSignature(long id, UpdateEmployeeSignatureDto updateDto)
         {
             try
             {
@@ -190,19 +190,19 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
         [HttpPatch("{id}/image")]
         [Consumes("multipart/form-data")]
         [ProducesResponseType(typeof(ApiResponse<EmployeeSignatureDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
 
-        public async Task<ActionResult<ApiResponse<EmployeeSignatureDto>>> UpdateEmployeeSignatureImage(Guid id, IFormFile image)
+        public async Task<ActionResult<ApiResponse<EmployeeSignatureDto>>> UpdateEmployeeSignatureImage(long id, IFormFile image)
         {
             try
             {
@@ -223,16 +223,16 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        
-        
-        
-        
-        
+
+
+
+
+
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(ApiResponse), 204)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
 
-        public async Task<ActionResult<ApiResponse>> DeleteEmployeeSignature(Guid id)
+        public async Task<ActionResult<ApiResponse>> DeleteEmployeeSignature(long id)
         {
             try
             {

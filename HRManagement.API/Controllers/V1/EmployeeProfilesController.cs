@@ -20,10 +20,10 @@ namespace HRManagement.API.Controllers.V1
         private readonly IEmployeeProfileService _employeeProfileService = employeeProfileService;
         private readonly IMapper _mapper = mapper;
 
-        
-        
-        
-        
+
+
+
+
         [HttpGet]
         [ProducesResponseType(typeof(ApiResponse<PagedResult<EmployeeProfileDto>>), 200)]
 
@@ -52,16 +52,16 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        
-        
-        
-        
-        
+
+
+
+
+
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(ApiResponse<EmployeeProfileDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
 
-        public async Task<ActionResult<ApiResponse<EmployeeProfileDto>>> GetEmployeeProfile(Guid id)
+        public async Task<ActionResult<ApiResponse<EmployeeProfileDto>>> GetEmployeeProfile(long id)
         {
             try
             {
@@ -79,16 +79,16 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        
-        
-        
-        
-        
+
+
+
+
+
         [HttpGet("employee/{employeeId}")]
         [ProducesResponseType(typeof(ApiResponse<EmployeeProfileDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
 
-        public async Task<ActionResult<ApiResponse<EmployeeProfileDto>>> GetEmployeeProfileByEmployeeId(Guid employeeId)
+        public async Task<ActionResult<ApiResponse<EmployeeProfileDto>>> GetEmployeeProfileByEmployeeId(long employeeId)
         {
             try
             {
@@ -106,12 +106,12 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
         [HttpPost]
         [Consumes("multipart/form-data")]
         [ProducesResponseType(typeof(ApiResponse<EmployeeProfileDto>), 201)]
@@ -153,18 +153,18 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
         [HttpPatch("{id}")]
         [ProducesResponseType(typeof(ApiResponse<EmployeeProfileDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
 
-        public async Task<ActionResult<ApiResponse<EmployeeProfileDto>>> UpdateEmployeeProfile(Guid id, [FromForm] UpdateEmployeeProfileRequest updateRequest)
+        public async Task<ActionResult<ApiResponse<EmployeeProfileDto>>> UpdateEmployeeProfile(long id, [FromForm] UpdateEmployeeProfileRequest updateRequest)
         {
             try
             {
@@ -195,16 +195,16 @@ namespace HRManagement.API.Controllers.V1
             }
         }
 
-        
-        
-        
-        
-        
+
+
+
+
+
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(ApiResponse), 204)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
 
-        public async Task<ActionResult<ApiResponse>> DeleteEmployeeProfile(Guid id)
+        public async Task<ActionResult<ApiResponse>> DeleteEmployeeProfile(long id)
         {
             try
             {

@@ -1,3 +1,4 @@
+using System.Reflection;
 using HRManagement.Application.Interfaces;
 using HRManagement.Core.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -31,10 +32,14 @@ namespace HRManagement.Infrastructure.Data
             modelBuilder.Entity<Role>().HasQueryFilter(e => !e.IsDeleted);
             modelBuilder.Entity<OrgUnit>().HasQueryFilter(e => !e.IsDeleted);
 
+
+            //base entity configuration 
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
             // Employee configuration
             modelBuilder.Entity<Employee>(entity =>
             {
-                entity.HasKey(e => e.Id);
+
                 entity.Property(e => e.MilitaryNumber).IsRequired();
                 entity.HasIndex(e => e.MilitaryNumber).IsUnique();
                 entity.Property(e => e.ArabicFirstName).IsRequired().HasMaxLength(100);
@@ -50,7 +55,7 @@ namespace HRManagement.Infrastructure.Data
             // EmployeeProfile configuration
             modelBuilder.Entity<EmployeeProfile>(entity =>
             {
-                entity.HasKey(e => e.Id);
+
                 entity.Property(e => e.SkinColor).HasMaxLength(50);
                 entity.Property(e => e.HairColor).HasMaxLength(50);
                 entity.Property(e => e.EyeColor).HasMaxLength(50);
@@ -66,7 +71,7 @@ namespace HRManagement.Infrastructure.Data
             });
             modelBuilder.Entity<EmployeeContact>(entity =>
             {
-                entity.HasKey(e => e.Id);
+
                 entity.Property(e => e.Email);
                 entity.Property(e => e.MobileNumber).IsRequired();
                 entity.Property(e => e.SecondMobileNumber);
@@ -80,7 +85,7 @@ namespace HRManagement.Infrastructure.Data
             // EmployeeSignature configuration
             modelBuilder.Entity<EmployeeSignature>(entity =>
             {
-                entity.HasKey(e => e.Id);
+
                 entity.Property(e => e.SignatureName).IsRequired().HasMaxLength(100);
                 entity.Property(e => e.FilePath).IsRequired().HasMaxLength(500);
                 entity.Property(e => e.OriginalFileName).HasMaxLength(255);
@@ -93,7 +98,7 @@ namespace HRManagement.Infrastructure.Data
             // EmployeeServiceInfo configuration
             modelBuilder.Entity<EmployeeServiceInfo>(entity =>
             {
-                entity.HasKey(e => e.Id);
+
                 entity.Property(e => e.BaseSalary).HasColumnType("decimal(18,2)");
                 entity.HasOne(e => e.Employee)
                     .WithMany(e => e.ServiceInfos)
@@ -112,7 +117,7 @@ namespace HRManagement.Infrastructure.Data
             // EmployeeAssignment configuration
             modelBuilder.Entity<EmployeeAssignment>(entity =>
             {
-                entity.HasKey(e => e.Id);
+
                 entity.Property(e => e.AssignmentDate).IsRequired();
                 entity.Property(e => e.HiringDate).IsRequired();
                 entity.HasOne(e => e.Employee)
@@ -140,18 +145,18 @@ namespace HRManagement.Infrastructure.Data
             // Role configuration
             modelBuilder.Entity<Role>(entity =>
             {
-                entity.HasKey(e => e.Id);
+
                 entity.Property(e => e.Name).IsRequired().HasMaxLength(200);
                 entity.Property(e => e.OldListId).IsRequired().HasMaxLength(50);
 
-                entity.HasIndex(e=>e.OldListId).IsUnique();
+                entity.HasIndex(e => e.OldListId).IsUnique();
             });
 
             // OrgUnit configuration
             modelBuilder.Entity<OrgUnit>(entity =>
             {
-                entity.HasKey(o => o.Id);
-                entity.Property(o => o.Name).IsRequired().HasMaxLength(200);
+
+                entity.Property(o => o.OfficialName).IsRequired().HasMaxLength(200);
                 entity.Property(o => o.Description);
                 entity.HasOne(o => o.Parent)
                       .WithMany(o => o.Children)
@@ -185,7 +190,7 @@ namespace HRManagement.Infrastructure.Data
                     var createdByProp = entry.Entity.GetType().GetProperty("CreatedBy");
                     if (createdByProp != null)
                     {
-                        if (createdByProp.PropertyType == typeof(Guid?) && userId.HasValue)
+                        if (createdByProp.PropertyType == typeof(long?) && userId.HasValue)
                         {
                             createdByProp.SetValue(entry.Entity, userId);
                         }
@@ -203,7 +208,7 @@ namespace HRManagement.Infrastructure.Data
                     var updatedByProp = entry.Entity.GetType().GetProperty("UpdatedBy");
                     if (updatedByProp != null)
                     {
-                        if (updatedByProp.PropertyType == typeof(Guid?) && userId.HasValue)
+                        if (updatedByProp.PropertyType == typeof(long?) && userId.HasValue)
                         {
                             updatedByProp.SetValue(entry.Entity, userId);
                         }
@@ -223,7 +228,7 @@ namespace HRManagement.Infrastructure.Data
                     var updatedByProp = entry.Entity.GetType().GetProperty("UpdatedBy");
                     if (updatedByProp != null)
                     {
-                        if (updatedByProp.PropertyType == typeof(Guid?) && userId.HasValue)
+                        if (updatedByProp.PropertyType == typeof(long?) && userId.HasValue)
                         {
                             updatedByProp.SetValue(entry.Entity, userId);
                         }

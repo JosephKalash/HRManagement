@@ -11,7 +11,7 @@ namespace HRManagement.Infrastructure.Repositories
         {
         }
 
-        public async Task<IEnumerable<EmployeeServiceInfo>> GetByEmployeeId(Guid employeeId)
+        public async Task<IEnumerable<EmployeeServiceInfo>> GetByEmployeeId(long employeeId)
         {
             return await _context.EmployeeServiceInfos
                 .Include(esi => esi.Employee)
@@ -21,7 +21,7 @@ namespace HRManagement.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<EmployeeServiceInfo?> GetActiveByEmployeeId(Guid employeeId)
+        public async Task<EmployeeServiceInfo?> GetActiveByEmployeeId(long employeeId)
         {
             return await _context.EmployeeServiceInfos
                 .Include(esi => esi.Employee)
@@ -30,7 +30,7 @@ namespace HRManagement.Infrastructure.Repositories
                 .FirstOrDefaultAsync(esi => esi.EmployeeId == employeeId && esi.IsActive);
         }
 
-        public async Task<IEnumerable<EmployeeServiceInfo>> GetByRoleId(Guid roleId)
+        public async Task<IEnumerable<EmployeeServiceInfo>> GetByRoleId(long roleId)
         {
             return await _context.EmployeeServiceInfos
                 .Include(esi => esi.Employee)

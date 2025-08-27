@@ -6,20 +6,34 @@ namespace HRManagement.Core.Entities
     public class OrgUnit : BaseEntity, IActivable
     {
         public OrgUnitType Type { get; set; }
-        public int Level => (int)Type;
+        public int Level;
 
         [Required]
         [StringLength(200)]
-        public string Name { get; set; } = string.Empty;
+        public string OfficialName { get; set; } = string.Empty;
+
+        [Required]
+        [StringLength(200)]
+        public string AliasName { get; set; } = string.Empty;
+
+        [Required]
+        [StringLength(200)]
+        public string ShortName { get; set; } = string.Empty;
+
+        [Required]
+        [StringLength(200)]
+        public string EnglishName { get; set; } = string.Empty;
 
         public string HierarchyPath { get; set; } = string.Empty;
 
+        public long? OldUnitId { get; set; } // from old system
+        public long? OldParentId { get; set; } // from old system
         public string? Description { get; set; }
 
-        public Guid? ParentId { get; set; }
+        public long? ParentId { get; set; }
         public OrgUnit? Parent { get; set; }
 
-        public Guid? ManagerId { get; set; }
+        public long? ManagerId { get; set; }
         public Employee? Manager { get; set; }
 
         public ICollection<OrgUnit> Children { get; set; } = [];

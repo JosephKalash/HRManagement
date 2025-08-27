@@ -33,7 +33,7 @@ namespace HRManagement.Infrastructure.Repositories
             ).ToListAsync();
         }
 
-        public async Task<Employee?> GetEmployeeWithAllDetails(Guid id)
+        public async Task<Employee?> GetEmployeeWithAllDetails(long id)
         {
             return await _dbSet
                 .Include(e => e.Profile)

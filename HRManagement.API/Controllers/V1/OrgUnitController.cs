@@ -41,7 +41,7 @@ namespace HRManagement.API.Controllers.V1
         [ProducesResponseType(typeof(ApiResponse<OrgUnitDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
 
-        public async Task<ActionResult<ApiResponse<OrgUnitDto>>> GetOrgUnit(Guid id)
+        public async Task<ActionResult<ApiResponse<OrgUnitDto>>> GetOrgUnit(long id)
         {
             try
             {
@@ -57,11 +57,31 @@ namespace HRManagement.API.Controllers.V1
                 return StatusCode(400, ApiResponse<OrgUnitDto>.ErrorResult(ex.Message, new List<string> { ex.Message }));
             }
         }
+        [HttpGet("external/{guid}")]
+        [ProducesResponseType(typeof(ApiResponse<OrgUnitDto>), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 404)]
+
+        public async Task<ActionResult<ApiResponse<OrgUnitDto>>> GetOrgUnitByGuid(Guid guid)
+        {
+            try
+            {
+                var orgUnit = await _orgUnitService.GetByGuid(guid);
+                if (orgUnit == null)
+                {
+                    return NotFound(ApiResponse<OrgUnitDto>.ErrorResult($"OrgUnit not found"));
+                }
+                return Ok(ApiResponse<OrgUnitDto>.SuccessResult(orgUnit, "Org unit retrieved successfully"));
+            }
+            catch (InvalidOperationException ex)
+            {
+                return StatusCode(400, ApiResponse<OrgUnitDto>.ErrorResult(ex.Message, new List<string> { ex.Message }));
+            }
+        }
 
         [HttpGet("parent/{parentId}")]
         [ProducesResponseType(typeof(ApiResponse<IEnumerable<OrgUnitDto>>), 200)]
 
-        public async Task<ActionResult<ApiResponse<IEnumerable<OrgUnitDto>>>> GetByParentId(Guid? parentId)
+        public async Task<ActionResult<ApiResponse<IEnumerable<OrgUnitDto>>>> GetByParentId(long? parentId)
         {
             try
             {
@@ -137,7 +157,7 @@ namespace HRManagement.API.Controllers.V1
         [ProducesResponseType(typeof(ApiResponse), 400)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
 
-        public async Task<ActionResult<ApiResponse<OrgUnitDto>>> UpdateOrgUnit(Guid id, UpdateOrgUnitDto dto)
+        public async Task<ActionResult<ApiResponse<OrgUnitDto>>> UpdateOrgUnit(long id, UpdateOrgUnitDto dto)
         {
             try
             {
@@ -163,7 +183,7 @@ namespace HRManagement.API.Controllers.V1
         [ProducesResponseType(typeof(ApiResponse), 204)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
 
-        public async Task<ActionResult<ApiResponse>> DeleteOrgUnit(Guid id)
+        public async Task<ActionResult<ApiResponse>> DeleteOrgUnit(long id)
         {
             try
             {

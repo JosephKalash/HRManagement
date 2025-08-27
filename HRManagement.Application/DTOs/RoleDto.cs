@@ -7,7 +7,7 @@ namespace HRManagement.Application.DTOs
 {
     public class RoleDto
     {
-        public Guid Id { get; set; }
+        public long Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Code { get; set; } = string.Empty; // System identification
         public string? Description { get; set; }
@@ -38,7 +38,7 @@ namespace HRManagement.Application.DTOs
     public class UpdateRoleDto
     {
         [Required]
-        public Guid Id { get; set; } // Role ID for identification
+        public long Id { get; set; } // Role ID for identification
 
         [StringLength(100)]
         public string Name { get; set; } = string.Empty;

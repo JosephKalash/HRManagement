@@ -6,6 +6,6 @@ namespace HRManagement.Core.Repositories
 {
     public interface IEmployeeContactRepository : IRepository<EmployeeContact>
     {
-        Task<EmployeeContact?> GetEmployeeContactByEmployeeId(Guid employeeId);
+        Task<EmployeeContact?> GetEmployeeContactByEmployeeId(long employeeId);
     }
 }
