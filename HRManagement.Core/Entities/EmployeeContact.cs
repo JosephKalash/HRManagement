@@ -25,3 +25,25 @@ namespace HRManagement.Core.Entities
         public virtual Employee? Employee { get; set; }
     }
 }
+// public class EmployeeContactInfo
+// {
+//     // Phones
+//     public string? Phone { get; set; }              // ephone
+//     public string? MobilePrimary { get; set; }      // emobile
+//     public string? MobileSecondary { get; set; }    // other_phone
+//     public string? Extension { get; set; }          // extention_phone_no
+//     public string? FaxNumber { get; set; }          // fax_no
+
+//     // Email
+//     public string? Email { get; set; }              // email
+//     public string? OfficialEmail { get; set; }      // moi_email
+
+//     // Address
+//     public string? Street { get; set; }             // street_no
+//     public string? HouseNumber { get; set; }        // house_no
+//     public string? FlatNumber { get; set; }         // flat_no
+//     public string? Area { get; set; }               // areaid (linked lookup)
+//     public string? City { get; set; }               // cityid (linked lookup)
+//     public string? Pobox { get; set; }              // emp_pobox
+//     public string? AddressDetails { get; set; }     // address (free-text)
+// }

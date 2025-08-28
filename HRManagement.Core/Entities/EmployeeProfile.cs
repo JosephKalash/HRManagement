@@ -11,7 +11,7 @@ namespace HRManagement.Core.Entities
         public Gender Gender { get; set; } = Gender.Male;
 
         [Required]
-        public DateTime DateOfBirth { get; set; }
+        public DateTime? DateOfBirth { get; set; }
 
         public int? Height { get; set; }
 
@@ -27,19 +27,19 @@ namespace HRManagement.Core.Entities
         public string? EyeColor { get; set; }
 
         [StringLength(100)]
-        public string? DisabilityType { get; set; }
+        public int? DisabilityType { get; set; }
 
         public string? DistinctiveSigns { get; set; }
 
         [Required]
         [StringLength(100)]
-        public string CurrentNationality { get; set; } = string.Empty;
+        public long? NationalityId { get; set; }
 
         [Required]
         [StringLength(100)]
         public Religions Religion { get; set; } = Religions.Islam;
 
-        public string? PreviousNationality { get; set; }
+        public long? PreviousNationalityId { get; set; }
 
         public DateTime? IssueNationalityDate { get; set; }
 
@@ -54,7 +54,12 @@ namespace HRManagement.Core.Entities
 
         [StringLength(500)]
         public string? ImagePath { get; set; } = string.Empty; // Store the file path of the uploaded image
+        public string? MotherName { get; set; }
+        public string? NickName { get; set; }
 
+        // navigation
         public Employee Employee { get; set; } = null!;
+        public Nationality? Nationality { get; set; }
+        public Nationality? PreviousNationality { get; set; }
     }
 }

@@ -19,6 +19,7 @@ namespace HRManagement.Infrastructure.Data
         public DbSet<OrgUnit> OrgUnits { get; set; }
         public DbSet<Rank> Ranks { get; set; }
         public DbSet<OrgUnitProfile> OrgUnitProfiles { get; set; }
+        public DbSet<Nationality> Nationalities { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -36,11 +37,16 @@ namespace HRManagement.Infrastructure.Data
             modelBuilder.Entity<Role>().HasQueryFilter(e => !e.IsDeleted);
             modelBuilder.Entity<OrgUnitProfile>().HasQueryFilter(e => !e.IsDeleted);
             modelBuilder.Entity<OrgUnit>().HasQueryFilter(e => !e.IsDeleted);
+            modelBuilder.Entity<Nationality>().HasQueryFilter(e => !e.IsDeleted);
 
 
             //base entity configuration 
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
+            modelBuilder.Entity<Employee>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+            });
             // Employee configuration
             modelBuilder.Entity<Employee>(entity =>
             {
@@ -66,14 +72,21 @@ namespace HRManagement.Infrastructure.Data
             modelBuilder.Entity<EmployeeProfile>(entity =>
             {
 
-                entity.Property(e => e.SkinColor).HasMaxLength(50);
                 entity.Property(e => e.HairColor).HasMaxLength(50);
                 entity.Property(e => e.EyeColor).HasMaxLength(50);
                 entity.Property(e => e.DisabilityType).HasMaxLength(100);
-                entity.Property(e => e.CurrentNationality).IsRequired().HasMaxLength(100);
                 entity.Property(e => e.Religion).IsRequired().HasMaxLength(100);
                 entity.Property(e => e.PlaceOfBirth).IsRequired().HasMaxLength(200);
                 entity.Property(e => e.InsuranceNumber).HasMaxLength(50);
+
+                entity.HasOne(e => e.Nationality)
+                           .WithMany(n => n.CurrentEmployees)
+                           .HasForeignKey(e => e.NationalityId)
+                           .OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(e => e.PreviousNationality)
+                    .WithMany(n => n.PreviousEmployees)
+                    .HasForeignKey(e => e.PreviousNationalityId)
+                    .OnDelete(DeleteBehavior.Restrict);
                 entity.HasOne(e => e.Employee)
                     .WithOne(e => e.Profile)
                     .HasForeignKey<EmployeeProfile>(e => e.EmployeeId)

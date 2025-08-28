@@ -8,6 +8,7 @@ namespace HRManagement.Core.Enums
         Buddhism,
         Sikhism,
         Judaism,
+        Other,
     }
 
     public static class ReligionTranslations
