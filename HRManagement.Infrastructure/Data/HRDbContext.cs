@@ -187,6 +187,7 @@ namespace HRManagement.Infrastructure.Data
 
             modelBuilder.Entity<OrgUnitProfile>(entity =>
             {
+                entity.Property(e => e.Specialization).HasColumnType("nvarchar(max)");
                 entity.HasOne(e => e.OrgUnit)
                     .WithOne(e => e.Profile)
                     .HasForeignKey<OrgUnitProfile>(e => e.OrgUnitId)

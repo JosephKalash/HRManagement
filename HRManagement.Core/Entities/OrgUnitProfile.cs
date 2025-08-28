@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HRManagement.Core.Entities
 {
@@ -9,7 +10,7 @@ namespace HRManagement.Core.Entities
         
         public OrgUnit? OrgUnit { get; set; }
 
-        [StringLength(500)]
+        [Column(TypeName = "nvarchar(max)")]
         public string? Specialization { get; set; }
 
         public int AllowedForcesOff { get; set; } = 100; //center_forces
