@@ -1,7 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using HRManagement.Core.Entities;
-using HRManagement.Core.Enums;
-// using HRManagement.Core.Enums;
 
 namespace HRManagement.Application.DTOs
 {
@@ -9,12 +6,8 @@ namespace HRManagement.Application.DTOs
     {
         public long Id { get; set; }
         public string Name { get; set; } = string.Empty;
-        public string Code { get; set; } = string.Empty; // System identification
         public string? Description { get; set; }
-        public RoleLevel Level { get; set; } // Organizational role level
-        public int LevelNumber { get; set; } // Organizational role level
-        public bool IsActive { get; set; } // Indicates if the role is active
-        public bool IsSystemRole { get; set; } = false; // Indicates if the role is a system role
+        public bool IsActive { get; set; } = true;
     }
 
     public class CreateRoleDto
@@ -23,16 +16,10 @@ namespace HRManagement.Application.DTOs
         [StringLength(100)]
         public string Name { get; set; } = string.Empty;
 
-        [StringLength(50)]
-        public string Code { get; set; } = string.Empty; // System identification
-
-        [StringLength(500)]
+        [StringLength(300)]
         public string? Description { get; set; }
 
-        [Required]
-        public RoleLevel Level { get; set; } // Organizational role level
-
-        public bool IsSystemRole { get; set; } = false; // Indicates if the role is a system role
+        public bool IsActive { get; set; } = true;
     }
 
     public class UpdateRoleDto
@@ -41,15 +28,10 @@ namespace HRManagement.Application.DTOs
         public long Id { get; set; } // Role ID for identification
 
         [StringLength(100)]
-        public string Name { get; set; } = string.Empty;
+        public string? Name { get; set; }
 
-        [StringLength(50)]
-        public string Code { get; set; } = string.Empty; // System identification
-
-        [StringLength(500)]
+        [StringLength(300)]
         public string? Description { get; set; }
-
-        public RoleLevel? Level { get; set; } // Organizational role level
 
         public bool? IsActive { get; set; } // Indicates if the role is active
     }
