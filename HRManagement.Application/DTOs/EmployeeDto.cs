@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using HRManagement.Core.Enums;
 
 namespace HRManagement.Application.DTOs
 {
@@ -8,7 +7,7 @@ namespace HRManagement.Application.DTOs
         public long Id { get; set; }
         public int MilitaryNumber { get; set; }
         public string ArabicName { get; set; } = string.Empty;
-        public MilitaryRank Rank { get; set; }
+        public string RankName { get; set; } = string.Empty;
         // public string? ImagePath { get; set; }
     }
     public class EmployeeDto
@@ -18,7 +17,7 @@ namespace HRManagement.Application.DTOs
         public string ArabicFirstName { get; set; } = string.Empty;
         public string? ArabicMiddleName { get; set; }
         public string ArabicLastName { get; set; } = string.Empty;
-        public MilitaryRank Rank { get; set; }
+        public string RankName { get; set; } = string.Empty;
         public string EnglishFirstName { get; set; } = string.Empty;
         public string? EnglishMiddleName { get; set; }
         public string EnglishLastName { get; set; } = string.Empty;
@@ -57,7 +56,7 @@ namespace HRManagement.Application.DTOs
 
 
         [Required]
-        public MilitaryRank Rank { get; set; }
+        public long RankId { get; set; }
 
         [Required]
         [StringLength(50)]
@@ -88,7 +87,7 @@ namespace HRManagement.Application.DTOs
 
         [StringLength(50)]
         public string? IdNumber { get; set; }
-        public MilitaryRank? Rank { get; set; }
+        public long? RankId { get; set; }
 
         public bool? IsActive { get; set; }
     }

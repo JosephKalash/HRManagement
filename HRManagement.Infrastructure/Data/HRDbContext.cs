@@ -25,6 +25,7 @@ namespace HRManagement.Infrastructure.Data
             base.OnModelCreating(modelBuilder);
 
             // Global query filters to exclude soft-deleted records
+            modelBuilder.Entity<Employee>().Navigation(e => e.Rank).AutoInclude();
             modelBuilder.Entity<Employee>().HasQueryFilter(e => !e.IsDeleted);
             modelBuilder.Entity<Rank>().HasQueryFilter(e => !e.IsDeleted);
             modelBuilder.Entity<EmployeeProfile>().HasQueryFilter(e => !e.IsDeleted);

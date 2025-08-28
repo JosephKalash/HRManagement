@@ -7,11 +7,13 @@ namespace HRManagement.Application.Interfaces
     {
         Task<OrgUnitProfileDto?> GetById(long id);
         Task<OrgUnitProfileDto?> GetByOrgUnitId(long orgUnitId);
+        Task<OrgUnitProfileDto?> GetByOrgUnitGuid(Guid orgUnitGuid);
         Task<PagedResult<OrgUnitProfileDto>> GetPaged(int pageNumber, int pageSize);
         Task<OrgUnitProfileDto> Create(CreateOrgUnitProfileDto dto);
         Task<OrgUnitProfileDto> Update(long id, UpdateOrgUnitProfileDto dto);
         Task Delete(long id);
     }
 }
+
 
 

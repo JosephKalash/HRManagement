@@ -93,6 +93,7 @@ namespace HRManagement.API.Controllers.V1
             }
         }
         [HttpGet("external/{guid}")]
+        [OutputCache(PolicyName = "RoleByGuid")]
         [ProducesResponseType(typeof(ApiResponse<RoleDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
 

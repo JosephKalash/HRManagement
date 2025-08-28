@@ -174,7 +174,6 @@ namespace HRManagement.Application.Services
 
         public async Task<CurrentEmployeeSummaryDto?> GetCurrentEmployeeSummary(long userId)
         {
-            // Match current user id to an employee record
             var employee = await _employeeRepository.GetById(userId);
             if (employee == null)
             {
@@ -183,10 +182,8 @@ namespace HRManagement.Application.Services
 
             var employeeDto = _mapper.Map<EmployeeDto>(employee);
 
-            // Get profile image path (optimized)
             var imagePath = await _employeeProfileRepository.GetEmployeeImagePath(employee.Id);
 
-            // Get job summary
             var jobSummary = await GetEmployeeJobSummary(employee.Id);
 
             return new CurrentEmployeeSummaryDto
@@ -201,7 +198,6 @@ namespace HRManagement.Application.Services
         {
             var employees = new HashSet<Employee>();
 
-            // Get employees from service info
             var serviceInfoEmployees = await _employeeServiceInfoRepository.GetByRoleId(roleId);
             foreach (var serviceInfo in serviceInfoEmployees)
             {
@@ -211,7 +207,6 @@ namespace HRManagement.Application.Services
                 }
             }
 
-            // Get employees from assignments
             var assignmentEmployees = await _employeeAssignmentRepository.GetByRoleId(roleId);
             foreach (var assignment in assignmentEmployees)
             {
@@ -221,7 +216,6 @@ namespace HRManagement.Application.Services
                 }
             }
 
-            // Map to DTOs and return
             return _mapper.Map<List<EmployeeDto>>(employees);
         }
 
@@ -241,6 +235,7 @@ namespace HRManagement.Application.Services
                     Id = e.Id,
                     MilitaryNumber = e.MilitaryNumber,
                     ArabicName = e.ArabicFirstName + " " + e.ArabicLastName,
+                    RankName = e.Rank != null ? e.Rank.Name : string.Empty
                 });
             if (isMultiple)
             {

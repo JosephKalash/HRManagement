@@ -43,6 +43,17 @@ namespace HRManagement.API.Controllers.V1
             return Ok(ApiResponse<OrgUnitProfileDto>.SuccessResult(dto));
         }
 
+        [HttpGet("external/by-org/{orgUnitGuid}")]
+        [ProducesResponseType(typeof(ApiResponse<OrgUnitProfileDto>), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 404)]
+        public async Task<ActionResult<ApiResponse<OrgUnitProfileDto>>> GetByOrgUnitGuid(Guid orgUnitGuid)
+        {
+            var dto = await _service.GetByOrgUnitGuid(orgUnitGuid);
+            if (dto == null)
+                return NotFound(ApiResponse<OrgUnitProfileDto>.ErrorResult($"Profile for OrgUnit not found"));
+            return Ok(ApiResponse<OrgUnitProfileDto>.SuccessResult(dto));
+        }
+
         [HttpPost]
         [ProducesResponseType(typeof(ApiResponse<OrgUnitProfileDto>), 201)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
@@ -103,5 +114,6 @@ namespace HRManagement.API.Controllers.V1
         }
     }
 }
+
 
 

@@ -208,6 +208,14 @@ public static class ProgramConfigExtensions
             options.AddPolicy("ShortEmployeeById", b => b
                 .Expire(TimeSpan.FromMinutes(2))
                 .SetVaryByRouteValue("id"));
+            
+            // External GUID endpoints caching
+            options.AddPolicy("RoleByGuid", b => b
+                .Expire(TimeSpan.FromMinutes(5))
+                .SetVaryByRouteValue("guid"));
+            options.AddPolicy("OrgUnitByGuid", b => b
+                .Expire(TimeSpan.FromMinutes(5))
+                .SetVaryByRouteValue("guid"));
             /// end summarized 
         });
 

@@ -10,6 +10,7 @@ namespace HRManagement.Application.Mapping
         {
             // Employee mappings
             CreateMap<Employee, EmployeeDto>()
+                .ForMember(dest => dest.RankName, opt => opt.MapFrom(src => src.Rank != null ? src.Rank.Name : string.Empty))
                 .ReverseMap();
 
             CreateMap<CreateEmployeeDto, Employee>()
@@ -21,6 +22,11 @@ namespace HRManagement.Application.Mapping
                 .ForMember(dest => dest.ServiceInfos, opt => opt.Ignore())
                 .ForMember(dest => dest.Assignments, opt => opt.Ignore())
                 .ReverseMap();
+
+            // ShortEmployeeDto mapping
+            CreateMap<Employee, ShortEmployeeDto>()
+                .ForMember(dest => dest.ArabicName, opt => opt.MapFrom(src => $"{src.ArabicFirstName} {src.ArabicLastName}"))
+                .ForMember(dest => dest.RankName, opt => opt.MapFrom(src => src.Rank != null ? src.Rank.Name : string.Empty));
 
             CreateMap<UpdateEmployeeDto, Employee>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())

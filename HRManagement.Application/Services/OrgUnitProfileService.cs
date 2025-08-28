@@ -26,6 +26,15 @@ namespace HRManagement.Application.Services
             return profile != null ? _mapper.Map<OrgUnitProfileDto>(profile) : null;
         }
 
+        public async Task<OrgUnitProfileDto?> GetByOrgUnitGuid(Guid orgUnitGuid)
+        {
+            var orgUnit = await _orgUnitRepository.GetByGuid(orgUnitGuid);
+            if (orgUnit == null)
+                return null;
+            var profile = await _profileRepository.GetByOrgUnitId(orgUnit.Id);
+            return profile != null ? _mapper.Map<OrgUnitProfileDto>(profile) : null;
+        }
+
         public async Task<PagedResult<OrgUnitProfileDto>> GetPaged(int pageNumber, int pageSize)
         {
             var query = _profileRepository.AsQueryable();
@@ -87,5 +96,6 @@ namespace HRManagement.Application.Services
         }
     }
 }
+
 
 

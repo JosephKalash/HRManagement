@@ -58,6 +58,7 @@ namespace HRManagement.API.Controllers.V1
             }
         }
         [HttpGet("external/{guid}")]
+        [OutputCache(PolicyName = "OrgUnitByGuid")]
         [ProducesResponseType(typeof(ApiResponse<OrgUnitDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 404)]
 

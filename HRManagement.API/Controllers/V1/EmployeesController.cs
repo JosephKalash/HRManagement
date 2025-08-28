@@ -16,11 +16,6 @@ namespace HRManagement.API.Controllers.V1
         private readonly ICurrentUserService _currentUserService = currentUserService;
 
 
-
-
-
-
-
         [HttpGet]
         [OutputCache(PolicyName = "EmployeesPaged")]
         [ProducesResponseType(typeof(ApiResponse<PagedResult<EmployeeDto>>), 200)]
