@@ -20,7 +20,7 @@ namespace HRManagement.Infrastructure.Repositories
             return await _dbSet.ToListAsync();
         }
 
-        public virtual async Task<T> AddAsync(T entity)
+        public virtual async Task<T> Add(T entity)
         {
             await _dbSet.AddAsync(entity);
             await _context.SaveChangesAsync();

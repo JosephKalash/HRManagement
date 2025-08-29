@@ -53,7 +53,7 @@ namespace HRManagement.Application.Services
                 throw new ArgumentException($"Rank with order {dto.Order} already exists");
 
             var entity = _mapper.Map<Rank>(dto);
-            var created = await _rankRepository.AddAsync(entity);
+            var created = await _rankRepository.Add(entity);
             return _mapper.Map<RankDto>(created);
         }
 

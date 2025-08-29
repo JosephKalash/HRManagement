@@ -40,7 +40,7 @@ namespace HRManagement.Application.Services
         public async Task<EmployeeServiceInfoDto> Create(CreateEmployeeServiceInfoDto createDto)
         {
             var serviceInfo = _mapper.Map<EmployeeServiceInfo>(createDto);
-            var createdServiceInfo = await _employeeServiceInfoRepository.AddAsync(serviceInfo);
+            var createdServiceInfo = await _employeeServiceInfoRepository.Add(serviceInfo);
             return _mapper.Map<EmployeeServiceInfoDto>(createdServiceInfo);
         }
 

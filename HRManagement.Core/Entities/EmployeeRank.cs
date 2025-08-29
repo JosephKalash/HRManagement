@@ -10,10 +10,9 @@ namespace HRManagement.Core.Entities
         [Required]
         public long RankId { get; set; }
         
-        public DateTime AssignedDate { get; set; } = DateTime.UtcNow;
-        
         public DateTime? EffectiveDate { get; set; }
         
+        // end of thie rank date, automatically set when a new rank is assigned
         public DateTime? EndDate { get; set; }
         
         public bool IsActive { get; set; } = true;

@@ -35,7 +35,7 @@ namespace HRManagement.Application.Services
         public async Task<EmployeeContactDto> Create(CreateEmployeeContactDto createDto)
         {
             var contact = _mapper.Map<EmployeeContact>(createDto);
-            var createdContact = await _employeeContactRepository.AddAsync(contact);
+            var createdContact = await _employeeContactRepository.Add(contact);
             return _mapper.Map<EmployeeContactDto>(createdContact);
         }
 

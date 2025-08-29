@@ -10,8 +10,11 @@ namespace HRManagement.Application.Mapping
         {
             // Employee mappings
             CreateMap<Employee, EmployeeDto>()
-                // .ForMember(dest => dest.RankName, opt => opt.MapFrom(src => src.Rank != null ? src.Rank.Name : string.Empty))
-                .ReverseMap();
+                .ForMember(dest => dest.RankName, opt => opt.MapFrom(
+                    src => src.EmployeeRanks
+                        .Where(e => e.IsActive)
+                        .Select(er => er.Rank.Name).FirstOrDefault()
+                )).ReverseMap();
 
             CreateMap<CreateEmployeeDto, Employee>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
@@ -23,10 +26,30 @@ namespace HRManagement.Application.Mapping
                 .ForMember(dest => dest.Assignments, opt => opt.Ignore())
                 .ReverseMap();
 
+            CreateMap<EmployeeRank, EmployeeRankDto>().ReverseMap()
+                    .ForMember(dest => dest.Employee, opt => opt.Ignore());
+
+            CreateMap<CreateEmployeeRankDto, EmployeeRank>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.Employee, opt => opt.Ignore())
+                .ForMember(dest => dest.Rank, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedBy, opt => opt.Ignore())
+                .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore());
+            CreateMap<UpdateEmployeeRankDto, EmployeeRank>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+                .ForMember(dest => dest.Employee, opt => opt.Ignore())
+                .ForMember(dest => dest.Rank, opt => opt.Ignore())
+                .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => DateTime.UtcNow))
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             // ShortEmployeeDto mapping
             CreateMap<Employee, ShortEmployeeDto>()
-                .ForMember(dest => dest.ArabicName, opt => opt.MapFrom(src => $"{src.ArabicFirstName} {src.ArabicLastName}"));
-                // .ForMember(dest => dest.RankName, opt => opt.MapFrom(src => src.Rank != null ? src.Rank.Name : string.Empty));
+                .ForMember(dest => dest.ArabicName, opt => opt.MapFrom(src => $"{src.ArabicFirstName} {src.ArabicLastName}"))
+                .ForMember(dest => dest.RankName, opt => opt.MapFrom(
+                    src => src.EmployeeRanks
+                        .Where(e => e.IsActive)
+                        .Select(er => er.Rank.Name).FirstOrDefault()));
 
             CreateMap<UpdateEmployeeDto, Employee>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
@@ -185,7 +208,8 @@ namespace HRManagement.Application.Mapping
 
             // Rank mappings
             CreateMap<Rank, RankDto>()
-                .ReverseMap();
+                .ReverseMap()
+                .ForMember(dest => dest.EmployeeRanks, opt => opt.Ignore());
 
             CreateMap<CreateRankDto, Rank>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore());
@@ -199,6 +223,7 @@ namespace HRManagement.Application.Mapping
                 .ForMember(dest => dest.Profile, opt => opt.MapFrom(src => src.Profile))
                 .ForMember(dest => dest.Contact, opt => opt.MapFrom(src => src.Contact))
                 .ForMember(dest => dest.Signature, opt => opt.MapFrom(src => src.Signature))
+                .ForMember(dest => dest.ActiveRank, opt => opt.MapFrom(src => src.EmployeeRanks.FirstOrDefault(er => er.IsActive)))
                 .ForMember(dest => dest.ActiveServiceInfo, opt => opt.MapFrom(src => src.ServiceInfos.FirstOrDefault(si => si.IsActive)))
                 .ForMember(dest => dest.Assignments, opt => opt.MapFrom(src => src.Assignments));
         }

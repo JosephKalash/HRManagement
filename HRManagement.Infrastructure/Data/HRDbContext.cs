@@ -20,6 +20,7 @@ namespace HRManagement.Infrastructure.Data
         public DbSet<Rank> Ranks { get; set; }
         public DbSet<OrgUnitProfile> OrgUnitProfiles { get; set; }
         public DbSet<Nationality> Nationalities { get; set; }
+        public DbSet<EmployeeRank> EmployeeRanks { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -60,13 +61,11 @@ namespace HRManagement.Infrastructure.Data
                        .HasForeignKey(er => er.RankId)
                        .OnDelete(DeleteBehavior.Restrict);
 
-                entity.HasIndex(er => new { er.EmployeeId, er.RankId, er.IsActive }).HasFilter("IsActive = 1");
+                //todo
+                // entity.HasIndex(er => new { er.EmployeeId, er.RankId, er.IsActive }).HasFilter("EmployeeRanks.IsActive = 1");
                 entity.HasIndex(er => er.EmployeeId);
                         // .IncludeProperties(er => new { er.RankId, er.IsActive, er.AssignedDate });
                 entity.HasIndex(er => new { er.RankId, er.IsActive });
-
-                entity.Property(er => er.AssignedDate).IsRequired();
-
                 entity.Property(er => er.Notes).HasMaxLength(500);
             });
             // Employee configuration
@@ -217,7 +216,7 @@ namespace HRManagement.Infrastructure.Data
 
             modelBuilder.Entity<OrgUnitProfile>(entity =>
             {
-                entity.Property(e => e.Specialization).HasColumnType("nvarchar(max)");
+                // entity.Property(e => e.Specialization).HasColumnType("nvarchar(max)");
                 entity.HasOne(e => e.OrgUnit)
                     .WithOne(e => e.Profile)
                     .HasForeignKey<OrgUnitProfile>(e => e.OrgUnitId)

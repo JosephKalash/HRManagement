@@ -40,7 +40,7 @@ namespace HRManagement.Application.Services
         public async Task<EmployeeAssignmentDto> Create(CreateEmployeeAssignmentDto createDto)
         {
             var assignment = _mapper.Map<EmployeeAssignment>(createDto);
-            var createdAssignment = await _employeeAssignmentRepository.AddAsync(assignment);
+            var createdAssignment = await _employeeAssignmentRepository.Add(assignment);
             return _mapper.Map<EmployeeAssignmentDto>(createdAssignment);
         }
 

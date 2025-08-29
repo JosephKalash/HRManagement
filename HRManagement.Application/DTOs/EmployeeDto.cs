@@ -56,9 +56,6 @@ namespace HRManagement.Application.DTOs
 
 
         [Required]
-        public long RankId { get; set; }
-
-        [Required]
         [StringLength(50)]
         public string IdNumber { get; set; } = string.Empty;
     }
@@ -87,8 +84,6 @@ namespace HRManagement.Application.DTOs
 
         [StringLength(50)]
         public string? IdNumber { get; set; }
-        public long? RankId { get; set; }
-
         public bool? IsActive { get; set; }
     }
 }

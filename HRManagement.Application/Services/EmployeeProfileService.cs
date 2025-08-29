@@ -45,7 +45,7 @@ namespace HRManagement.Application.Services
                 }
             }
 
-            var createdProfile = await _employeeProfileRepository.AddAsync(profile);
+            var createdProfile = await _employeeProfileRepository.Add(profile);
             return _mapper.Map<EmployeeProfileDto>(createdProfile);
         }
 

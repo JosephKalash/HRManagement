@@ -19,7 +19,6 @@ namespace HRManagement.API.Controllers.V1
         [HttpGet]
         [OutputCache(PolicyName = "EmployeesPaged")]
         [ProducesResponseType(typeof(ApiResponse<PagedResult<EmployeeDto>>), 200)]
-
         public async Task<ActionResult<ApiResponse<PagedResult<EmployeeDto>>>> GetEmployees([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             try

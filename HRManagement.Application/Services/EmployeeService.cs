@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using HRManagement.Application.DTOs;
 using HRManagement.Application.Interfaces;
 using HRManagement.Core.Entities;
@@ -29,8 +30,13 @@ namespace HRManagement.Application.Services
 
         public async Task<EmployeeDto?> GetById(long id)
         {
-            var employee = await _employeeRepository.GetById(id);
-            return employee != null ? _mapper.Map<EmployeeDto>(employee) : null;
+            // var employee = await _employeeRepository.GetById(id);
+            var query = _employeeRepository.AsQueryable();
+            var employee = await query
+                .Where(e => e.Id == id)
+                .ProjectTo<EmployeeDto>(_mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync();
+            return employee;
         }
 
         public async Task<IEnumerable<EmployeeDto>> GetAll()
@@ -70,7 +76,7 @@ namespace HRManagement.Application.Services
         public async Task<EmployeeDto> Create(CreateEmployeeDto createDto)
         {
             var employee = _mapper.Map<Employee>(createDto);
-            var createdEmployee = await _employeeRepository.AddAsync(employee);
+            var createdEmployee = await _employeeRepository.Add(employee);
             return _mapper.Map<EmployeeDto>(createdEmployee);
         }
 

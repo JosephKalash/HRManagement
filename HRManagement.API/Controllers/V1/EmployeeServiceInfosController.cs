@@ -11,20 +11,9 @@ namespace HRManagement.API.Controllers.V1
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [Produces("application/json")]
-    public class EmployeeServiceInfosController : ControllerBase
+    public class EmployeeServiceInfosController(IEmployeeServiceInfoService employeeServiceInfoService) : ControllerBase
     {
-        private readonly IEmployeeServiceInfoService _employeeServiceInfoService;
-        private readonly IMapper _mapper;
-
-        public EmployeeServiceInfosController(IEmployeeServiceInfoService employeeServiceInfoService, IMapper mapper)
-        {
-            _employeeServiceInfoService = employeeServiceInfoService;
-            _mapper = mapper;
-        }
-
-
-
-
+        private readonly IEmployeeServiceInfoService _employeeServiceInfoService = employeeServiceInfoService;
 
         [HttpGet]
         [ProducesResponseType(typeof(ApiResponse<PagedResult<EmployeeServiceInfoDto>>), 200)]
@@ -34,14 +23,7 @@ namespace HRManagement.API.Controllers.V1
             try
             {
                 var pagedResult = await _employeeServiceInfoService.GetPaged(pageNumber, pageSize);
-                var dtos = _mapper.Map<List<EmployeeServiceInfoDto>>(pagedResult.Items);
-                return Ok(ApiResponse<PagedResult<EmployeeServiceInfoDto>>.SuccessResult(new PagedResult<EmployeeServiceInfoDto>
-                {
-                    Items = dtos,
-                    PageNumber = pagedResult.PageNumber,
-                    PageSize = pagedResult.PageSize,
-                    TotalCount = pagedResult.TotalCount
-                }, "Employee service infos retrieved successfully"));
+                return Ok(ApiResponse<PagedResult<EmployeeServiceInfoDto>>.SuccessResult(pagedResult));
             }
             catch (Exception ex)
             {
@@ -89,14 +71,7 @@ namespace HRManagement.API.Controllers.V1
             try
             {
                 var pagedResult = await _employeeServiceInfoService.GetPagedByEmployeeId(employeeId, pageNumber, pageSize);
-                var dtos = _mapper.Map<List<EmployeeServiceInfoDto>>(pagedResult.Items);
-                return Ok(ApiResponse<PagedResult<EmployeeServiceInfoDto>>.SuccessResult(new PagedResult<EmployeeServiceInfoDto>
-                {
-                    Items = dtos,
-                    PageNumber = pagedResult.PageNumber,
-                    PageSize = pagedResult.PageSize,
-                    TotalCount = pagedResult.TotalCount
-                }, "Employee service infos retrieved successfully"));
+                return Ok(ApiResponse<PagedResult<EmployeeServiceInfoDto>>.SuccessResult(pagedResult));
             }
             catch (Exception ex)
             {

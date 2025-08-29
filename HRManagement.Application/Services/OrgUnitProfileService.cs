@@ -60,7 +60,7 @@ namespace HRManagement.Application.Services
                 throw new ArgumentException($"Profile already exists for OrgUnit {dto.OrgUnitId}");
 
             var entity = _mapper.Map<OrgUnitProfile>(dto);
-            var created = await _profileRepository.AddAsync(entity);
+            var created = await _profileRepository.Add(entity);
             return _mapper.Map<OrgUnitProfileDto>(created);
         }
 

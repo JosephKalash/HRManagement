@@ -10,7 +10,7 @@ namespace HRManagement.Core.Entities
         
         public OrgUnit? OrgUnit { get; set; }
 
-        [Column(TypeName = "nvarchar(max)")]
+        // [Column(TypeName = "nvarchar(max)")]
         public string? Specialization { get; set; }
 
         public int AllowedForcesOff { get; set; } = 100; //center_forces

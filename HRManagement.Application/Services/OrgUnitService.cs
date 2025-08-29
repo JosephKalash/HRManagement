@@ -133,7 +133,7 @@ namespace HRManagement.Application.Services
             if (!ValidateHierarchy(orgUnit))
                 throw new ArgumentException("Invalid hierarchy for the organization unit");
             orgUnit.HierarchyPath = GetHierarchyPath(orgUnit);
-            var created = await _orgUnitRepository.AddAsync(orgUnit);
+            var created = await _orgUnitRepository.Add(orgUnit);
             return _mapper.Map<OrgUnitDto>(created);
         }
 

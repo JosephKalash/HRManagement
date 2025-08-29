@@ -63,7 +63,7 @@ namespace HRManagement.Application.Services
         public async Task<RoleDto> Create(CreateRoleDto createDto)
         {
             var role = _mapper.Map<Role>(createDto);
-            var createdRole = await _roleRepository.AddAsync(role);
+            var createdRole = await _roleRepository.Add(role);
             return _mapper.Map<RoleDto>(createdRole);
         }
 

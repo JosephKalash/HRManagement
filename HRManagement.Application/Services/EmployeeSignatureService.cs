@@ -50,7 +50,7 @@ namespace HRManagement.Application.Services
             signature.FilePath = filePath;
             signature.OriginalFileName = fileName;
 
-            var createdSignature = await _signatureRepository.AddAsync(signature);
+            var createdSignature = await _signatureRepository.Add(signature);
             return _mapper.Map<EmployeeSignatureDto>(createdSignature);
         }
 

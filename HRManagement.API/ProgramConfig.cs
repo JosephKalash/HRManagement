@@ -120,6 +120,7 @@ public static class ProgramConfigExtensions
         builder.Services.AddScoped<IOrgUnitProfileRepository, OrgUnitProfileRepository>();
         builder.Services.AddScoped<IEmployeeContactRepository, EmployeeContactRepository>();
         builder.Services.AddScoped<IEmployeeSignatureRepository, EmployeeSignatureRepository>();
+        builder.Services.AddScoped<IEmployeeRankRepository, EmployeeRankRepository>();
         return builder;
     }
 
@@ -136,6 +137,7 @@ public static class ProgramConfigExtensions
         builder.Services.AddScoped<IRoleService, RoleService>();
         builder.Services.AddScoped<IRankService, RankService>();
         builder.Services.AddScoped<IEmployeeSignatureService, EmployeeSignatureService>();
+        builder.Services.AddScoped<IEmployeeRankService, EmployeeRankService>();
 
         // Add AutoMapper
         builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
