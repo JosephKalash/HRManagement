@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using HRManagement.Core.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HRManagement.Core.Entities
 {
@@ -32,9 +32,6 @@ namespace HRManagement.Core.Entities
         public string EnglishLastName { get; set; } = string.Empty;
 
         [Required]
-        public long RankId { get; set; }
-
-        [Required]
         [StringLength(50)]
         public string IdNumber { get; set; } = string.Empty;
 
@@ -43,8 +40,11 @@ namespace HRManagement.Core.Entities
         public long? DeletedBy { get; set; }
 
         // Navigation properties
+        public virtual ICollection<EmployeeRank> EmployeeRanks { get; set; } = [];
+        // public virtual EmployeeRank? CurrentRank => EmployeeRanks
+        //     .Where(er => er.IsActive && (er.EndDate == null || er.EndDate > DateTime.UtcNow))
+        //     .FirstOrDefault();
         public virtual EmployeeProfile? Profile { get; set; }
-        public virtual Rank? Rank { get; set; }
         public virtual EmployeeContact? Contact { get; set; }
         public virtual EmployeeSignature? Signature { get; set; }
         public virtual ICollection<EmployeeServiceInfo> ServiceInfos { get; set; } = [];

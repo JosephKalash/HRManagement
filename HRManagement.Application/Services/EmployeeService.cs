@@ -235,7 +235,9 @@ namespace HRManagement.Application.Services
                     Id = e.Id,
                     MilitaryNumber = e.MilitaryNumber,
                     ArabicName = e.ArabicFirstName + " " + e.ArabicLastName,
-                    RankName = e.Rank != null ? e.Rank.Name : string.Empty
+                    RankName = e.EmployeeRanks
+                                    .Where(er => er.IsActive)
+                                    .Select(er => er.Rank.Name).FirstOrDefault() ?? string.Empty
                 });
             if (isMultiple)
             {

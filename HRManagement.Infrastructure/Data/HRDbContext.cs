@@ -26,7 +26,7 @@ namespace HRManagement.Infrastructure.Data
             base.OnModelCreating(modelBuilder);
 
             // Global query filters to exclude soft-deleted records
-            modelBuilder.Entity<Employee>().Navigation(e => e.Rank).AutoInclude();
+            // modelBuilder.Entity<Employee>().Navigation();
             modelBuilder.Entity<Employee>().HasQueryFilter(e => !e.IsDeleted);
             modelBuilder.Entity<Rank>().HasQueryFilter(e => !e.IsDeleted);
             modelBuilder.Entity<EmployeeProfile>().HasQueryFilter(e => !e.IsDeleted);
@@ -38,6 +38,7 @@ namespace HRManagement.Infrastructure.Data
             modelBuilder.Entity<OrgUnitProfile>().HasQueryFilter(e => !e.IsDeleted);
             modelBuilder.Entity<OrgUnit>().HasQueryFilter(e => !e.IsDeleted);
             modelBuilder.Entity<Nationality>().HasQueryFilter(e => !e.IsDeleted);
+            modelBuilder.Entity<EmployeeRank>().HasQueryFilter(e => !e.IsDeleted);
 
 
             //base entity configuration 
@@ -46,6 +47,27 @@ namespace HRManagement.Infrastructure.Data
             modelBuilder.Entity<Employee>(entity =>
             {
                 entity.HasKey(e => e.Id);
+            });
+            modelBuilder.Entity<EmployeeRank>(entity =>
+            {
+                entity.HasOne(er => er.Employee)
+                       .WithMany(e => e.EmployeeRanks)
+                       .HasForeignKey(er => er.EmployeeId)
+                       .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(er => er.Rank)
+                       .WithMany(r => r.EmployeeRanks)
+                       .HasForeignKey(er => er.RankId)
+                       .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasIndex(er => new { er.EmployeeId, er.RankId, er.IsActive }).HasFilter("IsActive = 1");
+                entity.HasIndex(er => er.EmployeeId);
+                        // .IncludeProperties(er => new { er.RankId, er.IsActive, er.AssignedDate });
+                entity.HasIndex(er => new { er.RankId, er.IsActive });
+
+                entity.Property(er => er.AssignedDate).IsRequired();
+
+                entity.Property(er => er.Notes).HasMaxLength(500);
             });
             // Employee configuration
             modelBuilder.Entity<Employee>(entity =>
@@ -61,11 +83,6 @@ namespace HRManagement.Infrastructure.Data
                 entity.Property(e => e.EnglishLastName).IsRequired().HasMaxLength(100);
                 entity.Property(e => e.IdNumber).IsRequired().HasMaxLength(50);
                 entity.HasIndex(e => e.IdNumber).IsUnique();
-
-                entity.HasOne(e => e.Rank)
-                    .WithMany(r => r.Employees)
-                    .HasForeignKey(e => e.RankId)
-                    .OnDelete(DeleteBehavior.NoAction);
             });
 
             // EmployeeProfile configuration

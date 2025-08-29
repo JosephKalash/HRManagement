@@ -39,7 +39,7 @@ namespace HRManagement.Infrastructure.Repositories
                 .Include(e => e.Profile)
                 .Include(e => e.Contact)
                 .Include(e => e.Signature)
-                .Include(e => e.Rank)
+                .Include(e => e.EmployeeRanks.Where(er => er.IsActive)).ThenInclude(er => er.Rank.Name)
                 .Include(e => e.ServiceInfos)
                     .ThenInclude(si => si.JobRole)
                 .Include(e => e.Assignments)

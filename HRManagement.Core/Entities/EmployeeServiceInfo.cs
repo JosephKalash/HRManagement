@@ -7,17 +7,14 @@ namespace HRManagement.Core.Entities
     {
         [Required]
         public long EmployeeId { get; set; }
-        public Employee Employee { get; set; } = null!;
 
         [Required]
         public long BelongingUnitId { get; set; }
-        public OrgUnit BelongingUnit { get; set; } = null!;
 
         public Ownership Ownership { get; set; }
 
         [Required]
         public long JobRoleId { get; set; }
-        public Role JobRole { get; set; } = null!;
 
         public DateTime? HiringDate { get; set; }
 
@@ -32,8 +29,6 @@ namespace HRManagement.Core.Entities
 
         public decimal? BaseSalary { get; set; }
 
-        public bool IsMilitaryCoach { get; set; } = false;
-
         public bool IsDeductedMinistryVacancies { get; set; } = false;
 
         public bool IsRetiredFederalMinistry { get; set; } = false;
@@ -46,7 +41,13 @@ namespace HRManagement.Core.Entities
         public DateTime EffectiveDate { get; set; }
 
         public DateTime? EndDate { get; set; }
+        public bool IsMilitaryCoach { get; set; } = false;
 
         public bool IsActive { get; set; } = true;
+
+        //navigation
+        public Employee Employee { get; set; } = null!;
+        public OrgUnit BelongingUnit { get; set; } = null!;
+        public Role JobRole { get; set; } = null!;
     }
 }

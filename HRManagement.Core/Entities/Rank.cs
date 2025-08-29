@@ -8,8 +8,9 @@ namespace HRManagement.Core.Entities
         [StringLength(100)]
         public required string Name { get; set; }
         public string? EnglishName { get; set; }
-        public int Order { get; set; }
+        public int Order { get; set; } = 1;
 
-        public ICollection<Employee> Employees { get; set; } = [];
+        //navigations
+        public virtual ICollection<EmployeeRank> EmployeeRanks { get; set; } = [];
     }
 }

@@ -11,6 +11,10 @@ namespace HRManagement.Infrastructure.Repositories
         {
             return _dbSet.FirstOrDefaultAsync(r => r.Order == order);
         }
+        public Task<Rank?> GetEmployeeRank(int order)
+        {
+            return _dbSet.FirstOrDefaultAsync(r => r.Order == order);
+        }
     }
 }
 
