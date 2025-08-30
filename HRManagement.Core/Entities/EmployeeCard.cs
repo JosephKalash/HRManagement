@@ -14,6 +14,7 @@ public class EmployeeCard
     public DateTime IssueDate { get; set; }
     public DateTime ExpiryDate { get; set; }
     public CardStatus Status { get; set; }
+    public CardIssueReason? IssueReason { get; set; }
     public bool IsPrinted { get; set; }
 
     public int IssuedByHRManagerId { get; set; }
