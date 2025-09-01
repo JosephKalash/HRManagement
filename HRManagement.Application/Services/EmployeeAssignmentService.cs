@@ -39,6 +39,9 @@ namespace HRManagement.Application.Services
 
         public async Task<EmployeeAssignmentDto> Create(CreateEmployeeAssignmentDto createDto)
         {
+            var empService = await _employeeAssignmentRepository.GetActiveByEmployeeId(createDto.EmployeeId);
+            if(empService != null) throw new ArgumentException("Active assignment already exists for this employee");
+
             var assignment = _mapper.Map<EmployeeAssignment>(createDto);
             var createdAssignment = await _employeeAssignmentRepository.Add(assignment);
             return _mapper.Map<EmployeeAssignmentDto>(createdAssignment);

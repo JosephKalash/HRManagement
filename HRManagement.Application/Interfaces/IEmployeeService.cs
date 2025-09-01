@@ -24,6 +24,7 @@ namespace HRManagement.Application.Interfaces
         Task DeleteProfileImage(long employeeId);
         Task<ComprehensiveEmployeeDto?> GetComprehensiveEmployeeById(long id);
         Task<List<EmployeeJobSummaryDto>> GetEmployeeJobSummary(long employeeId);
+        Task<EmployeeJobSummaryDto> GetEmployeeCurrentWorkingJob(long employeeId);
         Task<CurrentEmployeeSummaryDto?> GetCurrentEmployeeSummary(long userId);
         Task<List<EmployeeDto>> GetEmployeeByRoleId(long roleId);
         Task<List<Guid>> GetEmployeeRoleGuids(Guid employeeId); // external

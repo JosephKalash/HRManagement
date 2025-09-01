@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using HRManagement.Core.Enums;
 
@@ -10,8 +11,14 @@ namespace HRManagement.Core.Entities
 
         [Required]
         public long BelongingUnitId { get; set; }
+        public string? UnitNote{ get; set; }
+        
+        public long? AttachedUnitId { get; set; } // Unit to which the employee is attached, not important in e-services but just as info-recorded field
+        public string? AttachedUnitNote { get; set; }
+        public DateTime? AttachedStartDate { get; set; }
+        public DateTime? AttachedEndDate { get; set; }
 
-        public Ownership Ownership { get; set; }
+        public Ownership Ownership { get; set; } = Ownership.Local;
 
         [Required]
         public long JobRoleId { get; set; }
@@ -29,19 +36,16 @@ namespace HRManagement.Core.Entities
 
         public decimal? BaseSalary { get; set; }
 
-        public bool IsDeductedMinistryVacancies { get; set; } = false;
+        public bool IsMilitaryTraining { get; set; } = false;
+        public bool IsDeductedMinistryVacancies { get; set; } = false; 
 
-        public bool IsRetiredFederalMinistry { get; set; } = false;
+        public bool IsRetiredFederalGov { get; set; } = false;
 
         public bool IsNationalService { get; set; } = false;
 
-        public bool ProfessionalSupport { get; set; } = false;
-
-        [Required]
-        public DateTime EffectiveDate { get; set; }
+        public bool IsProfessionalSupportNeeded { get; set; } = false;
 
         public DateTime? EndDate { get; set; }
-        public bool IsMilitaryCoach { get; set; } = false;
 
         public bool IsActive { get; set; } = true;
 

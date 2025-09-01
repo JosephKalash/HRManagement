@@ -9,6 +9,7 @@ namespace HRManagement.Core.enums
         Secondment,          // Temporarily assigned to another department/unit
         Training,            // Assignment for training or professional development
         SpecialDuty,         // Special or exceptional assignment
-        Contractual          // Assignment based on a service contract
+        Contractual,          // Assignment based on a service contract
+        Other
     }
 }

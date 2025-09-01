@@ -39,9 +39,9 @@ namespace HRManagement.API.Controllers.V1
                 var pagedResult = await _roleService.GetPagedRoles(pageNumber, pageSize);
                 return Ok(ApiResponse<PagedResult<RoleDto>>.SuccessResult(pagedResult, "Roles retrieved successfully"));
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
-                return StatusCode(500, ApiResponse<PagedResult<RoleDto>>.ErrorResult("An error occurred while retrieving roles", new List<string> { ex.Message }));
+                return NotFound(ApiResponse.ErrorResult(ex.Message, [ex.Message]));
             }
         }
 
@@ -66,9 +66,9 @@ namespace HRManagement.API.Controllers.V1
 
                 return Ok(ApiResponse<RoleDto>.SuccessResult(role, "Role retrieved successfully"));
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
-                return StatusCode(500, ApiResponse<RoleDto>.ErrorResult("An error occurred while retrieving the role", new List<string> { ex.Message }));
+                return NotFound(ApiResponse.ErrorResult(ex.Message, [ex.Message]));
             }
         }
 
@@ -87,9 +87,9 @@ namespace HRManagement.API.Controllers.V1
                 var pagedResult = await _roleService.GetPagedRolesByLevel(level, pageNumber, pageSize);
                 return Ok(ApiResponse<PagedResult<RoleDto>>.SuccessResult(pagedResult, $"Roles at level {level} retrieved successfully"));
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
-                return StatusCode(500, ApiResponse<PagedResult<RoleDto>>.ErrorResult("An error occurred while retrieving roles by level", new List<string> { ex.Message }));
+                return NotFound(ApiResponse.ErrorResult(ex.Message, [ex.Message]));
             }
         }
         [HttpGet("external/{guid}")]
@@ -109,9 +109,9 @@ namespace HRManagement.API.Controllers.V1
 
                 return Ok(ApiResponse<RoleDto>.SuccessResult(role, "Role retrieved successfully"));
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
-                return StatusCode(500, ApiResponse<RoleDto>.ErrorResult("An error occurred while retrieving the role", new List<string> { ex.Message }));
+                return NotFound(ApiResponse.ErrorResult(ex.Message, [ex.Message]));
             }
         }
 
@@ -141,12 +141,11 @@ namespace HRManagement.API.Controllers.V1
                 return CreatedAtAction(nameof(GetRole), new { id = createdRole.Id },
                     ApiResponse<RoleDto>.SuccessResult(createdRole, "Role created successfully"));
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                return StatusCode(500, ApiResponse<RoleDto>.ErrorResult("An error occurred while creating the role", new List<string> { ex.Message }));
+                return BadRequest(ApiResponse<RoleDto>.ErrorResult(ex.Message));
             }
         }
-
 
 
 
@@ -179,9 +178,9 @@ namespace HRManagement.API.Controllers.V1
 
                 return Ok(ApiResponse<RoleDto>.SuccessResult(updatedRole, "Role updated successfully"));
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                return StatusCode(500, ApiResponse<RoleDto>.ErrorResult("An error occurred while updating the role", new List<string> { ex.Message }));
+                return BadRequest(ApiResponse<RoleDto>.ErrorResult(ex.Message));
             }
         }
 
@@ -206,9 +205,9 @@ namespace HRManagement.API.Controllers.V1
 
                 return NoContent();
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                return StatusCode(500, ApiResponse.ErrorResult("An error occurred while deleting the role", new List<string> { ex.Message }));
+                return BadRequest(ApiResponse<RoleDto>.ErrorResult(ex.Message));
             }
         }
     }

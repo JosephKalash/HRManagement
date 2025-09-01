@@ -279,5 +279,21 @@ namespace HRManagement.Application.Services
             var guids = await _roleRepo.GetGuidsByIds(roleIds);
             return guids;
         }
+
+        public async Task<EmployeeJobSummaryDto> GetEmployeeCurrentWorkingJob(long employeeId)
+        {
+            var empAssignment = await _employeeAssignmentRepository.GetActiveByEmployeeId(employeeId);
+            if (empAssignment != null)
+            {
+                return _mapper.Map<EmployeeJobSummaryDto>(empAssignment);
+            }
+
+            var empServiceInfo = await _employeeServiceInfoRepository.GetActiveByEmployeeId(employeeId);
+            if (empServiceInfo != null)
+                return _mapper.Map<EmployeeJobSummaryDto>(empServiceInfo);
+
+            throw new ArgumentException("No active job found for this employee");
+
+        }
     }
 }

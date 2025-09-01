@@ -43,9 +43,9 @@ namespace HRManagement.API.Controllers.V1
                     TotalCount = pagedResult.TotalCount
                 }, "Employee signatures retrieved successfully"));
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
-                return StatusCode(500, ApiResponse<PagedResult<EmployeeSignatureDto>>.ErrorResult("An error occurred while retrieving employee signatures", new List<string> { ex.Message }));
+                return NotFound(ApiResponse.ErrorResult(ex.Message, [ex.Message]));
             }
         }
 
@@ -76,9 +76,9 @@ namespace HRManagement.API.Controllers.V1
 
                 return Ok(ApiResponse<EmployeeSignatureDto>.SuccessResult(signature, "Employee signature retrieved successfully"));
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
-                return StatusCode(500, ApiResponse<EmployeeSignatureDto>.ErrorResult("An error occurred while retrieving the employee signature", new List<string> { ex.Message }));
+                return NotFound(ApiResponse.ErrorResult(ex.Message, [ex.Message]));
             }
         }
 
@@ -109,9 +109,9 @@ namespace HRManagement.API.Controllers.V1
 
                 return Ok(ApiResponse<EmployeeSignatureDto>.SuccessResult(signature, "Employee signature retrieved successfully"));
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
-                return StatusCode(500, ApiResponse<EmployeeSignatureDto>.ErrorResult("An error occurred while retrieving the employee signature", new List<string> { ex.Message }));
+                return NotFound(ApiResponse.ErrorResult(ex.Message, [ex.Message]));
             }
         }
 
@@ -150,10 +150,6 @@ namespace HRManagement.API.Controllers.V1
             {
                 return BadRequest(ApiResponse<EmployeeSignatureDto>.ErrorResult(ex.Message));
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ApiResponse<EmployeeSignatureDto>.ErrorResult("An error occurred while creating the employee signature", new List<string> { ex.Message }));
-            }
         }
 
 
@@ -184,10 +180,6 @@ namespace HRManagement.API.Controllers.V1
             {
                 return NotFound(ApiResponse<EmployeeSignatureDto>.ErrorResult(ex.Message));
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ApiResponse<EmployeeSignatureDto>.ErrorResult("An error occurred while updating the employee signature", new List<string> { ex.Message }));
-            }
         }
 
 
@@ -217,10 +209,6 @@ namespace HRManagement.API.Controllers.V1
             {
                 return NotFound(ApiResponse<EmployeeSignatureDto>.ErrorResult(ex.Message));
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ApiResponse<EmployeeSignatureDto>.ErrorResult("An error occurred while updating the employee signature image", new List<string> { ex.Message }));
-            }
         }
 
 
@@ -242,10 +230,6 @@ namespace HRManagement.API.Controllers.V1
             catch (ArgumentException ex)
             {
                 return NotFound(ApiResponse.ErrorResult(ex.Message));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ApiResponse.ErrorResult("An error occurred while deleting the employee signature", new List<string> { ex.Message }));
             }
         }
     }

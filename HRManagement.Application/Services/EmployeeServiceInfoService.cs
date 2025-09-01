@@ -39,6 +39,9 @@ namespace HRManagement.Application.Services
 
         public async Task<EmployeeServiceInfoDto> Create(CreateEmployeeServiceInfoDto createDto)
         {
+            var empService = await _employeeServiceInfoRepository.GetActiveByEmployeeId(createDto.EmployeeId);
+            if(empService != null) throw new ArgumentException("Active service info already exists for this employee");
+
             var serviceInfo = _mapper.Map<EmployeeServiceInfo>(createDto);
             var createdServiceInfo = await _employeeServiceInfoRepository.Add(serviceInfo);
             return _mapper.Map<EmployeeServiceInfoDto>(createdServiceInfo);

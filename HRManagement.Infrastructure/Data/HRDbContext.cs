@@ -157,8 +157,6 @@ namespace HRManagement.Infrastructure.Data
             modelBuilder.Entity<EmployeeAssignment>(entity =>
             {
 
-                entity.Property(e => e.AssignmentDate).IsRequired();
-                entity.Property(e => e.HiringDate).IsRequired();
                 entity.HasOne(e => e.Employee)
                     .WithMany(e => e.Assignments)
                     .HasForeignKey(e => e.EmployeeId)

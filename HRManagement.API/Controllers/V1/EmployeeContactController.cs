@@ -35,9 +35,9 @@ namespace HRManagement.API.Controllers.V1
                     TotalCount = pagedResult.TotalCount
                 }, "Employee contacts retrieved successfully"));
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                return StatusCode(500, ApiResponse<PagedResult<EmployeeContactDto>>.ErrorResult($"Internal server error: {ex.Message}"));
+                return BadRequest(ApiResponse<RoleDto>.ErrorResult(ex.Message));
             }
         }
 

@@ -25,9 +25,9 @@ namespace HRManagement.API.Controllers.V1
                 var pagedResult = await _employeeServiceInfoService.GetPaged(pageNumber, pageSize);
                 return Ok(ApiResponse<PagedResult<EmployeeServiceInfoDto>>.SuccessResult(pagedResult));
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
-                return StatusCode(500, ApiResponse<PagedResult<EmployeeServiceInfoDto>>.ErrorResult("An error occurred while retrieving employee service infos", new List<string> { ex.Message }));
+                return NotFound(ApiResponse.ErrorResult(ex.Message, [ex.Message]));
             }
         }
 
@@ -52,9 +52,9 @@ namespace HRManagement.API.Controllers.V1
 
                 return Ok(ApiResponse<EmployeeServiceInfoDto>.SuccessResult(serviceInfo, "Employee service info retrieved successfully"));
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
-                return StatusCode(500, ApiResponse<EmployeeServiceInfoDto>.ErrorResult("An error occurred while retrieving the employee service info", new List<string> { ex.Message }));
+                return NotFound(ApiResponse.ErrorResult(ex.Message, [ex.Message]));
             }
         }
 
@@ -73,9 +73,9 @@ namespace HRManagement.API.Controllers.V1
                 var pagedResult = await _employeeServiceInfoService.GetPagedByEmployeeId(employeeId, pageNumber, pageSize);
                 return Ok(ApiResponse<PagedResult<EmployeeServiceInfoDto>>.SuccessResult(pagedResult));
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
-                return StatusCode(500, ApiResponse<PagedResult<EmployeeServiceInfoDto>>.ErrorResult("An error occurred while retrieving employee service infos", new List<string> { ex.Message }));
+                return NotFound(ApiResponse.ErrorResult(ex.Message, [ex.Message]));
             }
         }
 
@@ -100,9 +100,9 @@ namespace HRManagement.API.Controllers.V1
 
                 return Ok(ApiResponse<EmployeeServiceInfoDto>.SuccessResult(serviceInfo, "Active employee service info retrieved successfully"));
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
-                return StatusCode(500, ApiResponse<EmployeeServiceInfoDto>.ErrorResult("An error occurred while retrieving the active employee service info", new List<string> { ex.Message }));
+                return NotFound(ApiResponse.ErrorResult(ex.Message, [ex.Message]));
             }
         }
 
@@ -142,10 +142,6 @@ namespace HRManagement.API.Controllers.V1
             {
                 return BadRequest(ApiResponse<EmployeeServiceInfoDto>.ErrorResult(ex.Message));
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ApiResponse<EmployeeServiceInfoDto>.ErrorResult("An error occurred while creating the employee service info", new List<string> { ex.Message }));
-            }
         }
 
 
@@ -179,10 +175,6 @@ namespace HRManagement.API.Controllers.V1
             {
                 return NotFound(ApiResponse<EmployeeServiceInfoDto>.ErrorResult(ex.Message));
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ApiResponse<EmployeeServiceInfoDto>.ErrorResult("An error occurred while updating the employee service info", new List<string> { ex.Message }));
-            }
         }
 
 
@@ -204,10 +196,6 @@ namespace HRManagement.API.Controllers.V1
             catch (ArgumentException ex)
             {
                 return NotFound(ApiResponse.ErrorResult(ex.Message));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ApiResponse.ErrorResult("An error occurred while deleting the employee service info", new List<string> { ex.Message }));
             }
         }
     }

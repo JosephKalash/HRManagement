@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using HRManagement.Core.Enums;
 
+//todo
 namespace HRManagement.Application.DTOs
 {
     public class EmployeeServiceInfoDto
