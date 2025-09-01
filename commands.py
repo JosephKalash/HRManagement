@@ -3,6 +3,6 @@ import os
 
 # command = 'cd HRManagement.Infrastructure'
 # os.system(command)
-# command = "dotnet ef migrations add UpdateService -s ../HRManagement.API/HRManagement.API.csproj"
+# command = "dotnet ef migrations add DateOfBirthNullable -s ../HRManagement.API/HRManagement.API.csproj"
 command = "dotnet ef database update -s ../HRManagement.API/HRManagement.API.csproj"
 os.system(command)

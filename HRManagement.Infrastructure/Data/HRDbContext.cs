@@ -91,8 +91,6 @@ namespace HRManagement.Infrastructure.Data
                 entity.Property(e => e.HairColor).HasMaxLength(50);
                 entity.Property(e => e.EyeColor).HasMaxLength(50);
                 entity.Property(e => e.DisabilityType).HasMaxLength(100);
-                entity.Property(e => e.Religion).IsRequired().HasMaxLength(100);
-                entity.Property(e => e.PlaceOfBirth).IsRequired().HasMaxLength(200);
                 entity.Property(e => e.InsuranceNumber).HasMaxLength(50);
 
                 entity.HasOne(e => e.Nationality)

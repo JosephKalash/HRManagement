@@ -10,7 +10,6 @@ namespace HRManagement.Core.Entities
         public long EmployeeId { get; set; }
         public Gender Gender { get; set; } = Gender.Male;
 
-        [Required]
         public DateTime? DateOfBirth { get; set; }
 
         public int? Height { get; set; }
