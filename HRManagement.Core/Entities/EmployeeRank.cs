@@ -14,6 +14,7 @@ namespace HRManagement.Core.Entities
         
         // end of thie rank date, automatically set when a new rank is assigned
         public DateTime? EndDate { get; set; }
+        public DateTime? IssueDate { get; set; }
         
         public bool IsActive { get; set; } = true;
         

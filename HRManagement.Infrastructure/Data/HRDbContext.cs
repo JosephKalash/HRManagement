@@ -21,6 +21,7 @@ namespace HRManagement.Infrastructure.Data
         public DbSet<OrgUnitProfile> OrgUnitProfiles { get; set; }
         public DbSet<Nationality> Nationalities { get; set; }
         public DbSet<EmployeeRank> EmployeeRanks { get; set; }
+        public DbSet<EmploymentDetails> EmploymentDetails { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -40,11 +41,19 @@ namespace HRManagement.Infrastructure.Data
             modelBuilder.Entity<OrgUnit>().HasQueryFilter(e => !e.IsDeleted);
             modelBuilder.Entity<Nationality>().HasQueryFilter(e => !e.IsDeleted);
             modelBuilder.Entity<EmployeeRank>().HasQueryFilter(e => !e.IsDeleted);
+            modelBuilder.Entity<EmploymentDetails>().HasQueryFilter(e => !e.IsDeleted);
 
 
             //base entity configuration 
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
+            modelBuilder.Entity<EmploymentDetails>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.HasOne(e => e.Employee)
+                        .WithOne(e => e.EmploymentDetails)
+                        .HasForeignKey<EmploymentDetails>(e => e.EmployeeId).OnDelete(DeleteBehavior.Cascade);
+            });
             modelBuilder.Entity<Employee>(entity =>
             {
                 entity.HasKey(e => e.Id);
@@ -136,7 +145,6 @@ namespace HRManagement.Infrastructure.Data
             modelBuilder.Entity<EmployeeServiceInfo>(entity =>
             {
 
-                entity.Property(e => e.BaseSalary).HasColumnType("decimal(18,2)");
                 entity.HasOne(e => e.Employee)
                     .WithMany(e => e.ServiceInfos)
                     .HasForeignKey(e => e.EmployeeId)

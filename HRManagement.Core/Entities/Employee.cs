@@ -6,6 +6,7 @@ namespace HRManagement.Core.Entities
 
     public class Employee : AuditedEntity, IActivable, IAuditSoftDelete
     {
+
         [Required]
         public int MilitaryNumber { get; set; }
 
@@ -49,5 +50,6 @@ namespace HRManagement.Core.Entities
         public virtual EmployeeSignature? Signature { get; set; }
         public virtual ICollection<EmployeeServiceInfo> ServiceInfos { get; set; } = [];
         public virtual ICollection<EmployeeAssignment> Assignments { get; set; } = [];
+        public virtual EmploymentDetails? EmploymentDetails { get; set; }
     }
 }

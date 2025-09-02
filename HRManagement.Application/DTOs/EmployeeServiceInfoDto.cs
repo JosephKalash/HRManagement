@@ -16,7 +16,7 @@ namespace HRManagement.Application.DTOs
         public DateTime? LastPromotion { get; set; }
         public int? ContractDuration { get; set; }
         public int? ServiceDuration { get; set; }
-        public decimal? BaseSalary { get; set; }
+        public int? BaseSalary { get; set; }
         public bool IsMilitaryCoach { get; set; } = false;
         public ContractType ContractType { get; set; }
 
@@ -49,7 +49,7 @@ namespace HRManagement.Application.DTOs
         public DateTime? LastPromotion { get; set; }
         public int? ContractDuration { get; set; }
         public int? ServiceDuration { get; set; }
-        public decimal? BaseSalary { get; set; }
+        public int? BaseSalary { get; set; }
         public bool IsMilitaryCoach { get; set; } = false;
         public bool IsDeductedMinistryVacancies { get; set; } = false;
         public bool IsRetiredFederalMinistry { get; set; } = false;
@@ -75,7 +75,7 @@ namespace HRManagement.Application.DTOs
         public DateTime? LastPromotion { get; set; }
         public int? ContractDuration { get; set; }
         public int? ServiceDuration { get; set; }
-        public decimal? BaseSalary { get; set; }
+        public int? BaseSalary { get; set; }
         public ContractType? ContractType { get; set; }
 
         public bool? IsMilitaryCoach { get; set; }
